@@ -1,0 +1,67 @@
+{
+    "configurations": [
+        {
+            "name": "Windows NDS",
+            "includePath": [
+                "${workspaceFolder}",
+                "C:/devkitPro/libnds/include/**",
+                "C:/devkitPro/devkitARM/arm-none-eabi/include/**",
+                "C:/devkitPro/calico/include/**"
+            ],
+            "defines": [
+                "_DEBUG",
+                "_UNICODE",
+                "WIN32",
+                "ARM7",
+                "ARM9",
+                "__NDS__",
+                "_DEFAULT_SOURCE"
+            ],
+             "browse": {
+                "path": [
+                    "${workspaceFolder}",
+                    "C:/devkitPro/libnds/include/**",
+                    "C:/devkitPro/devkitARM/arm-none-eabi/include/**",
+                    "C:/devkitPro/calico/include/**"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            },
+            "cStandard": "c11",
+            "cppStandard": "c++11",
+            "compilerPath": "C:/devkitPro/devkitARM/bin/arm-none-eabi-g++.exe"
+        },
+        {
+            "name": "Linux NDS",
+            "includePath": [
+                "${workspaceFolder}",
+                "C:/devkitPro/libnds/include/**",
+                "C:/devkitPro/devkitARM/arm-none-eabi/include/**",
+                "C:/devkitPro/calico/include/**"
+            ],
+            "defines": [
+                "_DEBUG",
+                "_UNICODE",
+                "WIN32",
+                "ARM7",
+                "ARM9",
+                "__NDS__",
+                "_DEFAULT_SOURCE"
+            ],
+             "browse": {
+                "path": [
+                    "${workspaceFolder}",
+                    "C:/devkitPro/libnds/include/**",
+                    "C:/devkitPro/devkitARM/arm-none-eabi/include/**",
+                    "C:/devkitPro/calico/include/**"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            },
+            "cStandard": "c11",
+            "cppStandard": "c++11",
+            "compilerPath": "C:/devkitPro/devkitARM/bin/arm-none-eabi-g++.exe"
+        }
+    ],
+    "version": 4
+}
