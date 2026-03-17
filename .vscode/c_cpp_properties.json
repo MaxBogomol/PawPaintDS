@@ -11,7 +11,6 @@
             "defines": [
                 "_DEBUG",
                 "_UNICODE",
-                "WIN32",
                 "ARM7",
                 "ARM9",
                 "__NDS__",
@@ -35,9 +34,9 @@
             "name": "Linux NDS",
             "includePath": [
                 "${workspaceFolder}",
-                "C:/devkitPro/libnds/include/**",
-                "C:/devkitPro/devkitARM/arm-none-eabi/include/**",
-                "C:/devkitPro/calico/include/**"
+                "~/devkitpro/opt/devkitpro/libnds/include/**",
+                "~/devkitpro/opt/devkitpro/devkitARM/arm-none-eabi/include/**",
+                "~/devkitpro/opt/devkitpro/calico/include/**"
             ],
             "defines": [
                 "_DEBUG",
@@ -51,16 +50,17 @@
              "browse": {
                 "path": [
                     "${workspaceFolder}",
-                    "C:/devkitPro/libnds/include/**",
-                    "C:/devkitPro/devkitARM/arm-none-eabi/include/**",
-                    "C:/devkitPro/calico/include/**"
+                    "~/devkitpro/opt/devkitpro/libnds/include/**",
+                    "~/devkitpro/opt/devkitpro/devkitARM/arm-none-eabi/include/**",
+                    "~/devkitpro/opt/devkitpro/calico/include/**"
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""
             },
             "cStandard": "c11",
             "cppStandard": "c++11",
-            "compilerPath": "C:/devkitPro/devkitARM/bin/arm-none-eabi-g++.exe"
+            "compilerPath": "~/devkitpro/opt/devkitpro/devkitARM/bin/arm-none-eabi-g++",
+            "intelliSenseMode": "linux-gcc-arm"
         }
     ],
     "version": 4
