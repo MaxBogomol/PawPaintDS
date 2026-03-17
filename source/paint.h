@@ -86,7 +86,9 @@ class Paint {
 
         void drawPixel(int x, int y, u16* buffer, u16 color);
         void drawSquare(int x0, int y0, int x1, int y1, u16* buffer, u16 color);
-        void drawCircle(int xc, int yc, int r, u16* buffer, u16 color);
+        void drawSquareOutline(int x0, int y0, int x1, int y1, u16* buffer, u16 color);
+        void drawCircleRadius(int xc, int yc, int r, u16* buffer, u16 color);
+        void drawCircleDiameter(int xc, int yc, int d, u16* buffer, u16 color);
         void drawLine(int x0, int y0, int x1, int y1, u16* buffer, u16 color);
         void drawChar(int x, int y, char c, u16* buffer, u16 color);
         void drawText(int x, int y, const char* text, u16* buffer, u16 color);

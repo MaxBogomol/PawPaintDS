@@ -73,13 +73,14 @@ void Paint::updateTools() {
 
     if (keysD & KEY_L) {
         selectedTool--;
+        if (selectedTool < 0) selectedTool = tools.size() - 1;
         toolChanged = true;
     }
     if (keysD & KEY_R) {
         selectedTool++;
+        if (selectedTool > tools.size() - 1) selectedTool = 0;
         toolChanged = true;
     }
-    selectedTool = selectedTool % tools.size();
     if (toolChanged) {
         tools[selectedToolOld]->close(*this);
         tools[selectedTool]->open(*this);
@@ -91,31 +92,40 @@ void Paint::updateTools() {
 void Paint::updateVideo() {
     dmaFillHalfWords(whiteColor, pixelBufferMain, sizeof(pixelBufferMain));
 
-    drawSquare(1, 159, 16, 16, pixelBufferMain, selectedColor);
+    updateSubLayers = false;
+    int i = 0;
+    int j = 0;
+    for (int t = 0; t < tools.size(); t++) {
+        drawSquare(3 + (i * 18), 3 + (j * 18), 16, 16, pixelBufferMain, blackColor);
+        if (t == selectedTool) drawSquareOutline(2 + (i * 18), 2 + (j * 18), 18, 18, pixelBufferMain, blackColor);
+        i++;
+        if (i >= 14) {
+            i = 0;
+            j++;
+        }
+    }
+
+    string toolString = string("Tool: ") + tools[selectedTool]->getName(*this); 
+    drawText(3, 39, toolString.c_str(), pixelBufferMain, blackColor);
+
+    drawSquare(3, 157, 16, 16, pixelBufferMain, selectedColor);
     int r = (selectedColor) & 31;
     int g = (selectedColor >> 5) & 31;
     int b = (selectedColor >> 10) & 31;
 
     string colorString = string("RGB: (") + intToChars(r) + ", " + intToChars(g) + ", " + intToChars(b) + ")"; 
-    drawText(18, 163, colorString.c_str(), pixelBufferMain, blackColor);
+    drawText(20, 161, colorString.c_str(), pixelBufferMain, blackColor);
 
-    drawSquare(1, 175, 16, 16, pixelBufferMain, selectedColorSub);
+    drawSquare(3, 173, 16, 16, pixelBufferMain, selectedColorSub);
     int rs = (selectedColorSub) & 31;
     int gs = (selectedColorSub >> 5) & 31;
     int bs = (selectedColorSub >> 10) & 31;
 
     string colorSubString = string("RGB: (") + intToChars(rs) + ", " + intToChars(gs) + ", " + intToChars(bs) + ")"; 
-    drawText(18, 179, colorSubString.c_str(), pixelBufferMain, blackColor);
+    drawText(20, 177, colorSubString.c_str(), pixelBufferMain, blackColor);
 
-    drawLine(0, 158, 16, 158, pixelBufferMain, blackColor);
-    drawLine(0, 191, 16, 191, pixelBufferMain, blackColor);
-    drawLine(0, 158, 0, 191, pixelBufferMain, blackColor);
-    drawLine(16, 158, 16, 191, pixelBufferMain, blackColor);
-
-    string layerString = string("Layer: ") + intToChars(selectedLayer + 1); 
-    drawText(2, 2, layerString.c_str(), pixelBufferMain, blackColor);
-    string toolString = string("Tool: ") + intToChars(selectedTool + 1); 
-    drawText(2, 2 + 16, toolString.c_str(), pixelBufferMain, blackColor);
+    drawSquareOutline(2, 156, 18, 34, pixelBufferMain, blackColor);
+    updateSubLayers = true;
 
     swiWaitForVBlank(); 
     DC_FlushRange(pixelBufferSub, sizeof(pixelBufferSub));
@@ -169,11 +179,35 @@ void Paint::drawSquare(int x0, int y0, int x1, int y1, u16* buffer, u16 color) {
 	}
 }
 
-void Paint::drawCircle(int xc, int yc, int r, u16* buffer, u16 color) {
-	for (int y = -r; y <= r; y++) {
+void Paint::drawSquareOutline(int x0, int y0, int x1, int y1, u16* buffer, u16 color) {
+    x1 = x1 - 1;
+    y1 = y1 - 1;
+	drawLine(x0, y0, x0 + x1, y0, buffer, color);
+    drawLine(x0, y0 + y1, x0 + x1, y0 + y1, buffer, color);
+    drawLine(x0, y0, x0, y0 + y1, buffer, color);
+    drawLine(x0 + x1, y0, x0 + x1, y0 + y1, buffer, color);
+}
+
+void Paint::drawCircleRadius(int xc, int yc, int r, u16* buffer, u16 color) {
+    for (int y = -r; y <= r; y++) {
         for (int x = -r; x <= r; x++) {
             if (x*x + y*y <= r*r) {
                 drawPixel(xc + x, yc + y, buffer, color);
+            }
+        }
+    }
+}
+
+void Paint::drawCircleDiameter(int xc, int yc, int d, u16* buffer, u16 color) {
+    int d2 = d * d;
+    int offset = (d - 1);
+    int center = d / 2; 
+    for (int y = 0; y < d; y++) {
+        for (int x = 0; x < d; x++) {
+            int dx = 2 * x - offset;
+            int dy = 2 * y - offset;
+            if (dx * dx + dy * dy <= d2) {
+                drawPixel(xc + x - center, yc + y - center, buffer, color);
             }
         }
     }

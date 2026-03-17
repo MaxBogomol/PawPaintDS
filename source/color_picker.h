@@ -23,6 +23,8 @@ class ColorPicker : public Tool {
 
         virtual ~ColorPicker() {} 
 
+        virtual const char* getName(Paint& paint) override;
+
         virtual void setup(Paint& paint) override;
         virtual void update(Paint& paint) override;
         virtual void open(Paint& paint) override;

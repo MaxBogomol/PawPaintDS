@@ -2,6 +2,10 @@
 
 #include "paint.h"
 
+const char* Layers::getName(Paint& paint) {
+    return "Layers";
+}
+
 void Layers::update(Paint& paint) {
     if (keysD & KEY_LEFT) {
         if (paint.selectedLayer - 1 >= 0) {

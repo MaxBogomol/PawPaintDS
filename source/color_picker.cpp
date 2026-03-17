@@ -2,6 +2,10 @@
 
 #include "paint.h"
 
+const char* ColorPicker::getName(Paint& paint) {
+    return "Color Picker";
+}
+
 void ColorPicker::setup(Paint& paint) {
     hue = 0;
     hueOld = 0;
@@ -182,20 +186,9 @@ void ColorPicker::drawNewSelectedColor(Paint& paint) {
 
 void ColorPicker::drawOutlines(Paint& paint) {
     paint.updateSubLayers = false;
-    paint.drawLine(23, 79, 40, 79, getDrawLayer(paint), blackColor);
-    paint.drawLine(23, 112, 40, 112, getDrawLayer(paint), blackColor);
-    paint.drawLine(23, 79, 23, 112, getDrawLayer(paint), blackColor);
-    paint.drawLine(40, 79, 40, 112, getDrawLayer(paint), blackColor);
-
-    paint.drawLine(63, 31, 192, 31, getDrawLayer(paint), blackColor);
-    paint.drawLine(63, 160, 192, 160, getDrawLayer(paint), blackColor);
-    paint.drawLine(63, 31, 63, 160, getDrawLayer(paint), blackColor);
-    paint.drawLine(192, 31, 192, 160, getDrawLayer(paint), blackColor);
-
-    paint.drawLine(207, 7, 240, 7, getDrawLayer(paint), blackColor);
-    paint.drawLine(207, 188, 240, 188, getDrawLayer(paint), blackColor);
-    paint.drawLine(207, 7, 207, 188, getDrawLayer(paint), blackColor);
-    paint.drawLine(240, 7, 240, 188, getDrawLayer(paint), blackColor);
+    paint.drawSquareOutline(23, 79, 18, 34, getDrawLayer(paint), blackColor);
+    paint.drawSquareOutline(63, 31, 130, 130, getDrawLayer(paint), blackColor);
+    paint.drawSquareOutline(207, 7, 34, 182, getDrawLayer(paint), blackColor);
     paint.updateSubLayers = true;
 }
 
@@ -235,11 +228,7 @@ void ColorPicker::drawPickerPointers(Paint& paint) {
     paint.drawSquare(194, colorY * 4 + 31, 6, 6, getDrawLayer(paint), blackColor);
     paint.drawSquare(195, colorY * 4 + 32, 4, 4, getDrawLayer(paint), whiteColor);
 
-    paint.drawLine(colorX * 4 + 63, colorY * 4 + 31, colorX * 4 + 68, colorY * 4 + 31, getDrawLayer(paint), blackColor);
-    paint.drawLine(colorX * 4 + 63, colorY * 4 + 36, colorX * 4 + 68, colorY * 4 + 36, getDrawLayer(paint), blackColor);
-    paint.drawLine(colorX * 4 + 63, colorY * 4 + 31, colorX * 4 + 63, colorY * 4 + 36, getDrawLayer(paint), blackColor);
-    paint.drawLine(colorX * 4 + 68, colorY * 4 + 31, colorX * 4 + 68, colorY * 4 + 36, getDrawLayer(paint), blackColor);
-
+    paint.drawSquareOutline(colorX * 4 + 63, colorY * 4 + 31, 6, 6, getDrawLayer(paint), blackColor);
     paint.updateSubLayers = true;
 
     colorXOld = colorX;
