@@ -91,21 +91,26 @@ void Paint::updateTools() {
 void Paint::updateVideo() {
     dmaFillHalfWords(whiteColor, pixelBufferMain, sizeof(pixelBufferMain));
 
-    drawSquare(0, 160, 16, 16, pixelBufferMain, selectedColor);
+    drawSquare(1, 159, 16, 16, pixelBufferMain, selectedColor);
     int r = (selectedColor) & 31;
     int g = (selectedColor >> 5) & 31;
     int b = (selectedColor >> 10) & 31;
 
     string colorString = string("RGB: (") + intToChars(r) + ", " + intToChars(g) + ", " + intToChars(b) + ")"; 
-    drawText(16, 164, colorString.c_str(), pixelBufferMain, blackColor);
+    drawText(18, 163, colorString.c_str(), pixelBufferMain, blackColor);
 
-    drawSquare(0, 176, 16, 16, pixelBufferMain, selectedColorSub);
+    drawSquare(1, 175, 16, 16, pixelBufferMain, selectedColorSub);
     int rs = (selectedColorSub) & 31;
     int gs = (selectedColorSub >> 5) & 31;
     int bs = (selectedColorSub >> 10) & 31;
 
     string colorSubString = string("RGB: (") + intToChars(rs) + ", " + intToChars(gs) + ", " + intToChars(bs) + ")"; 
-    drawText(16, 180, colorSubString.c_str(), pixelBufferMain, blackColor);
+    drawText(18, 179, colorSubString.c_str(), pixelBufferMain, blackColor);
+
+    drawLine(0, 158, 16, 158, pixelBufferMain, blackColor);
+    drawLine(0, 191, 16, 191, pixelBufferMain, blackColor);
+    drawLine(0, 158, 0, 191, pixelBufferMain, blackColor);
+    drawLine(16, 158, 16, 191, pixelBufferMain, blackColor);
 
     string layerString = string("Layer: ") + intToChars(selectedLayer + 1); 
     drawText(2, 2, layerString.c_str(), pixelBufferMain, blackColor);
@@ -151,7 +156,7 @@ u16 Paint::getPixel(int x, int y, u16* buffer) {
 
 void Paint::drawPixel(int x, int y, u16* buffer, u16 color) {
 	if (x >= 0 && x < SCREEN_WIDTH && y >= 0 && y < SCREEN_HEIGHT) {
-		buffer[x + (y * SCREEN_WIDTH)] = color;
+		if (getPixel(x, y, buffer) != color) buffer[x + (y * SCREEN_WIDTH)] = color;
 		if (updateSubLayers) blendSubLayers(x, y);
 	}
 }
@@ -215,6 +220,22 @@ void Paint::drawText(int x, int y, const char* text, u16* buffer, u16 color) {
     }
 }
 
+void Paint::drawCharOutline(int x, int y, char c, u16* buffer, u16 color, u16 outlineColor) {
+    for (int dx = -1; dx <= 1; dx++) {
+        for (int dy = -1; dy <= 1; dy++) {
+            drawChar(x + dx, y + dy, c, buffer, outlineColor);
+        }
+    }
+    drawChar(x, y, c, buffer, color);
+}
+
+void Paint::drawTextOutline(int x, int y, const char* text, u16* buffer, u16 color, u16 outlineColor) {
+    while (*text) {
+        drawCharOutline(x, y, *text++, buffer, color, outlineColor);
+        x += 8;
+    }
+}
+
 u16 Paint::blendColors(u16 src, u16 dst) {
 	u8 alpha = (dst >> 15) & 1;
 	if (alpha == 1) {
@@ -247,6 +268,46 @@ u16 Paint::HSVtoRGB(int h, int s, int v) {
     }
 
     return ARGB16(1, r >> 3, g >> 3, b >> 3);
+}
+
+HSV Paint::RGBtoHSV(u16 color) {
+    int r5 = (color) & 0x1F;
+    int g5 = (color >> 5) & 0x1F;
+    int b5 = (color >> 10) & 0x1F;
+
+    int r = (r5 * 255) / 31;
+    int g = (g5 * 255) / 31;
+    int b = (b5 * 255) / 31;
+
+    int maxV = (r > g) ? ((r > b) ? r : b) : ((g > b) ? g : b);
+    int minV = (r < g) ? ((r < b) ? r : b) : ((g < b) ? g : b);
+    int delta = maxV - minV;
+
+    HSV res;
+    res.v = maxV;
+
+    if (maxV == 0) {
+        res.s = 0;
+        res.h = 0;
+        return res;
+    }
+    res.s = (255 * delta) / maxV;
+
+    if (delta == 0) {
+        res.h = 0;
+    } else {
+        if (maxV == r) {
+            res.h = 60 * (g - b) / delta;
+        } else if (maxV == g) {
+            res.h = 120 + 60 * (b - r) / delta;
+        } else {
+            res.h = 240 + 60 * (r - g) / delta;
+        }
+
+        if (res.h < 0) res.h += 360;
+    }
+
+    return res;
 }
 
 const char* Paint::intToChars(int val) {

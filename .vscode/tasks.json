@@ -13,7 +13,7 @@
             "problemMatcher": []
         },
         {
-            "label": "make file",
+            "label": "make",
             "type": "process",
             "command": "make",
             "args": [
@@ -24,20 +24,6 @@
                 "kind": "build",
                 "isDefault": true
             }
-        },
-        {
-            "label": "run",
-            "type": "shell",
-            "isBackground": true,
-            "command": "C:/desmume/DeSmuME-dev.exe",
-            "args": [
-                "${workspaceFolder}/${workspaceFolderBasename}.nds"
-            ],
-            "presentation": {
-                "clear": true,
-                "reveal": "always"
-            },
-            "problemMatcher": []
         }
     ]
 }

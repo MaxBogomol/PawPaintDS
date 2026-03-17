@@ -50,6 +50,12 @@ inline Eyedropper eyedropper;
 inline ColorPicker colorPicker;
 inline Layers layers;
 
+struct HSV {
+    int h;
+    int s;
+    int v;
+};
+
 class Paint {
     private:
 
@@ -84,8 +90,11 @@ class Paint {
         void drawLine(int x0, int y0, int x1, int y1, u16* buffer, u16 color);
         void drawChar(int x, int y, char c, u16* buffer, u16 color);
         void drawText(int x, int y, const char* text, u16* buffer, u16 color);
+        void drawCharOutline(int x, int y, char c, u16* buffer, u16 color, u16 outlineColor);
+        void drawTextOutline(int x, int y, const char* text, u16* buffer, u16 color, u16 outlineColor);
 
         u16 blendColors(u16 src, u16 dst);
         u16 HSVtoRGB(int h, int s, int v);
+        HSV RGBtoHSV(u16 color);
         const char* intToChars(int val);
 };
