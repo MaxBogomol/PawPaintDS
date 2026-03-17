@@ -1,8 +1,8 @@
 {
     "terminal.integrated.env.linux": {
-        "DEVKITPRO": "~/devkitpro/opt/devkitpro",
-        "DEVKITARM": "~/devkitpro/opt/devkitpro/devkitARM",
-        "DEVKITPPC": "~/devkitpro/opt/devkitpro/devkitPPC",
-        "PATH": "~/devkitpro/devkitARM/bin:${env:PATH}"
+        "DEVKITPRO": "/home/deck/devkitpro/opt/devkitpro",
+        "DEVKITARM": "/home/deck/devkitpro/opt/devkitpro/devkitARM",
+        "DEVKITPPC": "/home/deck/devkitpro/opt/devkitpro/devkitPPC",
+        "PATH": "/home/deck/devkitpro/opt/devkitpro/devkitARM/bin:/home/deck/devkitpro/opt/devkitpro/tools/bin:${env:PATH}"
     }
 }
