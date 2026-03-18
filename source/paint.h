@@ -20,13 +20,13 @@ inline u16 redColor = ARGB16(1, 31, 0, 0);
 inline u16 greenColor = ARGB16(1, 0, 31, 0);
 inline u16 blueColor = ARGB16(1, 0, 0, 31);
 
-alignas(4) inline u16 pixelBufferMain[SCREEN_WIDTH * SCREEN_HEIGHT];
+inline u16 pixelBufferMain[SCREEN_WIDTH * SCREEN_HEIGHT];
 
-alignas(4) inline u16 pixelBufferSub[SCREEN_WIDTH * SCREEN_HEIGHT];
-alignas(4) inline u16 pixelBufferSubLayer0[SCREEN_WIDTH * SCREEN_HEIGHT];
-alignas(4) inline u16 pixelBufferSubLayer1[SCREEN_WIDTH * SCREEN_HEIGHT];
-alignas(4) inline u16 pixelBufferSubLayer2[SCREEN_WIDTH * SCREEN_HEIGHT];
-alignas(4) inline u16 pixelBufferSubLayer3[SCREEN_WIDTH * SCREEN_HEIGHT];
+inline u16 pixelBufferSub[SCREEN_WIDTH * SCREEN_HEIGHT];
+inline u16 pixelBufferSubLayer0[SCREEN_WIDTH * SCREEN_HEIGHT];
+inline u16 pixelBufferSubLayer1[SCREEN_WIDTH * SCREEN_HEIGHT];
+inline u16 pixelBufferSubLayer2[SCREEN_WIDTH * SCREEN_HEIGHT];
+inline u16 pixelBufferSubLayer3[SCREEN_WIDTH * SCREEN_HEIGHT];
 
 inline u16* bgMainDest;
 inline u16* bgSubDest;
@@ -58,6 +58,7 @@ struct HSV {
 
 class Paint {
     private:
+        bool updateSubLayers = false;
 
     public:
         int selectedLayer = 0;
@@ -65,10 +66,12 @@ class Paint {
         u16 selectedColor = blackColor;
         u16 selectedColorSub = whiteColor;
 
-        bool updateSubLayers = true;
+        bool updateDrawTools = true;
+        bool updateDrawColors = true;
 
         vector<Tool*> tools;
 
+        void setup();
         void setupVideo();
         void setupLayers();
         void setupTools();
@@ -77,7 +80,12 @@ class Paint {
         void updateTools();
         void updateVideo();
 
+        void drawTools();
+        void drawColors();
+
         void blendSubLayers(int x, int y);
+        void updateSubLayersEnable();
+        void updateSubLayersDisable();
 
         u16 *getSelectedLayer();
         u16 getSelectedColor();
@@ -97,6 +105,7 @@ class Paint {
 
         u16 blendColors(u16 src, u16 dst);
         u16 HSVtoRGB(int h, int s, int v);
+        u16 HSVtoRGB(HSV hsv);
         HSV RGBtoHSV(u16 color);
         const char* intToChars(int val);
 };

@@ -11,20 +11,13 @@ void Eyedropper::update(Paint& paint) {
         u16 color = paint.getPixel(touchX, touchY, pixelBufferSub);
         if ((color >> 15) & 1 == 0) color = blackColor;
         paint.selectedColor = color;
+        paint.updateDrawColors = true;
     }
 
     if (keysD & KEY_Y) {
         u16 color = paint.selectedColorSub;
         paint.selectedColorSub = paint.selectedColor;
         paint.selectedColor = color;
+        paint.updateDrawColors = true;
     }
-}
-
-void Eyedropper::open(Paint& paint) {
-
-}
-
-
-void Eyedropper::close(Paint& paint) {
-
 }

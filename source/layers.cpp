@@ -18,12 +18,3 @@ void Layers::update(Paint& paint) {
         }
     }
 }
-
-void Layers::open(Paint& paint) {
-
-}
-
-
-void Layers::close(Paint& paint) {
-
-}

@@ -1,5 +1,17 @@
 #include "paint.h"
 
+void Paint::setup() {
+    updateSubLayers = false;
+
+    selectedLayer = 0;
+    selectedTool = 0;
+    selectedColor = blackColor;
+    selectedColorSub = whiteColor;
+
+    updateDrawTools = true;
+    updateDrawColors = true;
+}
+
 void Paint::setupVideo() {
     videoSetMode(MODE_5_2D);
     vramSetBankA(VRAM_A_MAIN_BG);
@@ -12,11 +24,6 @@ void Paint::setupVideo() {
 
     int bg3sub = bgInitSub(3, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
     bgSubDest = (u16*) bgGetGfxPtr(bg3sub);
-
-    selectedLayer = 0;
-    selectedTool = 0;
-    selectedColor = blackColor;
-    selectedColorSub = whiteColor;
 }
 
 void Paint::setupLayers() {
@@ -84,15 +91,36 @@ void Paint::updateTools() {
     if (toolChanged) {
         tools[selectedToolOld]->close(*this);
         tools[selectedTool]->open(*this);
+        updateDrawTools = true;
     }
 
     tools[selectedTool]->update(*this);
 }
 
 void Paint::updateVideo() {
-    dmaFillHalfWords(whiteColor, pixelBufferMain, sizeof(pixelBufferMain));
+    if (updateDrawTools) {
+        drawTools();
+        updateDrawTools = false;
+    }
 
-    updateSubLayers = false;
+    if (updateDrawColors) {
+        drawColors();
+        updateDrawColors = false;
+    }
+
+    swiWaitForVBlank();
+    DC_FlushAll();
+    dmaCopy(pixelBufferMain, bgMainDest, sizeof(pixelBufferMain));
+    dmaCopy(pixelBufferSub, bgSubDest, sizeof(pixelBufferSub));
+}
+
+void Paint::drawTools() {
+    for (int x = 0; x < SCREEN_WIDTH; x++) {
+        for (int y = 0; y < 48; y++) {
+            drawPixel(x, y, pixelBufferMain, whiteColor);
+        }
+    }
+
     int i = 0;
     int j = 0;
     for (int t = 0; t < tools.size(); t++) {
@@ -107,12 +135,21 @@ void Paint::updateVideo() {
 
     string toolString = string("Tool: ") + tools[selectedTool]->getName(*this); 
     drawText(3, 39, toolString.c_str(), pixelBufferMain, blackColor);
+}
+
+void Paint::drawColors() {
+    for (int x = 0; x < 164; x++) {
+        for (int y = 0; y < 34; y++) {
+            drawPixel(x, y + 156, pixelBufferMain, whiteColor);
+        }
+    }
+
+    drawSquareOutline(2, 156, 18, 34, pixelBufferMain, blackColor);
 
     drawSquare(3, 157, 16, 16, pixelBufferMain, selectedColor);
     int r = (selectedColor) & 31;
     int g = (selectedColor >> 5) & 31;
     int b = (selectedColor >> 10) & 31;
-
     string colorString = string("RGB: (") + intToChars(r) + ", " + intToChars(g) + ", " + intToChars(b) + ")"; 
     drawText(20, 161, colorString.c_str(), pixelBufferMain, blackColor);
 
@@ -120,27 +157,22 @@ void Paint::updateVideo() {
     int rs = (selectedColorSub) & 31;
     int gs = (selectedColorSub >> 5) & 31;
     int bs = (selectedColorSub >> 10) & 31;
-
     string colorSubString = string("RGB: (") + intToChars(rs) + ", " + intToChars(gs) + ", " + intToChars(bs) + ")"; 
     drawText(20, 177, colorSubString.c_str(), pixelBufferMain, blackColor);
-
-    drawSquareOutline(2, 156, 18, 34, pixelBufferMain, blackColor);
-    updateSubLayers = true;
-
-    swiWaitForVBlank(); 
-    DC_FlushRange(pixelBufferSub, sizeof(pixelBufferSub));
-    DC_FlushRange(pixelBufferSubLayer0, sizeof(pixelBufferSubLayer0));
-    DC_FlushRange(pixelBufferSubLayer1, sizeof(pixelBufferSubLayer1));
-    DC_FlushRange(pixelBufferSubLayer2, sizeof(pixelBufferSubLayer2));
-    DC_FlushRange(pixelBufferSubLayer3, sizeof(pixelBufferSubLayer3));
-    dmaCopy(pixelBufferMain, bgMainDest, sizeof(pixelBufferMain));
-    dmaCopy(pixelBufferSub, bgSubDest, sizeof(pixelBufferSub));
 }
 
 void Paint::blendSubLayers(int x, int y) {
 	pixelBufferSub[x + (y * SCREEN_WIDTH)] = blendColors(pixelBufferSubLayer0[x + (y * SCREEN_WIDTH)], pixelBufferSubLayer1[x + (y * SCREEN_WIDTH)]);
 	pixelBufferSub[x + (y * SCREEN_WIDTH)] = blendColors(pixelBufferSub[x + (y * SCREEN_WIDTH)], pixelBufferSubLayer2[x + (y * SCREEN_WIDTH)]);
 	pixelBufferSub[x + (y * SCREEN_WIDTH)] = blendColors(pixelBufferSub[x + (y * SCREEN_WIDTH)], pixelBufferSubLayer3[x + (y * SCREEN_WIDTH)]);
+}
+
+void Paint::updateSubLayersEnable() {
+    updateSubLayers = true;
+}
+
+void Paint::updateSubLayersDisable() {
+    updateSubLayers = false;
 }
 
 u16 *Paint::getSelectedLayer() {
@@ -166,8 +198,10 @@ u16 Paint::getPixel(int x, int y, u16* buffer) {
 
 void Paint::drawPixel(int x, int y, u16* buffer, u16 color) {
 	if (x >= 0 && x < SCREEN_WIDTH && y >= 0 && y < SCREEN_HEIGHT) {
-		if (getPixel(x, y, buffer) != color) buffer[x + (y * SCREEN_WIDTH)] = color;
-		if (updateSubLayers) blendSubLayers(x, y);
+		if (getPixel(x, y, buffer) != color) {
+            buffer[x + (y * SCREEN_WIDTH)] = color;
+		    if (updateSubLayers) blendSubLayers(x, y);
+        }
 	}
 }
 
@@ -302,6 +336,10 @@ u16 Paint::HSVtoRGB(int h, int s, int v) {
     }
 
     return ARGB16(1, r >> 3, g >> 3, b >> 3);
+}
+
+u16 Paint::HSVtoRGB(HSV hsv) {
+    return HSVtoRGB(hsv.h, hsv.s, hsv.v);
 }
 
 HSV Paint::RGBtoHSV(u16 color) {

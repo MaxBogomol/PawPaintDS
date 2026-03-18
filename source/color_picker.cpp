@@ -53,6 +53,7 @@ void ColorPicker::update(Paint& paint) {
     if (keysD & KEY_A) {
         selectedColor = newSelectedColor;
         paint.selectedColor = newSelectedColor;
+        paint.updateDrawColors = true;
         updateSelected = true;
     }
 
@@ -60,10 +61,17 @@ void ColorPicker::update(Paint& paint) {
         u16 color = paint.selectedColorSub;
         paint.selectedColorSub = paint.selectedColor;
         paint.selectedColor = color;
+        paint.updateDrawColors = true;
         selectedColor = paint.selectedColor;
         newSelectedColor = paint.selectedColor;
+        updatePicker = true;
         updateSelected = true;
         updateNewSelected = true;
+
+        HSV hsv = paint.RGBtoHSV(selectedColor);
+        hue = hsv.h;
+        colorX = hsv.s / 8;
+        colorY = (255 - hsv.v) / 8;
     }
 
     if (updatePicker) {
@@ -122,18 +130,15 @@ u16 *ColorPicker::getDrawLayer(Paint& paint) {
 }
 
 void ColorPicker::drawPicker(Paint& paint) {
-    paint.updateSubLayers = false;
     for (int y = 0; y < 32; y++) {
         for (int x = 0; x < 32; x++) {
             u16 color = paint.HSVtoRGB(hue, x * 8, 255 - (y * 8));
             paint.drawSquare(x * 4 + 64, y * 4 + 32, 4, 4, getDrawLayer(paint), color);
         }
     }
-    paint.updateSubLayers = true;
 }
 
 void ColorPicker::drawHue(Paint& paint) {
-    paint.updateSubLayers = false;
     for (int y = 0; y < 180; y++) {
         u16 color = paint.HSVtoRGB(y, 255, 255);
         paint.drawSquare(208, y + 8, 16, 1, getDrawLayer(paint), color);
@@ -142,12 +147,10 @@ void ColorPicker::drawHue(Paint& paint) {
         u16 color = paint.HSVtoRGB(y + 180, 255, 255);
         paint.drawSquare(224, y + 8, 16, 1, getDrawLayer(paint), color);
     }
-    paint.updateSubLayers = true;
 }
 
 
 void ColorPicker::drawSelectedColor(Paint& paint) {
-    paint.updateSubLayers = false;
     paint.drawSquare(24, 96, 16, 16, getDrawLayer(paint), selectedColor);
 
     for (int x = 0; x < 144; x++) {
@@ -162,11 +165,9 @@ void ColorPicker::drawSelectedColor(Paint& paint) {
 
     string colorString = string("RGB: (") + paint.intToChars(r) + ", " + paint.intToChars(g) + ", " + paint.intToChars(b) + ")"; 
     paint.drawTextOutline(24, 176, colorString.c_str(), getDrawLayer(paint), blackColor, whiteColor);
-    paint.updateSubLayers = true;
 }
 
 void ColorPicker::drawNewSelectedColor(Paint& paint) {
-    paint.updateSubLayers = false;
     paint.drawSquare(24, 80, 16, 16, getDrawLayer(paint), newSelectedColor);
 
     for (int x = 0; x < 144; x++) {
@@ -181,19 +182,15 @@ void ColorPicker::drawNewSelectedColor(Paint& paint) {
 
     string colorString = string("RGB: (") + paint.intToChars(r) + ", " + paint.intToChars(g) + ", " + paint.intToChars(b) + ")"; 
     paint.drawTextOutline(24, 8, colorString.c_str(), getDrawLayer(paint), blackColor, whiteColor);
-    paint.updateSubLayers = true;
 }
 
 void ColorPicker::drawOutlines(Paint& paint) {
-    paint.updateSubLayers = false;
     paint.drawSquareOutline(23, 79, 18, 34, getDrawLayer(paint), blackColor);
     paint.drawSquareOutline(63, 31, 130, 130, getDrawLayer(paint), blackColor);
     paint.drawSquareOutline(207, 7, 34, 182, getDrawLayer(paint), blackColor);
-    paint.updateSubLayers = true;
 }
 
 void ColorPicker::drawPickerPointers(Paint& paint) {
-    paint.updateSubLayers = false;
     for (int i = 0; i < 6; i++) {
         for (int j = 0; j < 6; j++) {
             paint.blendSubLayers(colorXOld * 4 + 63 + i, 23 + j);
@@ -229,14 +226,12 @@ void ColorPicker::drawPickerPointers(Paint& paint) {
     paint.drawSquare(195, colorY * 4 + 32, 4, 4, getDrawLayer(paint), whiteColor);
 
     paint.drawSquareOutline(colorX * 4 + 63, colorY * 4 + 31, 6, 6, getDrawLayer(paint), blackColor);
-    paint.updateSubLayers = true;
 
     colorXOld = colorX;
     colorYOld = colorY;
 }
 
 void ColorPicker::drawHuePointer(Paint& paint) {
-    paint.updateSubLayers = false;
     int x = 0;
     int y = hueOld;
     if (hueOld >= 180) {
@@ -257,7 +252,6 @@ void ColorPicker::drawHuePointer(Paint& paint) {
     }
     paint.drawSquare(x + 202, y + 7, 4, 3, getDrawLayer(paint), blackColor);
     paint.drawSquare(x + 202 + 1, y + 8, 2, 1, getDrawLayer(paint), whiteColor);
-    paint.updateSubLayers = true;
 
     hueOld = hue;
 }

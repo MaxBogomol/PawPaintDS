@@ -1,14 +1,12 @@
 #pragma once
 
-#include "tool.h"
+#include "brush.h"
 
-class Eraser : public Tool {
+class Eraser : public Brush {
     public:
         virtual ~Eraser() {} 
 
         virtual const char* getName(Paint& paint) override;
 
-        virtual void update(Paint& paint) override;
-        virtual void open(Paint& paint) override;
-        virtual void close(Paint& paint) override;
+        virtual u16 getSelectedColor(Paint& paint) override;
 };

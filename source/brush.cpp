@@ -8,23 +8,17 @@ const char* Brush::getName(Paint& paint) {
 
 void Brush::update(Paint& paint) {
     if (touchCount > 1) {
-        drawLine(paint, touchXOld, touchYOld, touchX, touchY, paint.getSelectedLayer(), paint.getSelectedColor());
+        paint.updateSubLayersEnable();
+        drawLine(paint, touchXOld, touchYOld, touchX, touchY, getSelectedLayer(paint), getSelectedColor(paint));
+        paint.updateSubLayersDisable();
     }
 
     if (keysD & KEY_Y) {
         u16 color = paint.selectedColorSub;
         paint.selectedColorSub = paint.selectedColor;
         paint.selectedColor = color;
+        paint.updateDrawColors = true;
     }
-}
-
-void Brush::open(Paint& paint) {
-
-}
-
-
-void Brush::close(Paint& paint) {
-
 }
 
 void Brush::drawLine(Paint& paint, int x0, int y0, int x1, int y1, u16* buffer, u16 color) {
@@ -41,4 +35,12 @@ void Brush::drawLine(Paint& paint, int x0, int y0, int x1, int y1, u16* buffer, 
         if (e2 >= dy) { err += dy; x0 += sx; }
         if (e2 <= dx) { err += dx; y0 += sy; }
     }
+}
+
+u16 *Brush::getSelectedLayer(Paint& paint) {
+    return paint.getSelectedLayer();
+}
+
+u16 Brush::getSelectedColor(Paint& paint) {
+    return paint.getSelectedColor();
 }
