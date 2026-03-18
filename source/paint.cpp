@@ -108,6 +108,8 @@ void Paint::updateVideo() {
         updateDrawColors = false;
     }
 
+    tools[selectedTool]->updateTool(*this);
+
     swiWaitForVBlank();
     DC_FlushAll();
     dmaCopy(pixelBufferMain, bgMainDest, sizeof(pixelBufferMain));

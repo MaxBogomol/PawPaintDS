@@ -12,6 +12,7 @@ class Tool {
         
         virtual void setup(Paint& paint) {}
         virtual void update(Paint& paint) {}
+        virtual void updateTool(Paint& paint) {}
         virtual void open(Paint& paint) {}
         virtual void close(Paint& paint) {}
 };
