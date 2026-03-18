@@ -2,10 +2,6 @@
 
 #include "tool.h"
 
-#include <cstdint>
-
-typedef uint16_t u16;
-
 class ColorPicker : public Tool {
     public:
         int hue = 0;
@@ -29,6 +25,8 @@ class ColorPicker : public Tool {
         virtual void update(Paint& paint) override;
         virtual void open(Paint& paint) override;
         virtual void close(Paint& paint) override;
+
+        virtual void drawIcon(Paint& paint, int x, int y, u16* buffer) override;
 
         u16 *getDrawLayer(Paint& paint);
 

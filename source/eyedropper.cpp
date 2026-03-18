@@ -21,3 +21,7 @@ void Eyedropper::update(Paint& paint) {
         paint.updateDrawColors = true;
     }
 }
+
+void Eyedropper::drawIcon(Paint& paint, int x, int y, u16* buffer) {
+    paint.drawSprite(x, y, 16, 16, eyedropper_iconBitmap, eyedropper_iconPal, pixelBufferMain);
+}

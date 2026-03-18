@@ -4,6 +4,7 @@
             "name": "Windows NDS",
             "includePath": [
                 "${workspaceFolder}",
+                "${workspaceFolder}/build",
                 "C:/devkitPro/libnds/include/**",
                 "C:/devkitPro/devkitARM/arm-none-eabi/include/**",
                 "C:/devkitPro/calico/include/**"
@@ -11,6 +12,7 @@
             "defines": [
                 "_DEBUG",
                 "_UNICODE",
+                "WIN32",
                 "ARM7",
                 "ARM9",
                 "__NDS__",
@@ -34,6 +36,7 @@
             "name": "Linux NDS",
             "includePath": [
                 "${workspaceFolder}",
+                "${workspaceFolder}/build",
                 "~/devkitpro/opt/devkitpro/libnds/include/**",
                 "~/devkitpro/opt/devkitpro/devkitARM/arm-none-eabi/include/**",
                 "~/devkitpro/opt/devkitpro/calico/include/**"
@@ -41,7 +44,6 @@
             "defines": [
                 "_DEBUG",
                 "_UNICODE",
-                "WIN32",
                 "ARM7",
                 "ARM9",
                 "__NDS__",

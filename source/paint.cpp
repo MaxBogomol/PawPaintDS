@@ -126,7 +126,7 @@ void Paint::drawTools() {
     int i = 0;
     int j = 0;
     for (int t = 0; t < tools.size(); t++) {
-        drawSquare(3 + (i * 18), 3 + (j * 18), 16, 16, pixelBufferMain, blackColor);
+        tools[t]->drawIcon(*this, 3 + (i * 18), 3 + (j * 18), pixelBufferMain);
         if (t == selectedTool) drawSquareOutline(2 + (i * 18), 2 + (j * 18), 18, 18, pixelBufferMain, blackColor);
         i++;
         if (i >= 14) {
@@ -303,6 +303,21 @@ void Paint::drawTextOutline(int x, int y, const char* text, u16* buffer, u16 col
     while (*text) {
         drawCharOutline(x, y, *text++, buffer, color, outlineColor);
         x += 8;
+    }
+}
+
+void Paint::drawSprite(int x0, int y0, int x1, int y1, const unsigned int* spriteBitmap, const unsigned short* spritePal, u16* buffer) {
+    const u8* pixels = (const u8*)spriteBitmap; 
+
+    for (int y = 0; y < y1; y++) {
+        for (int x = 0; x < x1; x++) {
+            u8 colorIndex = pixels[x + (y * x1)];
+            u16 color = spritePal[colorIndex] | BIT(15);
+
+            if (color != pinkColor) {
+                drawPixel(x0 + x, y0 + y, buffer, color);
+            }
+        }
     }
 }
 

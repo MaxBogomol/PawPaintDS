@@ -13,12 +13,30 @@ using namespace std;
 #include "color_picker.h"
 #include "layers.h"
 
+#include "brush_icon.h"
+#include "brush_square_icon.h"
+#include "brush_circle_icon.h"
+#include "brush_dot_icon.h"
+#include "brush_square_noise_icon.h"
+#include "brush_circle_noise_icon.h"
+#include "brush_dot_noise_icon.h"
+#include "eraser_icon.h"
+#include "eraser_square_icon.h"
+#include "eraser_circle_icon.h"
+#include "eraser_dot_icon.h"
+#include "eraser_square_noise_icon.h"
+#include "eraser_circle_noise_icon.h"
+#include "eraser_dot_noise_icon.h"
+#include "eyedropper_icon.h"
+#include "color_picker_icon.h"
+
 inline u16 alphaColor = ARGB16(0, 0, 0, 0);
 inline u16 whiteColor = ARGB16(1, 31, 31, 31);
 inline u16 blackColor = ARGB16(1, 0, 0, 0);
 inline u16 redColor = ARGB16(1, 31, 0, 0);
 inline u16 greenColor = ARGB16(1, 0, 31, 0);
 inline u16 blueColor = ARGB16(1, 0, 0, 31);
+inline u16 pinkColor = ARGB16(1, 31, 0, 31);
 
 inline u16 pixelBufferMain[SCREEN_WIDTH * SCREEN_HEIGHT];
 
@@ -102,6 +120,7 @@ class Paint {
         void drawText(int x, int y, const char* text, u16* buffer, u16 color);
         void drawCharOutline(int x, int y, char c, u16* buffer, u16 color, u16 outlineColor);
         void drawTextOutline(int x, int y, const char* text, u16* buffer, u16 color, u16 outlineColor);
+        void drawSprite(int x0, int y0, int x1, int y1, const unsigned int* spriteBitmap, const unsigned short* spritePal, u16* buffer);
 
         u16 blendColors(u16 src, u16 dst);
         u16 HSVtoRGB(int h, int s, int v);

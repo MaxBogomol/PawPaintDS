@@ -12,7 +12,6 @@ void Brush::setup(Paint& paint) {
     squareSize = 1;
     circleDiameter = 1;
     dotRadius = 1;
-    active = false;
     updateDrawTool = true;
 }
 
@@ -30,89 +29,84 @@ void Brush::update(Paint& paint) {
         paint.updateDrawColors = true;
     }
 
-    if (keysD & KEY_A) {
-        active = !active;
-        updateDrawTool = true;
+    if (keysD & KEY_UP) {
+        if (line - 1 >= 0) {
+            line--;
+            updateDrawTool = true;
+        }
+    }
+    if (keysD & KEY_DOWN) {
+        if (line + 1 < 2) {
+            line++;
+            updateDrawTool = true;
+        }
     }
 
-    if (active) {
-        if (keysD & KEY_UP) {
-            if (line - 1 >= 0) {
-                line--;
+    switch (line) {
+        case 0: {
+            if (keysD & KEY_LEFT) {
+                type--;
+                if (type < 0) type = 3;
                 updateDrawTool = true;
+                paint.updateDrawTools = true;
             }
-        }
-        if (keysD & KEY_DOWN) {
-            if (line + 1 < 2) {
-                line++;
+            if (keysD & KEY_RIGHT) {
+                type++;
+                if (type > 3) type = 0;
                 updateDrawTool = true;
+                paint.updateDrawTools = true;
             }
+            break;
         }
-
-        switch (line) {
-            case 0: {
-                if (keysD & KEY_LEFT) {
-                    type--;
-                    if (type < 0) type = 3;
-                    updateDrawTool = true;
+        case 1: {
+            switch (type) {
+                case 0: {
+                    if (keysD & KEY_LEFT) {
+                        if (squareSize - 1 >= 1) {
+                            squareSize--;
+                            updateDrawTool = true;
+                        }
+                    }
+                    if (keysD & KEY_RIGHT) {
+                        if (squareSize + 1 <= 64) {
+                            squareSize++;
+                            updateDrawTool = true;
+                        }
+                    }
+                    break;
                 }
-                if (keysD & KEY_RIGHT) {
-                    type++;
-                    if (type > 3) type = 0;
-                    updateDrawTool = true;
+                case 1: {
+                    if (keysD & KEY_LEFT) {
+                        if (circleDiameter - 1 >= 1) {
+                            circleDiameter--;
+                            updateDrawTool = true;
+                        }
+                    }
+                    if (keysD & KEY_RIGHT) {
+                        if (circleDiameter + 1 <= 64) {
+                            circleDiameter++;
+                            updateDrawTool = true;
+                        }
+                    }
+                    break;
                 }
-                break;
+                case 2: {
+                    if (keysD & KEY_LEFT) {
+                        if (dotRadius - 1 >= 1) {
+                            dotRadius--;
+                            updateDrawTool = true;
+                        }
+                    }
+                    if (keysD & KEY_RIGHT) {
+                        if (dotRadius + 1 <= 32) {
+                            dotRadius++;
+                            updateDrawTool = true;
+                        }
+                    }
+                    break;
+                }
             }
-            case 1: {
-                switch (type) {
-                    case 0: {
-                        if (keysD & KEY_LEFT) {
-                            if (squareSize - 1 >= 1) {
-                                squareSize--;
-                                updateDrawTool = true;
-                            }
-                        }
-                        if (keysD & KEY_RIGHT) {
-                            if (squareSize + 1 <= 64) {
-                                squareSize++;
-                                updateDrawTool = true;
-                            }
-                        }
-                        break;
-                    }
-                    case 1: {
-                        if (keysD & KEY_LEFT) {
-                            if (circleDiameter - 1 >= 1) {
-                                circleDiameter--;
-                                updateDrawTool = true;
-                            }
-                        }
-                        if (keysD & KEY_RIGHT) {
-                            if (circleDiameter + 1 <= 64) {
-                                circleDiameter++;
-                                updateDrawTool = true;
-                            }
-                        }
-                        break;
-                    }
-                    case 2: {
-                        if (keysD & KEY_LEFT) {
-                            if (dotRadius - 1 >= 1) {
-                                dotRadius--;
-                                updateDrawTool = true;
-                            }
-                        }
-                        if (keysD & KEY_RIGHT) {
-                            if (dotRadius + 1 <= 32) {
-                                dotRadius++;
-                                updateDrawTool = true;
-                            }
-                        }
-                        break;
-                    }
-                }
-                break;
-            }
+            break;
         }
     }
 }
@@ -125,7 +119,7 @@ void Brush::updateTool(Paint& paint) {
 }
 
 void Brush::open(Paint& paint) {
-    active = false;
+    line = 0;
     updateDrawTool = true;
 }
 
@@ -134,6 +128,15 @@ void Brush::close(Paint& paint) {
         for (int y = 0; y < 17; y++) {
             paint.drawPixel(x + 3, y + 48, pixelBufferMain, whiteColor);
         }
+    }
+}
+
+void Brush::drawIcon(Paint& paint, int x, int y, u16* buffer) {
+    switch (type) {
+    	case 0: return paint.drawSprite(x, y, 16, 16, brush_square_iconBitmap, brush_square_iconPal, pixelBufferMain); break;
+    	case 1: return paint.drawSprite(x, y, 16, 16, brush_circle_iconBitmap, brush_circle_iconPal, pixelBufferMain); break;
+		case 2: return paint.drawSprite(x, y, 16, 16, brush_dot_iconBitmap, brush_dot_iconPal, pixelBufferMain); break;
+		case 3: return paint.drawSprite(x, y, 16, 16, brush_iconBitmap, brush_iconPal, pixelBufferMain); break;
     }
 }
 
@@ -174,22 +177,22 @@ void Brush::drawTool(Paint& paint) {
         }
     }
 
-    string typeString = string((active && line == 0) ? ">" : "") + "Type: " + getTypeName(paint, type); 
+    string typeString = string((line == 0) ? ">" : "") + "Type: " + getTypeName(paint, type); 
     paint.drawText(3, 48, typeString.c_str(), pixelBufferMain, blackColor);
 
     switch (type) {
     	case 0: {
-            string diameterString = string((active && line == 1) ? ">" : "") + "Size: " + paint.intToChars(squareSize);
+            string diameterString = string((line == 1) ? ">" : "") + "Size: " + paint.intToChars(squareSize);
             paint.drawText(3, 57, diameterString.c_str(), pixelBufferMain, blackColor);
             break;
         }
         case 1: {
-            string diameterString = string((active && line == 1) ? ">" : "") + "Diameter: " + paint.intToChars(circleDiameter);
+            string diameterString = string((line == 1) ? ">" : "") + "Diameter: " + paint.intToChars(circleDiameter);
             paint.drawText(3, 57, diameterString.c_str(), pixelBufferMain, blackColor);
             break;
         }
         case 2: {
-            string radiusString = string((active && line == 1) ? ">" : "") + "Radius: " + paint.intToChars(dotRadius);
+            string radiusString = string((line == 1) ? ">" : "") + "Radius: " + paint.intToChars(dotRadius);
             paint.drawText(3, 57, radiusString.c_str(), pixelBufferMain, blackColor);
             break;
         }

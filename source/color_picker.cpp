@@ -31,15 +31,15 @@ void ColorPicker::update(Paint& paint) {
             updateNewSelected = true;
             setNewColor = true;
         }
-        if (touchX >= 208 && touchX < 224 && touchY >= 8 && touchY < 188) {
-            hue = touchY - 8;
+        if (touchX >= 208 && touchX < 224 && touchY >= 6 && touchY < 186) {
+            hue = touchY - 6;
             updatePicker = true;
             updateHue = true;
             updateNewSelected = true;
             setNewColor = true;
         }
-        if (touchX >= 224 && touchX < 240 && touchY >= 8 && touchY < 188) {
-            hue = touchY - 8 + 180;
+        if (touchX >= 224 && touchX < 240 && touchY >= 6 && touchY < 186) {
+            hue = touchY - 6 + 180;
             updatePicker = true;
             updateHue = true;
             updateNewSelected = true;
@@ -125,6 +125,10 @@ void ColorPicker::close(Paint& paint) {
     }
 }
 
+void ColorPicker::drawIcon(Paint& paint, int x, int y, u16* buffer) {
+    paint.drawSprite(x, y, 16, 16, color_picker_iconBitmap, color_picker_iconPal, pixelBufferMain);
+}
+
 u16 *ColorPicker::getDrawLayer(Paint& paint) {
     return pixelBufferSub;
 }
@@ -141,11 +145,11 @@ void ColorPicker::drawPicker(Paint& paint) {
 void ColorPicker::drawHue(Paint& paint) {
     for (int y = 0; y < 180; y++) {
         u16 color = paint.HSVtoRGB(y, 255, 255);
-        paint.drawSquare(208, y + 8, 16, 1, getDrawLayer(paint), color);
+        paint.drawSquare(208, y + 6, 16, 1, getDrawLayer(paint), color);
     }
     for (int y = 0; y < 180; y++) {
         u16 color = paint.HSVtoRGB(y + 180, 255, 255);
-        paint.drawSquare(224, y + 8, 16, 1, getDrawLayer(paint), color);
+        paint.drawSquare(224, y + 6, 16, 1, getDrawLayer(paint), color);
     }
 }
 
@@ -187,7 +191,7 @@ void ColorPicker::drawNewSelectedColor(Paint& paint) {
 void ColorPicker::drawOutlines(Paint& paint) {
     paint.drawSquareOutline(23, 79, 18, 34, getDrawLayer(paint), blackColor);
     paint.drawSquareOutline(63, 31, 130, 130, getDrawLayer(paint), blackColor);
-    paint.drawSquareOutline(207, 7, 34, 182, getDrawLayer(paint), blackColor);
+    paint.drawSquareOutline(207, 5, 34, 182, getDrawLayer(paint), blackColor);
 }
 
 void ColorPicker::drawPickerPointers(Paint& paint) {
@@ -240,7 +244,7 @@ void ColorPicker::drawHuePointer(Paint& paint) {
     }
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 3; j++) {
-            paint.blendSubLayers(x + 202 + i, y + 7 + j);
+            paint.blendSubLayers(x + 202 + i, y + 5 + j);
         }
     }
 
@@ -250,8 +254,8 @@ void ColorPicker::drawHuePointer(Paint& paint) {
         y = y - 180;
         x = x + 40;
     }
-    paint.drawSquare(x + 202, y + 7, 4, 3, getDrawLayer(paint), blackColor);
-    paint.drawSquare(x + 202 + 1, y + 8, 2, 1, getDrawLayer(paint), whiteColor);
+    paint.drawSquare(x + 202, y + 5, 4, 3, getDrawLayer(paint), blackColor);
+    paint.drawSquare(x + 202 + 1, y + 6, 2, 1, getDrawLayer(paint), whiteColor);
 
     hueOld = hue;
 }
