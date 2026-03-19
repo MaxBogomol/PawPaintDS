@@ -183,7 +183,7 @@ void Paint::drawTools() {
 }
 
 void Paint::drawColors() {
-    for (int x = 0; x < 164; x++) {
+    for (int x = 0; x < 128; x++) {
         for (int y = 0; y < 34; y++) {
             drawPixel(x, y + 156, pixelBufferMain, whiteColor);
         }
@@ -195,14 +195,14 @@ void Paint::drawColors() {
     int r = (selectedColor) & 31;
     int g = (selectedColor >> 5) & 31;
     int b = (selectedColor >> 10) & 31;
-    string colorString = string("RGB: (") + intToChars(r) + ", " + intToChars(g) + ", " + intToChars(b) + ")"; 
+    string colorString = string("RGB: ") + intToChars(r) + " " + intToChars(g) + " " + intToChars(b); 
     drawText(20, 161, colorString.c_str(), pixelBufferMain, blackColor);
 
     drawSquare(3, 173, 16, 16, pixelBufferMain, selectedColorSub);
     int rs = (selectedColorSub) & 31;
     int gs = (selectedColorSub >> 5) & 31;
     int bs = (selectedColorSub >> 10) & 31;
-    string colorSubString = string("RGB: (") + intToChars(rs) + ", " + intToChars(gs) + ", " + intToChars(bs) + ")"; 
+    string colorSubString = string("RGB: ") + intToChars(rs) + " " + intToChars(gs) + " " + intToChars(bs); 
     drawText(20, 177, colorSubString.c_str(), pixelBufferMain, blackColor);
 }
 

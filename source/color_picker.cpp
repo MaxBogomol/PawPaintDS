@@ -172,7 +172,7 @@ void ColorPicker::drawHue(Paint& paint) {
 void ColorPicker::drawSelectedColor(Paint& paint) {
     paint.drawSquare(24, 96, 16, 16, getDrawLayer(paint), selectedColor);
 
-    for (int x = 0; x < 144; x++) {
+    for (int x = 0; x < 90; x++) {
         for (int y = 0; y < 10; y++) {
             paint.blendSubLayers(x + 23, y + 175);
         }
@@ -182,14 +182,14 @@ void ColorPicker::drawSelectedColor(Paint& paint) {
     int g = (selectedColor >> 5) & 31;
     int b = (selectedColor >> 10) & 31;
 
-    string colorString = string("RGB: (") + paint.intToChars(r) + ", " + paint.intToChars(g) + ", " + paint.intToChars(b) + ")"; 
+    string colorString = string("RGB: ") + paint.intToChars(r) + " " + paint.intToChars(g) + " " + paint.intToChars(b); 
     paint.drawTextOutline(24, 176, colorString.c_str(), getDrawLayer(paint), blackColor, whiteColor);
 }
 
 void ColorPicker::drawNewSelectedColor(Paint& paint) {
     paint.drawSquare(24, 80, 16, 16, getDrawLayer(paint), newSelectedColor);
 
-    for (int x = 0; x < 144; x++) {
+    for (int x = 0; x < 90; x++) {
         for (int y = 0; y < 10; y++) {
             paint.blendSubLayers(x + 23, y + 7);
         }
@@ -199,7 +199,7 @@ void ColorPicker::drawNewSelectedColor(Paint& paint) {
     int g = (newSelectedColor >> 5) & 31;
     int b = (newSelectedColor >> 10) & 31;
 
-    string colorString = string("RGB: (") + paint.intToChars(r) + ", " + paint.intToChars(g) + ", " + paint.intToChars(b) + ")"; 
+    string colorString = string("RGB: ") + paint.intToChars(r) + " " + paint.intToChars(g) + " " + paint.intToChars(b); 
     paint.drawTextOutline(24, 8, colorString.c_str(), getDrawLayer(paint), blackColor, whiteColor);
 }
 

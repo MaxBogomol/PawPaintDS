@@ -15,6 +15,7 @@ class Brush : public Tool {
         int noiseYShift = 0;
         int noiseXOffset = 0;
         int noiseYOffset = 0;
+        bool active = false;
         bool updateDrawTool = true;
 
         virtual ~Brush() {} 
