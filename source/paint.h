@@ -29,6 +29,7 @@ using namespace std;
 #include "eraser_dot_noise_icon.h"
 #include "eyedropper_icon.h"
 #include "color_picker_icon.h"
+#include "layers_icon.h"
 
 inline u16 alphaColor = ARGB16(0, 0, 0, 0);
 inline u16 whiteColor = ARGB16(1, 31, 31, 31);
@@ -116,8 +117,11 @@ class Paint {
         void drawPixel(int x, int y, u16* buffer, u16 color);
         void drawSquare(int x0, int y0, int x1, int y1, u16* buffer, u16 color);
         void drawSquareOutline(int x0, int y0, int x1, int y1, u16* buffer, u16 color);
+        void drawSquareNoise(int x0, int y0, int x1, int y1, u16* buffer, u16 color, int xSize, int ySize, int xShift, int yShift, int xOffset, int yOffset);
         void drawCircleRadius(int xc, int yc, int r, u16* buffer, u16 color);
+        void drawCircleRadiusNoise(int xc, int yc, int r, u16* buffer, u16 color, int xSize, int ySize, int xShift, int yShift, int xOffset, int yOffset);
         void drawCircleDiameter(int xc, int yc, int d, u16* buffer, u16 color);
+        void drawCircleDiameterNoise(int xc, int yc, int d, u16* buffer, u16 color, int xSize, int ySize, int xShift, int yShift, int xOffset, int yOffset);
         void drawLine(int x0, int y0, int x1, int y1, u16* buffer, u16 color);
         void drawChar(int x, int y, char c, u16* buffer, u16 color);
         void drawText(int x, int y, const char* text, u16* buffer, u16 color);
@@ -129,5 +133,6 @@ class Paint {
         u16 HSVtoRGB(int h, int s, int v);
         u16 HSVtoRGB(HSV hsv);
         HSV RGBtoHSV(u16 color);
+        int getDitherThreshold(int x, int y, int xSize, int ySize, int xShift, int yShift);
         const char* intToChars(int val);
 };

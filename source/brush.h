@@ -9,6 +9,12 @@ class Brush : public Tool {
         int squareSize = 1;
         int circleDiameter = 1;
         int dotRadius = 1;
+        int noiseXSize = 2;
+        int noiseYSize = 2;
+        int noiseXShift = 0;
+        int noiseYShift = 0;
+        int noiseXOffset = 0;
+        int noiseYOffset = 0;
         bool updateDrawTool = true;
 
         virtual ~Brush() {} 

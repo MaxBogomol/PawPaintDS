@@ -18,3 +18,7 @@ void Layers::update(Paint& paint) {
         }
     }
 }
+
+void Layers::drawIcon(Paint& paint, int x, int y, u16* buffer) {
+    paint.drawSprite(x, y, 16, 16, layers_iconBitmap, layers_iconPal, pixelBufferMain);
+}

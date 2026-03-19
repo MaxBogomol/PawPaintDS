@@ -12,6 +12,12 @@ void Brush::setup(Paint& paint) {
     squareSize = 1;
     circleDiameter = 1;
     dotRadius = 1;
+    noiseXSize = 2;
+    noiseYSize = 2;
+    noiseXShift = 0;
+    noiseYShift = 0;
+    noiseXOffset = 0;
+    noiseYOffset = 0;
     updateDrawTool = true;
 }
 
@@ -105,6 +111,51 @@ void Brush::update(Paint& paint) {
                     }
                     break;
                 }
+                case 3: {
+                    if (keysD & KEY_LEFT) {
+                        if (squareSize - 1 >= 1) {
+                            squareSize--;
+                            updateDrawTool = true;
+                        }
+                    }
+                    if (keysD & KEY_RIGHT) {
+                        if (squareSize + 1 <= 64) {
+                            squareSize++;
+                            updateDrawTool = true;
+                        }
+                    }
+                    break;
+                }
+                case 4: {
+                    if (keysD & KEY_LEFT) {
+                        if (circleDiameter - 1 >= 1) {
+                            circleDiameter--;
+                            updateDrawTool = true;
+                        }
+                    }
+                    if (keysD & KEY_RIGHT) {
+                        if (circleDiameter + 1 <= 64) {
+                            circleDiameter++;
+                            updateDrawTool = true;
+                        }
+                    }
+                    break;
+                }
+                case 5: {
+                    if (keysD & KEY_LEFT) {
+                        if (dotRadius - 1 >= 1) {
+                            dotRadius--;
+                            updateDrawTool = true;
+                        }
+                    }
+                    if (keysD & KEY_RIGHT) {
+                        if (dotRadius + 1 <= 32) {
+                            dotRadius++;
+                            updateDrawTool = true;
+                        }
+                    }
+                    break;
+                }
             }
             break;
         }
@@ -126,7 +177,8 @@ void Brush::update(Paint& paint) {
     }
 
     switch (type) {
-        case 0: {
+        case 0:
+        case 3: {
             if (touchCount >= 1 && paint.reverseScreens) {
                 if (touchX >= 176 && touchX < 176 + 64 && touchY >= 66 && touchY < 66 + 8) {
                     squareSize = touchX - 176 + 1;
@@ -134,7 +186,8 @@ void Brush::update(Paint& paint) {
                 }
             }
         }
-        case 1: {
+        case 1:
+        case 4: {
             if (touchCount >= 1 && paint.reverseScreens) {
                 if (touchX >= 176 && touchX < 176 + 64 && touchY >= 66 && touchY < 66 + 8) {
                     circleDiameter = touchX - 176 + 1;
@@ -142,12 +195,49 @@ void Brush::update(Paint& paint) {
                 }
             }
         }
-        case 2: {
+        case 2:
+        case 5: {
             if (touchCount >= 1 && paint.reverseScreens) {
                 if (touchX >= 176 && touchX < 176 + 32 && touchY >= 66 && touchY < 66 + 8) {
                     dotRadius = touchX - 176 + 1;
                     updateDrawTool = true;
                 }
+            }
+        }
+    }
+
+    if (type >= 3) {
+        if (touchCount >= 1 && paint.reverseScreens) {
+            if (touchX >= 176 && touchX < 176 + 64 && touchY >= 66 && touchY < 66 + 8) {
+                squareSize = touchX - 176 + 1;
+                updateDrawTool = true;
+            }
+
+            if (touchX >= 176 && touchX < 176 + 16 && touchY >= 75 && touchY < 75 + 8) {
+                noiseXSize = touchX - 176 + 1;
+                updateDrawTool = true;
+            }
+            if (touchX >= 176 + 24 && touchX < 176 + 24 + 16 && touchY >= 75 && touchY < 75 + 8) {
+                noiseYSize = touchX - 176 + 1 - 24;
+                updateDrawTool = true;
+            }
+
+            if (touchX >= 176 && touchX < 176 + 16 && touchY >= 84 && touchY < 84 + 8) {
+                noiseXShift = touchX - 176;
+                updateDrawTool = true;
+            }
+            if (touchX >= 176 + 24 && touchX < 176 + 24 + 16 && touchY >= 84 && touchY < 84 + 8) {
+                noiseYShift = touchX - 176 - 24;
+                updateDrawTool = true;
+            }
+
+            if (touchX >= 176 && touchX < 176 + 16 && touchY >= 93 && touchY < 93 + 8) {
+                noiseXOffset = touchX - 176;
+                updateDrawTool = true;
+            }
+            if (touchX >= 176 + 24 && touchX < 176 + 24 + 16 && touchY >= 93 && touchY < 93 + 8) {
+                noiseYOffset = touchX - 176 - 24;
+                updateDrawTool = true;
             }
         }
     }
@@ -167,7 +257,7 @@ void Brush::open(Paint& paint) {
 
 void Brush::close(Paint& paint) {
     for (int x = 0; x < SCREEN_WIDTH; x++) {
-        for (int y = 0; y < 26; y++) {
+        for (int y = 0; y < 54; y++) {
             paint.drawPixel(x, y + 48, pixelBufferMain, whiteColor);
         }
     }
@@ -204,6 +294,19 @@ void Brush::drawLine(Paint& paint, int x0, int y0, int x1, int y1, u16* buffer, 
                 paint.drawCircleRadius(x0, y0, dotRadius - 1, buffer, color);
                 break;
             }
+            case 3: {
+                int center = squareSize / 2;
+                paint.drawSquareNoise(x0 - center, y0 - center, squareSize, squareSize, buffer, color, noiseXSize, noiseYSize, noiseXShift, noiseYShift, noiseXOffset, noiseYOffset);
+                break;
+            }
+            case 4: {
+                paint.drawCircleDiameterNoise(x0, y0, circleDiameter, buffer, color, noiseXSize, noiseYSize, noiseXShift, noiseYShift, noiseXOffset, noiseYOffset);
+                break;
+            }
+            case 5: {
+                paint.drawCircleRadiusNoise(x0, y0, dotRadius - 1, buffer, color, noiseXSize, noiseYSize, noiseXShift, noiseYShift, noiseXOffset, noiseYOffset);
+                break;
+            }
         }
 
         if (x0 == x1 && y0 == y1) break;
@@ -216,7 +319,7 @@ void Brush::drawLine(Paint& paint, int x0, int y0, int x1, int y1, u16* buffer, 
 
 void Brush::drawTool(Paint& paint) {
     for (int x = 0; x < SCREEN_WIDTH; x++) {
-        for (int y = 0; y < 26; y++) {
+        for (int y = 0; y < 54; y++) {
             paint.drawPixel(x, y + 48, pixelBufferMain, whiteColor);
         }
     }
@@ -230,15 +333,17 @@ void Brush::drawTool(Paint& paint) {
     paint.drawText(176, 57, "- +", pixelBufferMain, blackColor);
 
     switch (type) {
-    	case 0: {
-            string diameterString = string((line == 2) ? ">" : "") + "Size: " + paint.intToChars(squareSize);
-            paint.drawText(3, 66, diameterString.c_str(), pixelBufferMain, blackColor);
+        case 0:
+    	case 3: {
+            string sizeString = string((line == 2) ? ">" : "") + "Size: " + paint.intToChars(squareSize);
+            paint.drawText(3, 66, sizeString.c_str(), pixelBufferMain, blackColor);
 
             paint.drawLine(176, 67, 176 + 63, 67, pixelBufferMain, blackColor);
             paint.drawSquareOutline(176 - 1 + (squareSize - 1), 67 + 2, 3, 4, pixelBufferMain, blackColor);
             break;
         }
-        case 1: {
+        case 1:
+        case 4: {
             string diameterString = string((line == 2) ? ">" : "") + "Diameter: " + paint.intToChars(circleDiameter);
             paint.drawText(3, 66, diameterString.c_str(), pixelBufferMain, blackColor);
 
@@ -246,7 +351,8 @@ void Brush::drawTool(Paint& paint) {
             paint.drawSquareOutline(176 - 1 + (circleDiameter - 1), 67 + 2, 3, 4, pixelBufferMain, blackColor);
             break;
         }
-        case 2: {
+        case 2:
+        case 5: {
             string radiusString = string((line == 2) ? ">" : "") + "Radius: " + paint.intToChars(dotRadius);
             paint.drawText(3, 66, radiusString.c_str(), pixelBufferMain, blackColor);
 
@@ -254,6 +360,35 @@ void Brush::drawTool(Paint& paint) {
             paint.drawSquareOutline(176 - 1 + (dotRadius - 1), 67 + 2, 3, 4, pixelBufferMain, blackColor);
             break;
         }
+    }
+
+    if (type >= 3) {
+        string noiseSizeString = string((line == 3) ? ">" : "") + "Noise Size: " + paint.intToChars(noiseXSize) + " " + paint.intToChars(noiseYSize);
+        paint.drawText(3, 75, noiseSizeString.c_str(), pixelBufferMain, blackColor);
+
+        paint.drawLine(176, 76, 176 + 15, 76, pixelBufferMain, blackColor);
+        paint.drawSquareOutline(176 - 1 + (noiseXSize - 1), 76 + 2, 3, 4, pixelBufferMain, blackColor);
+
+        paint.drawLine(176 + 24, 76, 176 + 15 + 24, 76, pixelBufferMain, blackColor);
+        paint.drawSquareOutline(176 - 1 + (noiseYSize - 1) + 24, 76 + 2, 3, 4, pixelBufferMain, blackColor);
+
+        string noiseShiftString = string((line == 3) ? ">" : "") + "Noise Shift: " + paint.intToChars(noiseXShift) + " " + paint.intToChars(noiseYShift);
+        paint.drawText(3, 84, noiseShiftString.c_str(), pixelBufferMain, blackColor);
+
+        paint.drawLine(176, 85, 176 + 15, 85, pixelBufferMain, blackColor);
+        paint.drawSquareOutline(176 - 1 + noiseXShift, 85 + 2, 3, 4, pixelBufferMain, blackColor);
+
+        paint.drawLine(176 + 24, 85, 176 + 15 + 24, 85, pixelBufferMain, blackColor);
+        paint.drawSquareOutline(176 - 1 + noiseYShift + 24, 85 + 2, 3, 4, pixelBufferMain, blackColor);
+
+        string noiseOffsetString = string((line == 3) ? ">" : "") + "Noise Offset: " + paint.intToChars(noiseXOffset) + " " + paint.intToChars(noiseYOffset);
+        paint.drawText(3, 95, noiseOffsetString.c_str(), pixelBufferMain, blackColor);
+
+        paint.drawLine(176, 96, 176 + 15, 96, pixelBufferMain, blackColor);
+        paint.drawSquareOutline(176 - 1 + noiseXOffset, 96 + 2, 3, 4, pixelBufferMain, blackColor);
+
+        paint.drawLine(176 + 24, 96, 176 + 15 + 24, 96, pixelBufferMain, blackColor);
+        paint.drawSquareOutline(176 - 1 + noiseYOffset + 24, 96 + 2, 3, 4, pixelBufferMain, blackColor);
     }
 }
 

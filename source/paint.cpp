@@ -83,7 +83,7 @@ void Paint::updateTools() {
 
     if (updateDrawSelectedColor) updateDrawSelectedColor = false;
 
-    if (keysD & KEY_SELECT) {
+    if (keysD & KEY_START) {
         reverseScreens = !reverseScreens;
         if (reverseScreens) {
             lcdMainOnBottom();
@@ -267,11 +267,31 @@ void Paint::drawSquareOutline(int x0, int y0, int x1, int y1, u16* buffer, u16 c
     drawLine(x0 + x1, y0, x0 + x1, y0 + y1, buffer, color);
 }
 
+void Paint::drawSquareNoise(int x0, int y0, int x1, int y1, u16* buffer, u16 color, int xSize, int ySize, int xShift, int yShift, int xOffset, int yOffset) {
+	for (int x = 0; x < x1; x++) {
+		for (int y = 0; y < y1; y++) {
+            int threshold = getDitherThreshold(x0 + x + xOffset, y0 + y + yOffset, xSize, ySize, xShift, yShift);
+			if (threshold <= 0) drawPixel(x0 + x, y0 + y, buffer, color);
+		}
+	}
+}
+
 void Paint::drawCircleRadius(int xc, int yc, int r, u16* buffer, u16 color) {
     for (int y = -r; y <= r; y++) {
         for (int x = -r; x <= r; x++) {
             if (x*x + y*y <= r*r) {
                 drawPixel(xc + x, yc + y, buffer, color);
+            }
+        }
+    }
+}
+
+void Paint::drawCircleRadiusNoise(int xc, int yc, int r, u16* buffer, u16 color, int xSize, int ySize, int xShift, int yShift, int xOffset, int yOffset) {
+    for (int y = -r; y <= r; y++) {
+        for (int x = -r; x <= r; x++) {
+            if (x*x + y*y <= r*r) {
+                int threshold = getDitherThreshold(xc + x + xOffset, yc + y + yOffset, xSize, ySize, xShift, yShift);
+                if (threshold <= 0) drawPixel(xc + x, yc + y, buffer, color);
             }
         }
     }
@@ -287,6 +307,22 @@ void Paint::drawCircleDiameter(int xc, int yc, int d, u16* buffer, u16 color) {
             int dy = 2 * y - offset;
             if (dx * dx + dy * dy <= d2) {
                 drawPixel(xc + x - center, yc + y - center, buffer, color);
+            }
+        }
+    }
+}
+
+void Paint::drawCircleDiameterNoise(int xc, int yc, int d, u16* buffer, u16 color, int xSize, int ySize, int xShift, int yShift, int xOffset, int yOffset) {
+    int d2 = d * d;
+    int offset = (d - 1);
+    int center = d / 2; 
+    for (int y = 0; y < d; y++) {
+        for (int x = 0; x < d; x++) {
+            int dx = 2 * x - offset;
+            int dy = 2 * y - offset;
+            if (dx * dx + dy * dy <= d2) {
+                int threshold = getDitherThreshold(xc + x - center + xOffset, yc + y - center + yOffset, xSize, ySize, xShift, yShift);
+                if (threshold <= 0) drawPixel(xc + x - center, yc + y - center, buffer, color);
             }
         }
     }
@@ -440,6 +476,12 @@ HSV Paint::RGBtoHSV(u16 color) {
     }
 
     return res;
+}
+
+int Paint::getDitherThreshold(int x, int y, int xSize, int ySize, int xShift, int yShift) {
+    int xOffset = ((y / ySize) % 2 == 1) ? xShift : 0;
+    int yOffset = ((x / xSize) % 2 == 1) ? yShift : 0;
+    return ((x + xOffset) % xSize) + ((y + yOffset) % ySize);
 }
 
 const char* Paint::intToChars(int val) {
