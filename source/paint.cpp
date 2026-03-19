@@ -1,13 +1,16 @@
 #include "paint.h"
 
 void Paint::setup() {
+    firstFrameTool = true;
     updateSubLayers = false;
 
     selectedLayer = 0;
     selectedTool = 0;
     selectedColor = blackColor;
     selectedColorSub = whiteColor;
+    reverseScreens = false;
 
+    updateDrawSelectedColor = false;
     updateDrawTools = true;
     updateDrawColors = true;
 }
@@ -78,6 +81,17 @@ void Paint::updateTools() {
     int selectedToolOld = selectedTool;
     bool toolChanged = false;
 
+    if (updateDrawSelectedColor) updateDrawSelectedColor = false;
+
+    if (keysD & KEY_SELECT) {
+        reverseScreens = !reverseScreens;
+        if (reverseScreens) {
+            lcdMainOnBottom();
+        } else {
+            lcdMainOnTop();
+        }
+        tools[selectedTool]->reverse(*this);
+    }
     if (keysD & KEY_L) {
         selectedTool--;
         if (selectedTool < 0) selectedTool = tools.size() - 1;
@@ -88,10 +102,39 @@ void Paint::updateTools() {
         if (selectedTool > tools.size() - 1) selectedTool = 0;
         toolChanged = true;
     }
+    if (keysD & KEY_TOUCH && reverseScreens) {
+        int i = 0;
+        int j = 0;
+        for (int t = 0; t < tools.size(); t++) { 
+            if (touchX >= 3 + (i * 18) && touchX < 3 + (i * 18) + 18 && touchY >= 3 + (j * 18) && touchY < 3 + (j * 18) + 18) {
+                selectedTool = t;
+                toolChanged = true;
+                break;
+            }
+            i++;
+            if (i >= 14) {
+                i = 0;
+                j++;
+            }
+        }
+
+        if (touchX >= 3 && touchX < 19 && touchY >= 157 && touchY < 189) {
+            u16 color = selectedColorSub;
+            selectedColorSub = selectedColor;
+            selectedColor = color;
+            updateDrawColors = true;
+            updateDrawSelectedColor = true;
+        }
+}
     if (toolChanged) {
         tools[selectedToolOld]->close(*this);
         tools[selectedTool]->open(*this);
         updateDrawTools = true;
+    }
+
+    if (firstFrameTool) {
+        tools[selectedTool]->open(*this);
+        firstFrameTool = false;
     }
 
     tools[selectedTool]->update(*this);

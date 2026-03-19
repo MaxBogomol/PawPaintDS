@@ -11,7 +11,9 @@ void Eraser::drawIcon(Paint& paint, int x, int y, u16* buffer) {
     	case 0: return paint.drawSprite(x, y, 16, 16, eraser_square_iconBitmap, eraser_square_iconPal, pixelBufferMain); break;
     	case 1: return paint.drawSprite(x, y, 16, 16, eraser_circle_iconBitmap, eraser_circle_iconPal, pixelBufferMain); break;
 		case 2: return paint.drawSprite(x, y, 16, 16, eraser_dot_iconBitmap, eraser_dot_iconPal, pixelBufferMain); break;
-		case 3: return paint.drawSprite(x, y, 16, 16, eraser_iconBitmap, eraser_iconPal, pixelBufferMain); break;
+        case 3: return paint.drawSprite(x, y, 16, 16, eraser_square_noise_iconBitmap, eraser_square_noise_iconPal, pixelBufferMain); break;
+    	case 4: return paint.drawSprite(x, y, 16, 16, eraser_circle_noise_iconBitmap, eraser_circle_noise_iconPal, pixelBufferMain); break;
+		case 5: return paint.drawSprite(x, y, 16, 16, eraser_dot_noise_iconBitmap, eraser_dot_noise_iconPal, pixelBufferMain); break;
     }
 }
 

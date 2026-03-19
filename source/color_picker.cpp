@@ -22,7 +22,7 @@ void ColorPicker::setup(Paint& paint) {
 }
 
 void ColorPicker::update(Paint& paint) {
-    if (touchCount > 0) {
+    if (touchCount > 0 && !paint.reverseScreens) {
         bool setNewColor = false;
         if (touchX >= 64 && touchX < 192 && touchY >= 32 && touchY < 160) {
             colorX = ((touchX - 64) / 4);
@@ -74,9 +74,24 @@ void ColorPicker::update(Paint& paint) {
         colorY = (255 - hsv.v) / 8;
     }
 
+    if (paint.updateDrawSelectedColor) {
+        selectedColor = paint.selectedColor;
+        newSelectedColor = paint.selectedColor;
+
+        HSV hsv = paint.RGBtoHSV(selectedColor);
+        hue = hsv.h;
+        colorX = hsv.s / 8;
+        colorY = (255 - hsv.v) / 8;
+
+        updatePicker = true;
+        updateHue = true;
+        updateSelected = true;
+        updateNewSelected = true;
+    }
+
     if (updatePicker) {
         drawPicker(paint);
-         drawPickerPointers(paint);
+        drawPickerPointers(paint);
         updatePicker = false;
     }
 
@@ -254,7 +269,7 @@ void ColorPicker::drawHuePointer(Paint& paint) {
         y = y - 180;
         x = x + 40;
     }
-    paint.drawSquare(x + 202, y + 5, 4, 3, getDrawLayer(paint), blackColor);
+    paint.drawSquareOutline(x + 202, y + 5, 4, 3, getDrawLayer(paint), blackColor);
     paint.drawSquare(x + 202 + 1, y + 6, 2, 1, getDrawLayer(paint), whiteColor);
 
     hueOld = hue;

@@ -19,6 +19,7 @@ class Tool {
         virtual void updateTool(Paint& paint) {}
         virtual void open(Paint& paint) {}
         virtual void close(Paint& paint) {}
+        virtual void reverse(Paint& paint) {}
 
         virtual void drawIcon(Paint& paint, int x, int y, u16* buffer) {}
 };

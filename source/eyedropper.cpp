@@ -7,7 +7,7 @@ const char* Eyedropper::getName(Paint& paint) {
 }
 
 void Eyedropper::update(Paint& paint) {
-    if (touchCount > 1) {
+    if (touchCount >= 1 && !paint.reverseScreens) {
         u16 color = paint.getPixel(touchX, touchY, pixelBufferSub);
         if ((color >> 15) & 1 == 0) color = blackColor;
         paint.selectedColor = color;

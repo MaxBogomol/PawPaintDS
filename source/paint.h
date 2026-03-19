@@ -76,6 +76,7 @@ struct HSV {
 
 class Paint {
     private:
+        bool firstFrameTool = true;
         bool updateSubLayers = false;
 
     public:
@@ -83,7 +84,9 @@ class Paint {
         int selectedTool = 0;
         u16 selectedColor = blackColor;
         u16 selectedColorSub = whiteColor;
+        bool reverseScreens = false;
 
+        bool updateDrawSelectedColor = false;
         bool updateDrawTools = true;
         bool updateDrawColors = true;
 
