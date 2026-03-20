@@ -22,8 +22,9 @@ void ColorPicker::setup(Paint& paint) {
 }
 
 void ColorPicker::update(Paint& paint) {
+    bool setNewColor = false;
+
     if (touchCount > 0 && !paint.reverseScreens) {
-        bool setNewColor = false;
         if (touchX >= 64 && touchX < 192 && touchY >= 32 && touchY < 160) {
             colorX = ((touchX - 64) / 4);
             colorY = ((touchY - 32) / 4);
@@ -44,9 +45,6 @@ void ColorPicker::update(Paint& paint) {
             updateHue = true;
             updateNewSelected = true;
             setNewColor = true;
-        }
-        if (setNewColor) {
-            newSelectedColor = paint.HSVtoRGB(hue, colorX * 8, 255 - (colorY * 8));
         }
     }
 
@@ -72,6 +70,64 @@ void ColorPicker::update(Paint& paint) {
         hue = hsv.h;
         colorX = hsv.s / 8;
         colorY = (255 - hsv.v) / 8;
+    }
+
+    if (keysH & KEY_B) {
+        if (keysR & KEY_UP) {
+            if (hue - 1 >= 0) {
+                hue--;
+                updatePicker = true;
+                updateHue = true;
+                updateNewSelected = true;
+                setNewColor = true;
+            }
+        }
+        if (keysR & KEY_DOWN) {
+            if (hue + 1 < 360) {
+                hue++;
+                updatePicker = true;
+                updateHue = true;
+                updateNewSelected = true;
+                setNewColor = true;
+            }
+        }
+    } else {
+        if (keysR & KEY_LEFT) {
+            if (colorX - 1 >= 0) {
+                colorX--;
+                updatePicker = true;
+                updateNewSelected = true;
+                setNewColor = true;
+            }
+        }
+        if (keysR & KEY_RIGHT) {
+            if (colorX + 1 < 32) {
+                colorX++;
+                updatePicker = true;
+                updateNewSelected = true;
+                setNewColor = true;
+            }
+        }
+        if (keysR & KEY_UP) {
+            if (colorY - 1 >= 0) {
+                colorY--;
+                updatePicker = true;
+                updateNewSelected = true;
+                setNewColor = true;
+            }
+        }
+        if (keysR & KEY_DOWN) {
+            if (colorY + 1 < 32) {
+                colorY++;
+                updatePicker = true;
+                updateNewSelected = true;
+                setNewColor = true;
+            }
+        }
+    }
+
+    if (setNewColor) {
+        newSelectedColor = paint.HSVtoRGB(hue, colorX * 8, 255 - (colorY * 8));
     }
 
     if (paint.updateDrawSelectedColor) {
@@ -172,7 +228,7 @@ void ColorPicker::drawHue(Paint& paint) {
 void ColorPicker::drawSelectedColor(Paint& paint) {
     paint.drawSquare(24, 96, 16, 16, getDrawLayer(paint), selectedColor);
 
-    for (int x = 0; x < 90; x++) {
+    for (int x = 0; x < 120; x++) {
         for (int y = 0; y < 10; y++) {
             paint.blendSubLayers(x + 23, y + 175);
         }
@@ -189,7 +245,7 @@ void ColorPicker::drawSelectedColor(Paint& paint) {
 void ColorPicker::drawNewSelectedColor(Paint& paint) {
     paint.drawSquare(24, 80, 16, 16, getDrawLayer(paint), newSelectedColor);
 
-    for (int x = 0; x < 90; x++) {
+    for (int x = 0; x < 120; x++) {
         for (int y = 0; y < 10; y++) {
             paint.blendSubLayers(x + 23, y + 7);
         }

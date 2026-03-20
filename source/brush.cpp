@@ -30,7 +30,7 @@ void Brush::setup(Paint& paint) {
 
 void Brush::update(Paint& paint) {
     if (touchCount > 1 && !paint.reverseScreens) {
-        if (line == 0) {
+        if (line == 0 && active) {
             updateDrawCursor = true;
         } else {
             paint.updateSubLayersEnable();
@@ -97,7 +97,7 @@ void Brush::update(Paint& paint) {
             if (keysR & KEY_DOWN) {
                 if (cursorY + 1 < SCREEN_HEIGHT) {
                     cursorY++;
-                    updateDrawCursor = true;paint.updateSubLayersDisable();
+                    updateDrawCursor = true;
                 }
             }
             if (keysH & KEY_B) {
