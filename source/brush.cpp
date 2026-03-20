@@ -19,6 +19,7 @@ void Brush::setup(Paint& paint) {
     noiseXOffset = 0;
     noiseYOffset = 0;
     active = false;
+    activeNoise = false;
     updateDrawTool = true;
 }
 
@@ -39,6 +40,7 @@ void Brush::update(Paint& paint) {
     if (keysD & KEY_A) {
         if (line == 0 || line >= 3) {
             active = !active;
+            activeNoise = false;
             updateDrawTool = true;
         }
     }
@@ -186,6 +188,106 @@ void Brush::update(Paint& paint) {
     }
 
     if (type >= 3) {
+        if (active) {
+            if ((keysD & KEY_UP) || (keysD & KEY_DOWN)) {
+                activeNoise = !activeNoise;
+                updateDrawTool = true;
+            }
+
+            switch (line) {
+                case 3: {
+                    if (!activeNoise) {
+                        if (keysD & KEY_LEFT) {
+                            if (noiseXSize - 1 >= 1) {
+                                noiseXSize--;
+                                updateDrawTool = true;
+                            }
+                        }
+                        if (keysD & KEY_RIGHT) {
+                            if (noiseXSize + 1 <= 16) {
+                                noiseXSize++;
+                                updateDrawTool = true;
+                            }
+                        }
+                    } else {
+                        if (keysD & KEY_LEFT) {
+                            if (noiseYSize - 1 >= 1) {
+                                noiseYSize--;
+                                updateDrawTool = true;
+                            }
+                        }
+                        if (keysD & KEY_RIGHT) {
+                            if (noiseYSize + 1 <= 16) {
+                                noiseYSize++;
+                                updateDrawTool = true;
+                            }
+                        }
+                    }
+                    break;
+                }
+                case 4: {
+                    if (!activeNoise) {
+                        if (keysD & KEY_LEFT) {
+                            if (noiseXShift - 1 >= 0) {
+                                noiseXShift--;
+                                updateDrawTool = true;
+                            }
+                        }
+                        if (keysD & KEY_RIGHT) {
+                            if (noiseXShift + 1 < 16) {
+                                noiseXShift++;
+                                updateDrawTool = true;
+                            }
+                        }
+                    } else {
+                        if (keysD & KEY_LEFT) {
+                            if (noiseYShift - 1 >= 0) {
+                                noiseYShift--;
+                                updateDrawTool = true;
+                            }
+                        }
+                        if (keysD & KEY_RIGHT) {
+                            if (noiseYShift + 1 < 16) {
+                                noiseYShift++;
+                                updateDrawTool = true;
+                            }
+                        }
+                    }
+                    break;
+                }
+                case 5: {
+                    if (!activeNoise) {
+                        if (keysD & KEY_LEFT) {
+                            if (noiseXOffset - 1 >= 0) {
+                                noiseXOffset--;
+                                updateDrawTool = true;
+                            }
+                        }
+                        if (keysD & KEY_RIGHT) {
+                            if (noiseXOffset + 1 < 16) {
+                                noiseXOffset++;
+                                updateDrawTool = true;
+                            }
+                        }
+                    } else {
+                        if (keysD & KEY_LEFT) {
+                            if (noiseYOffset - 1 >= 0) {
+                                noiseYOffset--;
+                                updateDrawTool = true;
+                            }
+                        }
+                        if (keysD & KEY_RIGHT) {
+                            if (noiseYOffset + 1 < 16) {
+                                noiseYOffset++;
+                                updateDrawTool = true;
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+
         if (touchCount >= 1 && paint.reverseScreens) {
             if (touchX >= 176 && touchX < 176 + 64 && touchY >= 66 && touchY < 66 + 8) {
                 squareSize = touchX - 176 + 1;
@@ -232,6 +334,7 @@ void Brush::updateTool(Paint& paint) {
 void Brush::open(Paint& paint) {
     line = 0;
     active = false;
+    activeNoise = false;
     updateDrawTool = true;
 }
 
@@ -343,7 +446,7 @@ void Brush::drawTool(Paint& paint) {
     }
 
     if (type >= 3) {
-        string noiseSizeString = string((line == 3) ? ">" : "") + "Noise Size: " + paint.intToChars(noiseXSize) + " " + paint.intToChars(noiseYSize);
+        string noiseSizeString = string((line == 3 && !active) ? ">" : "") + "Noise Size: " + ((line == 3 && active && !activeNoise) ? ">" : "") + paint.intToChars(noiseXSize) + " " + ((line == 3 && active && activeNoise) ? ">" : "") + paint.intToChars(noiseYSize);
         paint.drawText(3, 75, noiseSizeString.c_str(), pixelBufferMain, blackColor);
 
         paint.drawLine(176, 76, 176 + 15, 76, pixelBufferMain, blackColor);
@@ -352,7 +455,7 @@ void Brush::drawTool(Paint& paint) {
         paint.drawLine(176 + 24, 76, 176 + 15 + 24, 76, pixelBufferMain, blackColor);
         paint.drawSquareOutline(176 - 1 + (noiseYSize - 1) + 24, 76 + 2, 3, 4, pixelBufferMain, blackColor);
 
-        string noiseShiftString = string((line == 4) ? ">" : "") + "Noise Shift: " + paint.intToChars(noiseXShift) + " " + paint.intToChars(noiseYShift);
+        string noiseShiftString = string((line == 4 && !active) ? ">" : "") + "Noise Shift: " + ((line == 4 && active && !activeNoise) ? ">" : "") + paint.intToChars(noiseXShift) + " " + ((line == 4 && active && activeNoise) ? ">" : "") + paint.intToChars(noiseYShift);
         paint.drawText(3, 84, noiseShiftString.c_str(), pixelBufferMain, blackColor);
 
         paint.drawLine(176, 85, 176 + 15, 85, pixelBufferMain, blackColor);
@@ -361,7 +464,7 @@ void Brush::drawTool(Paint& paint) {
         paint.drawLine(176 + 24, 85, 176 + 15 + 24, 85, pixelBufferMain, blackColor);
         paint.drawSquareOutline(176 - 1 + noiseYShift + 24, 85 + 2, 3, 4, pixelBufferMain, blackColor);
 
-        string noiseOffsetString = string((line == 5) ? ">" : "") + "Noise Offset: " + paint.intToChars(noiseXOffset) + " " + paint.intToChars(noiseYOffset);
+        string noiseOffsetString = string((line == 5 && !active) ? ">" : "") + "Noise Offset: " + ((line == 5 && active && !activeNoise) ? ">" : "") + paint.intToChars(noiseXOffset) + " " + ((line == 5 && active && activeNoise) ? ">" : "") + paint.intToChars(noiseYOffset);
         paint.drawText(3, 95, noiseOffsetString.c_str(), pixelBufferMain, blackColor);
 
         paint.drawLine(176, 96, 176 + 15, 96, pixelBufferMain, blackColor);
