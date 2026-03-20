@@ -55,6 +55,7 @@ extern const u8 default_font_bin[];
 inline touchPosition touch;
 inline int keysD;
 inline int keysH;
+inline int keysR;
 inline int keysU;
 
 inline int touchX = 0;

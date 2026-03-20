@@ -18,16 +18,28 @@ void Brush::setup(Paint& paint) {
     noiseYShift = 0;
     noiseXOffset = 0;
     noiseYOffset = 0;
+    cursorX = 0;
+    cursorY = 0;
+    cursorXOld = 0;
+    cursorYOld = 0;
     active = false;
     activeNoise = false;
     updateDrawTool = true;
+    updateDrawCursor = false;
 }
 
 void Brush::update(Paint& paint) {
     if (touchCount > 1 && !paint.reverseScreens) {
-        paint.updateSubLayersEnable();
-        drawLine(paint, touchXOld, touchYOld, touchX, touchY, getSelectedLayer(paint), getSelectedColor(paint));
-        paint.updateSubLayersDisable();
+        if (line == 0) {
+            updateDrawCursor = true;
+        } else {
+            paint.updateSubLayersEnable();
+            drawLine(paint, touchXOld, touchYOld, touchX, touchY, getSelectedLayer(paint), getSelectedColor(paint));
+            paint.updateSubLayersDisable();
+        }
+
+        cursorX = touchX;
+        cursorY = touchY;
     }
 
     if (keysD & KEY_Y) {
@@ -43,6 +55,7 @@ void Brush::update(Paint& paint) {
             activeNoise = false;
             updateDrawTool = true;
         }
+        if (line == 0) updateDrawCursor = true;
     }
 
     int maxLine = 3;
@@ -58,7 +71,39 @@ void Brush::update(Paint& paint) {
         if (keysD & KEY_DOWN) {
             if (line + 1 < maxLine) {
                 line++;
-                updateDrawTool = true;
+                updateDrawTool = true;paint.updateSubLayersDisable();
+            }
+        }
+    } else {
+        if (line == 0) {
+            if (keysR & KEY_LEFT) {
+                if (cursorX - 1 >= 0) {
+                    cursorX--;
+                    updateDrawCursor = true;
+                }
+            }
+            if (keysR & KEY_RIGHT) {
+                if (cursorX + 1 < SCREEN_WIDTH) {
+                    cursorX++;
+                    updateDrawCursor = true;
+                }
+            }
+            if (keysR & KEY_UP) {
+                if (cursorY - 1 >= 0) {
+                    cursorY--;
+                    updateDrawCursor = true;
+                }
+            }
+            if (keysR & KEY_DOWN) {
+                if (cursorY + 1 < SCREEN_HEIGHT) {
+                    cursorY++;
+                    updateDrawCursor = true;paint.updateSubLayersDisable();
+                }
+            }
+            if (keysH & KEY_B) {
+                paint.updateSubLayersEnable();
+                drawLine(paint, cursorX, cursorY, cursorX, cursorY, getSelectedLayer(paint), getSelectedColor(paint));
+                paint.updateSubLayersDisable();
             }
         }
     }
@@ -83,13 +128,13 @@ void Brush::update(Paint& paint) {
             switch (type) {
                 case 0:
                 case 3: {
-                    if (keysD & KEY_LEFT) {
+                    if (keysR & KEY_LEFT) {
                         if (squareSize - 1 >= 1) {
                             squareSize--;
                             updateDrawTool = true;
                         }
                     }
-                    if (keysD & KEY_RIGHT) {
+                    if (keysR & KEY_RIGHT) {
                         if (squareSize + 1 <= 64) {
                             squareSize++;
                             updateDrawTool = true;
@@ -99,13 +144,13 @@ void Brush::update(Paint& paint) {
                 }
                 case 1:
                 case 4: {
-                    if (keysD & KEY_LEFT) {
+                    if (keysR & KEY_LEFT) {
                         if (circleDiameter - 1 >= 1) {
                             circleDiameter--;
                             updateDrawTool = true;
                         }
                     }
-                    if (keysD & KEY_RIGHT) {
+                    if (keysR & KEY_RIGHT) {
                         if (circleDiameter + 1 <= 64) {
                             circleDiameter++;
                             updateDrawTool = true;
@@ -115,13 +160,13 @@ void Brush::update(Paint& paint) {
                 }
                 case 2:
                 case 5: {
-                    if (keysD & KEY_LEFT) {
+                    if (keysR & KEY_LEFT) {
                         if (dotRadius - 1 >= 1) {
                             dotRadius--;
                             updateDrawTool = true;
                         }
                     }
-                    if (keysD & KEY_RIGHT) {
+                    if (keysR & KEY_RIGHT) {
                         if (dotRadius + 1 <= 32) {
                             dotRadius++;
                             updateDrawTool = true;
@@ -138,6 +183,7 @@ void Brush::update(Paint& paint) {
         if (touchX >= 176 && touchX < 176 + 8 && touchY >= 48 && touchY < 48 + 8) {
             active = !active;
             line = 0;
+            updateDrawCursor = true;
             updateDrawTool = true;
         }
         if (touchX >= 176 && touchX < 176 + 8 && touchY >= 57 && touchY < 57 + 8) {
@@ -322,6 +368,11 @@ void Brush::update(Paint& paint) {
             }
         }
     }
+
+    if (updateDrawCursor) {
+        drawCursor(paint);
+        updateDrawCursor = false;
+    }
 }
 
 void Brush::updateTool(Paint& paint) {
@@ -336,6 +387,7 @@ void Brush::open(Paint& paint) {
     active = false;
     activeNoise = false;
     updateDrawTool = true;
+    updateDrawCursor = false;
 }
 
 void Brush::close(Paint& paint) {
@@ -473,6 +525,29 @@ void Brush::drawTool(Paint& paint) {
         paint.drawLine(176 + 24, 96, 176 + 15 + 24, 96, pixelBufferMain, blackColor);
         paint.drawSquareOutline(176 - 1 + noiseYOffset + 24, 96 + 2, 3, 4, pixelBufferMain, blackColor);
     }
+}
+
+void Brush::drawCursor(Paint& paint) {
+    int size = 0;
+    switch (type) {
+        case 0:
+    	case 3: size = squareSize; break;
+        case 1:
+    	case 4: size = circleDiameter; break;
+        case 2:
+    	case 5: size = dotRadius; break;
+    }
+    size = size + 2;
+    for (int x = 0; x < size; x++) {
+        for (int y = 0; y < size; y++) {
+            paint.blendSubLayers(cursorXOld + x - (size / 2), cursorYOld + y - (size / 2));
+        }
+    }
+
+    if (active) drawLine(paint, cursorX, cursorY, cursorX, cursorY, pixelBufferSub, getSelectedColor(paint));
+
+    cursorXOld = cursorX;
+    cursorYOld = cursorY;
 }
 
 const char* Brush::getTypeName(Paint& paint, int type) {

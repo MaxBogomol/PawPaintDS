@@ -15,9 +15,14 @@ class Brush : public Tool {
         int noiseYShift = 0;
         int noiseXOffset = 0;
         int noiseYOffset = 0;
+        int cursorX = 0;
+        int cursorY = 0;
+        int cursorXOld = 0;
+        int cursorYOld = 0;
         bool active = false;
         bool activeNoise = false;
         bool updateDrawTool = true;
+        bool updateDrawCursor = false;
 
         virtual ~Brush() {} 
 
@@ -33,6 +38,7 @@ class Brush : public Tool {
 
         virtual void drawLine(Paint& paint, int x0, int y0, int x1, int y1, u16* buffer, u16 color);
         virtual void drawTool(Paint& paint);
+        virtual void drawCursor(Paint& paint);
 
         virtual const char* getTypeName(Paint& paint, int type);
 

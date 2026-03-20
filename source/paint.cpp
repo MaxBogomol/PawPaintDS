@@ -13,6 +13,8 @@ void Paint::setup() {
     updateDrawSelectedColor = false;
     updateDrawTools = true;
     updateDrawColors = true;
+
+    keysSetRepeat(10, 2);
 }
 
 void Paint::setupVideo() {
@@ -61,6 +63,7 @@ void Paint::updateInputs() {
     scanKeys();
     keysD = keysDown();
     keysH = keysHeld();
+    keysR = keysDownRepeat();
     keysU = keysUp();
     touchRead(&touch);
 
