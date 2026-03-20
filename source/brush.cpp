@@ -396,6 +396,9 @@ void Brush::close(Paint& paint) {
             paint.drawPixel(x, y + 48, pixelBufferMain, whiteColor);
         }
     }
+
+    active = false;
+    drawCursor(paint);
 }
 
 void Brush::drawIcon(Paint& paint, int x, int y, u16* buffer) {
