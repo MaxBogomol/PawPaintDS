@@ -70,6 +70,11 @@ inline Eyedropper eyedropper;
 inline ColorPicker colorPicker;
 inline Layers layers;
 
+inline bool activeSubLayer0 = true;
+inline bool activeSubLayer1 = true;
+inline bool activeSubLayer2 = true;
+inline bool activeSubLayer3 = true;
+
 struct HSV {
     int h;
     int s;
@@ -107,8 +112,10 @@ class Paint {
         void drawColors();
 
         void blendSubLayers(int x, int y);
+        void swapSubLayers(int l0, int l1);
         void updateSubLayersEnable();
         void updateSubLayersDisable();
+        u16 *getLayer(int layer);
 
         u16 *getSelectedLayer();
         u16 getSelectedColor();

@@ -197,7 +197,7 @@ void ColorPicker::close(Paint& paint) {
 }
 
 void ColorPicker::drawIcon(Paint& paint, int x, int y, u16* buffer) {
-    paint.drawSprite(x, y, 16, 16, color_picker_iconBitmap, color_picker_iconPal, pixelBufferMain);
+    paint.drawSprite(x, y, 16, 16, color_picker_iconBitmap, color_picker_iconPal, buffer);
 }
 
 u16 *ColorPicker::getDrawLayer(Paint& paint) {

@@ -215,6 +215,16 @@ void Paint::blendSubLayers(int x, int y) {
 	pixelBufferSub[x + (y * SCREEN_WIDTH)] = blendColors(pixelBufferSub[x + (y * SCREEN_WIDTH)], pixelBufferSubLayer3[x + (y * SCREEN_WIDTH)]);
 }
 
+void Paint::swapSubLayers(int l0, int l1) {
+    for (int x = 0; x < SCREEN_WIDTH; x++) {
+		for (int y = 0; y < SCREEN_HEIGHT; y++) {
+            u16 color = getLayer(l0)[x + (y * SCREEN_WIDTH)];
+            getLayer(l0)[x + (y * SCREEN_WIDTH)] = getLayer(l1)[x + (y * SCREEN_WIDTH)];
+            getLayer(l1)[x + (y * SCREEN_WIDTH)] = color;
+        }
+    }
+}
+
 void Paint::updateSubLayersEnable() {
     updateSubLayers = true;
 }
@@ -223,14 +233,18 @@ void Paint::updateSubLayersDisable() {
     updateSubLayers = false;
 }
 
-u16 *Paint::getSelectedLayer() {
-	switch (selectedLayer) {
+u16 *Paint::getLayer(int layer) {
+	switch (layer) {
     	case 0: return pixelBufferSubLayer0;
     	case 1: return pixelBufferSubLayer1;
 		case 2: return pixelBufferSubLayer2;
 		case 3: return pixelBufferSubLayer3;
     }
 	return pixelBufferSubLayer0;
+}
+
+u16 *Paint::getSelectedLayer() {
+	return getLayer(selectedLayer);
 }
 
 u16 Paint::getSelectedColor() {
