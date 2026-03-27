@@ -65,13 +65,43 @@ void Layers::update(Paint& paint) {
         }
     }
 
+    if (keysD & KEY_TOUCH && paint.reverseScreens) {
+        if (touchX >= 176 && touchX < 176 + 8 && touchY >= 48 && touchY < 48 + 8) {
+            if (paint.selectedLayer - 1 >= 0) {
+                paint.selectedLayer--;
+                updateDrawTool = true;
+            }
+        }
+        if (touchX >= 192 && touchX < 192 + 8 && touchY >= 48 && touchY < 48 + 8) {
+            if (paint.selectedLayer + 1 <= 3) {
+                paint.selectedLayer++;
+                updateDrawTool = true;
+            }
+        }
+        if (touchX >= 176 && touchX < 176 + 8 && touchY >= 57 && touchY < 57 + 8) {
+            if (paint.selectedLayer - 1 >= 0) {
+                paint.swapSubLayers(paint.selectedLayer, paint.selectedLayer - 1);
+                paint.selectedLayer--;
+                updateSubLayers = true;
+                updateDrawTool = true;
+            }
+        }
+        if (touchX >= 192 && touchX < 192 + 8 && touchY >= 57 && touchY < 57 + 8) {
+            if (paint.selectedLayer + 1 <= 3) {
+                paint.swapSubLayers(paint.selectedLayer, paint.selectedLayer + 1);
+                paint.selectedLayer++;
+                updateSubLayers = true;
+                updateDrawTool = true;
+            }
+        }
+    }
+
     if (updateSubLayers) {
         for (int x = 0; x < SCREEN_WIDTH; x++) {
             for (int y = 0; y < SCREEN_HEIGHT; y++) {
                 paint.blendSubLayers(x, y);
             }
         }
-        updateSubLayers = false;
     }
 }
 

@@ -85,6 +85,7 @@ class Paint {
     private:
         bool firstFrameTool = true;
         bool updateSubLayers = false;
+        bool updateBlendSubLayers = false;
 
     public:
         int selectedLayer = 0;
@@ -112,6 +113,7 @@ class Paint {
         void drawColors();
 
         void blendSubLayers(int x, int y);
+        void blendSubLayers(int x, int y, u16* buffer);
         void swapSubLayers(int l0, int l1);
         void updateSubLayersEnable();
         void updateSubLayersDisable();
