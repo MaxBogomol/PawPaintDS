@@ -23,5 +23,5 @@ void Eyedropper::update(Paint& paint) {
 }
 
 void Eyedropper::drawIcon(Paint& paint, int x, int y, u16* buffer) {
-    paint.drawSprite(x, y, 16, 16, eyedropper_iconBitmap, eyedropper_iconPal, pixelBufferMain);
+    paint.drawSprite(x, y, 16, 16, eyedropper_iconBitmap, pixelBufferMain);
 }

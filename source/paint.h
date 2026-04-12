@@ -135,7 +135,7 @@ class Paint {
         void drawText(int x, int y, const char* text, u16* buffer, u16 color);
         void drawCharOutline(int x, int y, char c, u16* buffer, u16 color, u16 outlineColor);
         void drawTextOutline(int x, int y, const char* text, u16* buffer, u16 color, u16 outlineColor);
-        void drawSprite(int x0, int y0, int x1, int y1, const unsigned int* spriteBitmap, const unsigned short* spritePal, u16* buffer);
+        void drawSprite(int x0, int y0, int x1, int y1, const unsigned int* spriteBitmap, u16* buffer);
 
         u16 blendColors(u16 src, u16 dst);
         u16 HSVtoRGB(int h, int s, int v);

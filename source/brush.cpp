@@ -403,12 +403,12 @@ void Brush::close(Paint& paint) {
 
 void Brush::drawIcon(Paint& paint, int x, int y, u16* buffer) {
     switch (type) {
-    	case 0: return paint.drawSprite(x, y, 16, 16, brush_square_iconBitmap, brush_square_iconPal, buffer); break;
-    	case 1: return paint.drawSprite(x, y, 16, 16, brush_circle_iconBitmap, brush_circle_iconPal, buffer); break;
-		case 2: return paint.drawSprite(x, y, 16, 16, brush_dot_iconBitmap, brush_dot_iconPal, buffer); break;
-		case 3: return paint.drawSprite(x, y, 16, 16, brush_square_noise_iconBitmap, brush_square_noise_iconPal, buffer); break;
-    	case 4: return paint.drawSprite(x, y, 16, 16, brush_circle_noise_iconBitmap, brush_circle_noise_iconPal, buffer); break;
-		case 5: return paint.drawSprite(x, y, 16, 16, brush_dot_noise_iconBitmap, brush_dot_noise_iconPal, buffer); break;
+    	case 0: return paint.drawSprite(x, y, 16, 16, brush_square_iconBitmap, buffer); break;
+    	case 1: return paint.drawSprite(x, y, 16, 16, brush_circle_iconBitmap, buffer); break;
+		case 2: return paint.drawSprite(x, y, 16, 16, brush_dot_iconBitmap, buffer); break;
+		case 3: return paint.drawSprite(x, y, 16, 16, brush_square_noise_iconBitmap, buffer); break;
+    	case 4: return paint.drawSprite(x, y, 16, 16, brush_circle_noise_iconBitmap, buffer); break;
+		case 5: return paint.drawSprite(x, y, 16, 16, brush_dot_noise_iconBitmap, buffer); break;
     }
 }
 

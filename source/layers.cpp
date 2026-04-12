@@ -96,7 +96,7 @@ void Layers::close(Paint& paint) {
 }
 
 void Layers::drawIcon(Paint& paint, int x, int y, u16* buffer) {
-    paint.drawSprite(x, y, 16, 16, layers_iconBitmap, layers_iconPal, buffer);
+    paint.drawSprite(x, y, 16, 16, layers_iconBitmap, buffer);
 }
 
 void Layers::drawTool(Paint& paint) {

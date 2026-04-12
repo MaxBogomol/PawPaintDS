@@ -402,15 +402,14 @@ void Paint::drawTextOutline(int x, int y, const char* text, u16* buffer, u16 col
     }
 }
 
-void Paint::drawSprite(int x0, int y0, int x1, int y1, const unsigned int* spriteBitmap, const unsigned short* spritePal, u16* buffer) {
-    const u8* pixels = (const u8*)spriteBitmap; 
+void Paint::drawSprite(int x0, int y0, int x1, int y1, const unsigned int* spriteBitmap, u16* buffer) {
+    const u16* pixels = (const u16*) spriteBitmap; 
 
     for (int y = 0; y < y1; y++) {
         for (int x = 0; x < x1; x++) {
-            u8 colorIndex = pixels[x + (y * x1)];
-            u16 color = spritePal[colorIndex] | BIT(15);
+            u16 color = pixels[x + (y * x1)];
 
-            if (color != pinkColor) {
+            if (color & BIT(15)) {
                 drawPixel(x0 + x, y0 + y, buffer, color);
             }
         }
