@@ -518,3 +518,116 @@ const char* Paint::intToChars(int val) {
     sprintf(buf, "%d", val);
     return buf;
 }
+
+bool Paint::saveFile(const char* path, u16* buffer) {
+    FILE* fp = fopen(path, "wb");
+    if (!fp) return false;
+
+    png_structp png = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+
+    if (!png) { 
+        fclose(fp);
+        return false;
+    }
+
+    png_infop info = png_create_info_struct(png);
+
+    if (!info) { 
+        png_destroy_write_struct(&png, NULL); 
+        fclose(fp); 
+        return false; 
+    }
+    
+    if (setjmp(png_jmpbuf(png))) {
+        png_destroy_write_struct(&png, &info);
+        fclose(fp);
+        return false;
+    }
+
+    png_init_io(png, fp);
+    png_set_IHDR(png, info, 256, 192, 8, PNG_COLOR_TYPE_RGBA, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+    png_write_info(png, info);
+
+    png_byte row[256 * 4];
+
+    for (int y = 0; y < 192; y++) {
+        for (int x = 0; x < 256; x++) {
+            u16 color = buffer[y * 256 + x];
+            row[x * 4 + 0] = (color & 0x1F) << 3;
+            row[x * 4 + 1] = ((color >> 5) & 0x1F) << 3;
+            row[x * 4 + 2] = ((color >> 10) & 0x1F) << 3;
+            row[x * 4 + 3] = (color & BIT(15)) ? 255 : 0;
+        }
+        png_write_row(png, row);
+    }
+
+    png_write_end(png, NULL);
+    png_destroy_write_struct(&png, &info);
+    fflush(fp);
+    fclose(fp);
+    return true;
+}
+
+bool Paint::loadFile(const char* path, u16* buffer) {
+    FILE* fp = fopen(path, "rb");
+    if (!fp) return false;
+
+    png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+
+    if (!png) { 
+        fclose(fp);
+        return false;
+    }
+
+    png_infop info = png_create_info_struct(png);
+
+    if (!info) { 
+        png_destroy_read_struct(&png, NULL, NULL);
+        fclose(fp); 
+        return false; 
+    }
+    
+    if (setjmp(png_jmpbuf(png))) {
+        png_destroy_read_struct(&png, &info, NULL);
+        fclose(fp);
+        return false;
+    }
+
+    png_init_io(png, fp);
+    png_read_info(png, info);
+
+    png_uint_32 width, height;
+    int bit_depth, color_type;
+    png_get_IHDR(png, info, &width, &height, &bit_depth, &color_type, NULL, NULL, NULL);
+
+    if (color_type == PNG_COLOR_TYPE_PALETTE) png_set_palette_to_rgb(png);
+    if (color_type == PNG_COLOR_TYPE_GRAY && bit_depth < 8) png_set_expand_gray_1_2_4_to_8(png);
+    if (png_get_valid(png, info, PNG_INFO_tRNS)) png_set_tRNS_to_alpha(png);
+    if (color_type == PNG_COLOR_TYPE_RGB || color_type == PNG_COLOR_TYPE_GRAY) png_set_add_alpha(png, 0xFF, PNG_FILLER_AFTER);
+    
+    png_read_update_info(png, info);
+
+    png_byte row[256 * 4];
+    
+    if (width != 256 || height != 192) {
+        png_destroy_read_struct(&png, &info, NULL);
+        fclose(fp);
+        return false;
+    }
+
+    for (int y = 0; y < 192; y++) {
+        png_read_row(png, row, NULL);
+        for (int x = 0; x < 256; x++) {
+            u8 r = row[x * 4 + 0] >> 3;
+            u8 g = row[x * 4 + 1] >> 3;
+            u8 b = row[x * 4 + 2] >> 3;
+            u8 a = row[x * 4 + 3];
+            buffer[y * 256 + x] = (r) | (g << 5) | (b << 10) | (a > 128 ? BIT(15) : 0);
+        }
+    }
+
+    png_destroy_read_struct(&png, &info, NULL);
+    fflush(fp);
+    fclose(fp);
+    return true;
+}

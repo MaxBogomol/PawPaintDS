@@ -13,7 +13,7 @@ void Layers::setup(Paint& paint) {
 
 void Layers::update(Paint& paint) {
     bool updateSubLayers = false;
-    int maxLine = 4;
+    int maxLine = 2;
 
     if (keysD & KEY_UP) {
         if (line - 1 >= 0) {

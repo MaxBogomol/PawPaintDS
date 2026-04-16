@@ -1,6 +1,8 @@
 #pragma once
 
 #include <nds.h>
+#include <fat.h>
+#include <png.h>
 #include <string>
 #include <vector>
 
@@ -75,6 +77,8 @@ inline bool activeSubLayer1 = true;
 inline bool activeSubLayer2 = true;
 inline bool activeSubLayer3 = true;
 
+inline const char* paintPath = "fat:/PawPaintDS/";
+
 struct HSV {
     int h;
     int s;
@@ -145,4 +149,7 @@ class Paint {
         HSV RGBtoHSV(u16 color);
         int getDitherThreshold(int x, int y, int xSize, int ySize, int xShift, int yShift);
         const char* intToChars(int val);
+
+        bool saveFile(const char* path, u16* buffer);
+        bool loadFile(const char* path, u16* buffer);
 };
