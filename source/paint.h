@@ -77,7 +77,8 @@ inline bool activeSubLayer1 = true;
 inline bool activeSubLayer2 = true;
 inline bool activeSubLayer3 = true;
 
-inline const char* paintPath = "fat:/PawPaintDS/";
+inline const char* pawPaintPath = "fat:/PawPaintDS/";
+inline const char* paintsPath = "paints";
 
 struct HSV {
     int h;
