@@ -40,7 +40,8 @@
                 "${workspaceFolder}/build",
                 "~/devkitpro/opt/devkitpro/libnds/include/**",
                 "~/devkitpro/opt/devkitpro/devkitARM/arm-none-eabi/include/**",
-                "~/devkitpro/opt/devkitpro/calico/include/**"
+                "~/devkitpro/opt/devkitpro/calico/include/**",
+                "~/devkitpro/opt/devkitpro/portlibs/nds/include/**"
             ],
             "defines": [
                 "_DEBUG",
@@ -55,7 +56,8 @@
                     "${workspaceFolder}",
                     "~/devkitpro/opt/devkitpro/libnds/include/**",
                     "~/devkitpro/opt/devkitpro/devkitARM/arm-none-eabi/include/**",
-                    "~/devkitpro/opt/devkitpro/calico/include/**"
+                    "~/devkitpro/opt/devkitpro/calico/include/**",
+                    "~/devkitpro/opt/devkitpro/portlibs/nds/include/**"
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""

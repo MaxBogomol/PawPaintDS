@@ -519,7 +519,7 @@ const char* Paint::intToChars(int val) {
     return buf;
 }
 
-bool Paint::saveFile(const char* path, u16* buffer) {
+bool Paint::saveFileBuffer(const char* path, u16* buffer) {
     FILE* fp = fopen(path, "wb");
     if (!fp) return false;
 
@@ -568,7 +568,7 @@ bool Paint::saveFile(const char* path, u16* buffer) {
     return true;
 }
 
-bool Paint::loadFile(const char* path, u16* buffer) {
+bool Paint::loadFileBuffer(const char* path, u16* buffer) {
     FILE* fp = fopen(path, "rb");
     if (!fp) return false;
 

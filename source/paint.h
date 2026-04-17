@@ -151,6 +151,6 @@ class Paint {
         int getDitherThreshold(int x, int y, int xSize, int ySize, int xShift, int yShift);
         const char* intToChars(int val);
 
-        bool saveFile(const char* path, u16* buffer);
-        bool loadFile(const char* path, u16* buffer);
+        bool saveFileBuffer(const char* path, u16* buffer);
+        bool loadFileBuffer(const char* path, u16* buffer);
 };
