@@ -22,6 +22,12 @@ DATA		:=	data
 INCLUDES	:=	include
 SPRITES		:=  sprites
 
+GAME_ICON  := ../icon.bmp
+
+GAME_TITLE  := Paw Paint Ds
+GAME_SUBTITLE1 := MaxBogomol (Pink Joke)
+GAME_SUBTITLE2 := The Fluffy Village
+
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
