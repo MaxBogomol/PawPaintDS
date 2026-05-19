@@ -52,12 +52,14 @@ void Paint::setupTools() {
     eyedropper.setup(*this);
     colorPicker.setup(*this);
     layers.setup(*this);
+    saving.setup(*this);
 
     tools.push_back(&brush);
     tools.push_back(&eraser);
     tools.push_back(&eyedropper);
     tools.push_back(&colorPicker);
     tools.push_back(&layers);
+    tools.push_back(&saving);
 }
 
 void Paint::updateInputs() {
@@ -208,6 +210,8 @@ void Paint::drawColors() {
     int bs = (selectedColorSub >> 10) & 31;
     string colorSubString = string("RGB: ") + intToChars(rs) + " " + intToChars(gs) + " " + intToChars(bs); 
     drawText(20, 177, colorSubString.c_str(), pixelBufferMain, blackColor);
+
+    drawText(3, 147, paintName.c_str(), pixelBufferMain, blackColor);
 }
 
 void Paint::blendSubLayers(int x, int y) {

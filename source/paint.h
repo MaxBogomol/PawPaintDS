@@ -14,6 +14,7 @@ using namespace std;
 #include "eyedropper.h"
 #include "color_picker.h"
 #include "layers.h"
+#include "saving.h"
 
 #include "brush_icon.h"
 #include "brush_square_icon.h"
@@ -32,6 +33,10 @@ using namespace std;
 #include "eyedropper_icon.h"
 #include "color_picker_icon.h"
 #include "layers_icon.h"
+#include "saving_icon.h"
+#include "saving_error_icon.h"
+#include "saving_loading_icon.h"
+#include "saving_done_icon.h"
 
 inline u16 alphaColor = ARGB16(0, 0, 0, 0);
 inline u16 whiteColor = ARGB16(1, 31, 31, 31);
@@ -71,14 +76,16 @@ inline Eraser eraser;
 inline Eyedropper eyedropper;
 inline ColorPicker colorPicker;
 inline Layers layers;
+inline Saving saving;
 
 inline bool activeSubLayer0 = true;
 inline bool activeSubLayer1 = true;
 inline bool activeSubLayer2 = true;
 inline bool activeSubLayer3 = true;
 
-inline const char* pawPaintPath = "fat:/PawPaintDS/";
+inline const char* pawPaintPath = "fat:/PawPaintDS";
 inline const char* paintsPath = "paints";
+inline const char* pawsPath = "paws";
 
 struct HSV {
     int h;
@@ -91,6 +98,8 @@ class Paint {
         bool firstFrameTool = true;
         bool updateSubLayers = false;
         bool updateBlendSubLayers = false;
+
+        string paintName = string("Unnamed");
 
     public:
         int selectedLayer = 0;
