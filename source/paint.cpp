@@ -129,7 +129,7 @@ void Paint::updateTools() {
             updateDrawColors = true;
             updateDrawSelectedColor = true;
         }
-}
+    }
     if (toolChanged) {
         tools[selectedToolOld]->close(*this);
         tools[selectedTool]->open(*this);
@@ -211,20 +211,24 @@ void Paint::drawColors() {
 }
 
 void Paint::blendSubLayers(int x, int y) {
-    updateBlendSubLayers = false;
-    if (activeSubLayer0) blendSubLayers(x, y, pixelBufferSubLayer0);
-    if (activeSubLayer1) blendSubLayers(x, y, pixelBufferSubLayer1);
-    if (activeSubLayer2) blendSubLayers(x, y, pixelBufferSubLayer2);
-    if (activeSubLayer3) blendSubLayers(x, y, pixelBufferSubLayer3);
-    if (!updateBlendSubLayers) pixelBufferSub[x + (y * SCREEN_WIDTH)] = blackColor;
+    if (x >= 0 && x < SCREEN_WIDTH && y >= 0 && y < SCREEN_HEIGHT) {
+        updateBlendSubLayers = false;
+        if (activeSubLayer0) blendSubLayers(x, y, pixelBufferSubLayer0);
+        if (activeSubLayer1) blendSubLayers(x, y, pixelBufferSubLayer1);
+        if (activeSubLayer2) blendSubLayers(x, y, pixelBufferSubLayer2);
+        if (activeSubLayer3) blendSubLayers(x, y, pixelBufferSubLayer3);
+        if (!updateBlendSubLayers) pixelBufferSub[x + (y * SCREEN_WIDTH)] = blackColor;
+    }
 }
 
 void Paint::blendSubLayers(int x, int y, u16* buffer) {
-    if (updateBlendSubLayers) {
-        pixelBufferSub[x + (y * SCREEN_WIDTH)] = blendColors(pixelBufferSub[x + (y * SCREEN_WIDTH)], buffer[x + (y * SCREEN_WIDTH)]);
-    } else {
-        pixelBufferSub[x + (y * SCREEN_WIDTH)] = buffer[x + (y * SCREEN_WIDTH)];
-        updateBlendSubLayers = true;
+    if (x >= 0 && x < SCREEN_WIDTH && y >= 0 && y < SCREEN_HEIGHT) {
+        if (updateBlendSubLayers) {
+            pixelBufferSub[x + (y * SCREEN_WIDTH)] = blendColors(pixelBufferSub[x + (y * SCREEN_WIDTH)], buffer[x + (y * SCREEN_WIDTH)]);
+        } else {
+            pixelBufferSub[x + (y * SCREEN_WIDTH)] = buffer[x + (y * SCREEN_WIDTH)];
+            updateBlendSubLayers = true;
+        }
     }
 }
 
