@@ -8,10 +8,25 @@ const char* Saving::getName(Paint& paint) {
 
 void Saving::setup(Paint& paint) {
     line = 0;
+    loading = false;
+    saving = false;
     updateDrawTool = true;
 }
 
 void Saving::update(Paint& paint) {
+    if (paint.fileSystemInit) {
+        if (loading) {
+            loadPaint(paint);
+            loading = false;
+            doneTimer = 60;
+        }
+        if (saving) {
+            savePaint(paint);
+            saving = false;
+            doneTimer = 60;
+        }
+    }
+
     bool updateSubLayers = false;
     int maxLine = 4;
 
@@ -39,53 +54,24 @@ void Saving::update(Paint& paint) {
                     paint.blendSubLayers(x, y);
                 }
             }
+            paint.setPaintName("Unnnamed");
         }
 
-        if (line == 1) {
-            /*
-            string path = string(pawPaintPath);
-            mkdir(path.c_str(), 0777);
-
-            path = string(pawPaintPath) + "/" + paintsPath;
-            mkdir(path.c_str(), 0777);
-
-            path = string(pawPaintPath) + "/" + paintsPath + "/Unnamed";
-            mkdir(path.c_str(), 0777);*/
-
-            string path0String = string(pawPaintPath) + "/" + paintsPath + "/Unnamed/layer0.png";
-            paint.loadFileBuffer(path0String.c_str(), pixelBufferSubLayer0);
-            string path1String = string(pawPaintPath) + "/" + paintsPath + "/Unnamed/layer1.png";
-            paint.loadFileBuffer(path1String.c_str(), pixelBufferSubLayer1);
-            string path2String = string(pawPaintPath) + "/" + paintsPath + "/Unnamed/layer2.png";
-            paint.loadFileBuffer(path2String.c_str(), pixelBufferSubLayer2);
-            string path3String = string(pawPaintPath) + "/" + paintsPath + "/Unnamed/layer3.png";
-            paint.loadFileBuffer(path3String.c_str(), pixelBufferSubLayer3);
-
-            for (int x = 0; x < SCREEN_WIDTH; x++) {
-                for (int y = 0; y < SCREEN_HEIGHT; y++) {
-                    paint.blendSubLayers(x, y);
-                }
+        if (paint.fileSystemInit) {
+            if (line == 1) {
+                loading = true;
+                paint.updateDrawTools = true;
+            }
+            if (line == 2) {
+                saving = true;
+                paint.updateDrawTools = true;
             }
         }
-        if (line == 2) {
-            string path = string(pawPaintPath);
-            mkdir(path.c_str(), 0777);
+    }
 
-            path = string(pawPaintPath) + "/" + paintsPath;
-            mkdir(path.c_str(), 0777);
-
-            path = string(pawPaintPath) + "/" + paintsPath + "/Unnamed";
-            mkdir(path.c_str(), 0777);
-
-            string path0String = string(pawPaintPath) + "/" + paintsPath + "/Unnamed/layer0.png";
-            paint.saveFileBuffer(path0String.c_str(), pixelBufferSubLayer0);
-            string path1String = string(pawPaintPath) + "/" + paintsPath + "/Unnamed/layer1.png";
-            paint.saveFileBuffer(path1String.c_str(), pixelBufferSubLayer1);
-            string path2String = string(pawPaintPath) + "/" + paintsPath + "/Unnamed/layer2.png";
-            paint.saveFileBuffer(path2String.c_str(), pixelBufferSubLayer2);
-            string path3String = string(pawPaintPath) + "/" + paintsPath + "/Unnamed/layer3.png";
-            paint.saveFileBuffer(path3String.c_str(), pixelBufferSubLayer3);
-        }
+    if (doneTimer > 0)  {
+        doneTimer--;
+        paint.updateDrawTools = true;
     }
 }
 
@@ -110,7 +96,13 @@ void Saving::close(Paint& paint) {
 }
 
 void Saving::drawIcon(Paint& paint, int x, int y, u16* buffer) {
-    paint.drawSprite(x, y, 16, 16, paint.fileSystemInit ? saving_iconBitmap : saving_error_iconBitmap, pixelBufferMain);
+    if (loading || saving) {
+        paint.drawSprite(x, y, 16, 16, saving_loading_iconBitmap, pixelBufferMain);
+    } else if (doneTimer > 0) {
+        paint.drawSprite(x, y, 16, 16, saving_done_iconBitmap, pixelBufferMain);
+    } else {
+        paint.drawSprite(x, y, 16, 16, paint.fileSystemInit ? saving_iconBitmap : saving_error_iconBitmap, pixelBufferMain);
+    }
 }
 
 void Saving::drawTool(Paint& paint) {
@@ -135,4 +127,49 @@ void Saving::drawTool(Paint& paint) {
     string saveAsString = string((line == 3) ? ">" : "") + "Save As";
     paint.drawText(3, 75, saveAsString.c_str(), pixelBufferMain, blackColor);
     paint.drawText(176, 75, "+", pixelBufferMain, blackColor);
+}
+
+void Saving::createPaintDirectory(Paint& paint, const char* paintName) {
+    string path = string(pawPaintPath);
+    if (!paint.directoryExist(path.c_str())) paint.makeDirectory(path.c_str());
+
+    path = string(pawPaintPath) + "/" + paintsPath;
+    if (!paint.directoryExist(path.c_str())) paint.makeDirectory(path.c_str());
+
+    path = string(pawPaintPath) + "/" + paintsPath + "/" + paint.getPaintName();
+    if (!paint.directoryExist(path.c_str())) paint.makeDirectory(path.c_str());
+}
+
+void Saving::savePaint(Paint& paint) {
+    createPaintDirectory(paint, paint.getPaintName());
+    string pathString = string(pawPaintPath) + "/" + paintsPath + "/" + paint.getPaintName();
+    saveLayer(paint, pathString.c_str(), "layer0.png", pixelBufferSubLayer0);
+    saveLayer(paint, pathString.c_str(), "layer1.png", pixelBufferSubLayer1);
+    saveLayer(paint, pathString.c_str(), "layer2.png", pixelBufferSubLayer2);
+    saveLayer(paint, pathString.c_str(), "layer3.png", pixelBufferSubLayer3);
+}
+
+void Saving::loadPaint(Paint& paint) {
+    createPaintDirectory(paint, paint.getPaintName());
+    string pathString = string(pawPaintPath) + "/" + paintsPath + "/" + paint.getPaintName();
+    loadLayer(paint, pathString.c_str(), "layer0.png", pixelBufferSubLayer0);
+    loadLayer(paint, pathString.c_str(), "layer1.png", pixelBufferSubLayer1);
+    loadLayer(paint, pathString.c_str(), "layer2.png", pixelBufferSubLayer2);
+    loadLayer(paint, pathString.c_str(), "layer3.png", pixelBufferSubLayer3);
+
+    for (int x = 0; x < SCREEN_WIDTH; x++) {
+        for (int y = 0; y < SCREEN_HEIGHT; y++) {
+            paint.blendSubLayers(x, y);
+        }
+    }
+}
+
+bool Saving::saveLayer(Paint& paint, const char* path, const char* layerName, u16* buffer) {
+    string pathString = string(path) + "/" + layerName;
+    return paint.saveFileBuffer(pathString.c_str(), buffer);
+}
+
+bool Saving::loadLayer(Paint& paint, const char* path, const char* layerName, u16* buffer) {
+    string pathString = string(path) + "/" + layerName;
+    return paint.loadFileBuffer(pathString.c_str(), buffer);
 }

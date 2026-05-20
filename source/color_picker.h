@@ -28,7 +28,7 @@ class ColorPicker : public Tool {
 
         virtual void drawIcon(Paint& paint, int x, int y, u16* buffer) override;
 
-        u16 *getDrawLayer(Paint& paint);
+        virtual u16 *getDrawLayer(Paint& paint);
 
         virtual void drawPicker(Paint& paint);
         virtual void drawHue(Paint& paint);

@@ -211,7 +211,7 @@ void Paint::drawColors() {
     string colorSubString = string("RGB: ") + intToChars(rs) + " " + intToChars(gs) + " " + intToChars(bs); 
     drawText(20, 177, colorSubString.c_str(), pixelBufferMain, blackColor);
 
-    drawText(3, 147, paintName.c_str(), pixelBufferMain, blackColor);
+    drawText(3, 147, getPaintName(), pixelBufferMain, blackColor);
 }
 
 void Paint::blendSubLayers(int x, int y) {
@@ -527,6 +527,14 @@ const char* Paint::intToChars(int val) {
     return buf;
 }
 
+void Paint::setPaintName(const char* name) {
+    paintName = string(name);
+}
+
+const char* Paint::getPaintName() {
+    return paintName.c_str();
+}
+
 bool Paint::saveFileBuffer(const char* path, u16* buffer) {
     FILE* fp = fopen(path, "wb");
     if (!fp) return false;
@@ -638,4 +646,13 @@ bool Paint::loadFileBuffer(const char* path, u16* buffer) {
     fflush(fp);
     fclose(fp);
     return true;
+}
+
+bool Paint::makeDirectory(const char* path) {
+    return mkdir(path, 0777);
+}
+
+bool Paint::directoryExist(const char* path) {
+    struct stat st;
+    return stat(path, &st) == 0;
 }

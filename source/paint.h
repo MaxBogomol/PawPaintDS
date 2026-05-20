@@ -162,6 +162,10 @@ class Paint {
         int getDitherThreshold(int x, int y, int xSize, int ySize, int xShift, int yShift);
         const char* intToChars(int val);
 
+        void setPaintName(const char* name);
+        const char* getPaintName();
         bool saveFileBuffer(const char* path, u16* buffer);
         bool loadFileBuffer(const char* path, u16* buffer);
+        bool makeDirectory(const char* path);
+        bool directoryExist(const char* path);
 };
