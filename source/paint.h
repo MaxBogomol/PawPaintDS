@@ -84,8 +84,8 @@ inline bool activeSubLayer2 = true;
 inline bool activeSubLayer3 = true;
 
 inline const char* pawPaintPath = "fat:/PawPaintDS";
-inline const char* paintsPath = "paints";
-inline const char* pawsPath = "paws";
+inline const char* paintsPath = "Paints";
+inline const char* pawsPath = "Paws";
 
 struct HSV {
     int h;
@@ -111,6 +111,8 @@ class Paint {
         bool updateDrawSelectedColor = false;
         bool updateDrawTools = true;
         bool updateDrawColors = true;
+
+        bool fileSystemInit = false;
 
         vector<Tool*> tools;
 

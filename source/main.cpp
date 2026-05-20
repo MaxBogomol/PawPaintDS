@@ -3,9 +3,7 @@
 Paint paint;
 
 int main(void) {
-	if (!fatInitDefault()) {
-		return 0;
-    }
+	paint.fileSystemInit = fatInitDefault();
 
 	paint.setup();
 	paint.setupVideo();
