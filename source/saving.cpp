@@ -33,7 +33,6 @@ void Saving::update(Paint& paint) {
         }
     }
 
-    bool updateSubLayers = false;
     int maxLine = 6;
 
     if (keysD & KEY_UP) {
