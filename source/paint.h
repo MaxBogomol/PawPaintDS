@@ -99,7 +99,7 @@ class Paint {
         bool updateSubLayers = false;
         bool updateBlendSubLayers = false;
 
-        string paintName = string("Unnamed");
+        const char* paintName = "Unnamed";
 
     public:
         int selectedLayer = 0;

@@ -528,11 +528,11 @@ const char* Paint::intToChars(int val) {
 }
 
 void Paint::setPaintName(const char* name) {
-    paintName = string(name);
+    paintName = name;
 }
 
 const char* Paint::getPaintName() {
-    return paintName.c_str();
+    return paintName;
 }
 
 bool Paint::saveFileBuffer(const char* path, u16* buffer) {
