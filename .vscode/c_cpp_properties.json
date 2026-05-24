@@ -1,7 +1,7 @@
 {
     "configurations": [
         {
-            "name": "Windows NDS",
+            "name": "Windows",
             "includePath": [
                 "${workspaceFolder}",
                 "${workspaceFolder}/build",
@@ -34,7 +34,41 @@
             "compilerPath": "C:/devkitPro/devkitARM/bin/arm-none-eabi-g++.exe"
         },
         {
-            "name": "Linux NDS",
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}",
+                "${workspaceFolder}/build",
+                "/opt/devkitpro/libnds/include/**",
+                "/opt/devkitpro/devkitARM/arm-none-eabi/include/**",
+                "/opt/devkitpro/calico/include/**",
+                "/opt/devkitpro/portlibs/nds/include/**"
+            ],
+            "defines": [
+                "_DEBUG",
+                "_UNICODE",
+                "ARM7",
+                "ARM9",
+                "__NDS__",
+                "_DEFAULT_SOURCE"
+            ],
+             "browse": {
+                "path": [
+                    "${workspaceFolder}",
+                    "/opt/devkitpro/libnds/include/**",
+                    "/opt/devkitpro/devkitARM/arm-none-eabi/include/**",
+                    "/opt/devkitpro/calico/include/**",
+                    "/opt/devkitpro/portlibs/nds/include/**"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            },
+            "cStandard": "c11",
+            "cppStandard": "c++11",
+            "compilerPath": "/opt/devkitpro/devkitARM/bin/arm-none-eabi-g++",
+            "intelliSenseMode": "linux-gcc-arm"
+        },
+        {
+            "name": "Steam Deck",
             "includePath": [
                 "${workspaceFolder}",
                 "${workspaceFolder}/build",

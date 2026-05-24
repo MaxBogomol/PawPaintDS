@@ -53,6 +53,7 @@ void Paint::setupTools() {
     colorPicker.setup(*this);
     layers.setup(*this);
     saving.setup(*this);
+    info.setup(*this);
 
     tools.push_back(&brush);
     tools.push_back(&eraser);
@@ -60,6 +61,7 @@ void Paint::setupTools() {
     tools.push_back(&colorPicker);
     tools.push_back(&layers);
     tools.push_back(&saving);
+    tools.push_back(&info);
 }
 
 void Paint::updateInputs() {

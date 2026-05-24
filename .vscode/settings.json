@@ -1,8 +1,22 @@
 {
-    "terminal.integrated.env.linux": {
-        "DEVKITPRO": "/home/deck/devkitpro/opt/devkitpro",
-        "DEVKITARM": "/home/deck/devkitpro/opt/devkitpro/devkitARM",
-        "DEVKITPPC": "/home/deck/devkitpro/opt/devkitpro/devkitPPC",
-        "PATH": "/home/deck/devkitpro/opt/devkitpro/devkitARM/bin:/home/deck/devkitpro/opt/devkitpro/tools/bin:${env:PATH}"
+    "terminal.integrated.profiles.linux": {
+        "Standard": {
+            "path": "${env:SHELL}",
+            "env": {
+                "DEVKITPRO": "/opt/devkitpro",
+                "DEVKITARM": "/opt/devkitpro/devkitARM",
+                "DEVKITPPC": "/opt/devkitpro/devkitPPC",
+                "PATH": "/opt/devkitpro/devkitARM/bin:/opt/devkitpro/tools/bin:${env:PATH}"
+            }
+        },
+        "Steam Deck Dev": {
+            "path": "${env:SHELL}",
+            "env": {
+                "DEVKITPRO": "/home/deck/devkitpro/opt/devkitpro",
+                "DEVKITARM": "/home/deck/devkitpro/opt/devkitpro/devkitARM",
+                "DEVKITPPC": "/home/deck/devkitpro/opt/devkitpro/devkitPPC",
+                "PATH": "/home/deck/devkitpro/opt/devkitpro/devkitARM/bin:/home/deck/devkitpro/opt/devkitpro/tools/bin:${env:PATH}"
+            }
+        }
     }
 }

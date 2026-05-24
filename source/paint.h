@@ -15,6 +15,7 @@ using namespace std;
 #include "color_picker.h"
 #include "layers.h"
 #include "saving.h"
+#include "info.h"
 
 #include "brush_icon.h"
 #include "brush_square_icon.h"
@@ -37,6 +38,7 @@ using namespace std;
 #include "saving_error_icon.h"
 #include "saving_loading_icon.h"
 #include "saving_done_icon.h"
+#include "info_icon.h"
 
 inline u16 alphaColor = ARGB16(0, 0, 0, 0);
 inline u16 whiteColor = ARGB16(1, 31, 31, 31);
@@ -77,6 +79,7 @@ inline Eyedropper eyedropper;
 inline ColorPicker colorPicker;
 inline Layers layers;
 inline Saving saving;
+inline Info info;
 
 inline bool activeSubLayer0 = true;
 inline bool activeSubLayer1 = true;
