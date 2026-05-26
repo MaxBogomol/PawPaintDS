@@ -188,6 +188,8 @@ void Paint::drawTools() {
 
     string toolString = string("Tool: ") + tools[selectedTool]->getName(*this); 
     drawText(3, 39, toolString.c_str(), pixelBufferMain, blackColor);
+
+    drawSprite(SCREEN_WIDTH - 32 - 3, SCREEN_HEIGHT - 32 - 3, 32, 32, paint_iconBitmap, pixelBufferMain);
 }
 
 void Paint::drawColors() {
@@ -204,14 +206,14 @@ void Paint::drawColors() {
     int g = (selectedColor >> 5) & 31;
     int b = (selectedColor >> 10) & 31;
     string colorString = string("RGB: ") + intToChars(r) + " " + intToChars(g) + " " + intToChars(b); 
-    drawText(20, 161, colorString.c_str(), pixelBufferMain, blackColor);
+    drawText(21, 161, colorString.c_str(), pixelBufferMain, blackColor);
 
     drawSquare(3, 173, 16, 16, pixelBufferMain, selectedColorSub);
     int rs = (selectedColorSub) & 31;
     int gs = (selectedColorSub >> 5) & 31;
     int bs = (selectedColorSub >> 10) & 31;
     string colorSubString = string("RGB: ") + intToChars(rs) + " " + intToChars(gs) + " " + intToChars(bs); 
-    drawText(20, 177, colorSubString.c_str(), pixelBufferMain, blackColor);
+    drawText(21, 177, colorSubString.c_str(), pixelBufferMain, blackColor);
 
     drawText(3, 147, getPaintName(), pixelBufferMain, blackColor);
 }
@@ -384,13 +386,61 @@ void Paint::drawLine(int x0, int y0, int x1, int y1, u16* buffer, u16 color) {
     }
 }
 
-void Paint::drawChar(int x, int y, char c, u16* buffer, u16 color) {
-    const u8* charData = &default_font_bin[c * 8];
+u32 Paint::decodeChar(const char** c) {
+    const unsigned char* p = (const unsigned char*)*c;
+    u32 code = 0;
+
+    if (p[0] < 0x80) {
+        code = p[0];
+        *c += 1;
+    } else if (p[0] < 0xE0) {
+        code = ((p[0] & 0x1F) << 6) | (p[1] & 0x3F);
+        *c += 2;
+    } else if (p[0] < 0xF0) {
+        code = ((p[0] & 0x0F) << 12) | ((p[1] & 0x3F) << 6) | (p[2] & 0x3F);
+        *c += 3;
+    }
+    return code;
+}
+
+int Paint::getCharLength(u32 c) {
+    if (c == ' ') return 5;
+    if (c == '!') return 2;
+    if (c == '"') return 4;
+    if (c == '\'') return 2;
+    if (c == '(') return 4;
+    if (c == ')') return 4;
+    if (c == '*') return 4;
+    if (c == ',') return 2;
+    if (c == '.') return 2;
+    if (c == ':') return 2;
+    if (c == ';') return 2;
+    if (c == '@') return 7;
+    if (c == '[') return 4;
+    if (c == ']') return 4;
+    if (c == '`') return 3;
+    if (c == '|') return 2;
+    if (c == '~') return 7;
+
+    if (c == 'f') return 5;
+    if (c == 'i') return 2;
+    if (c == 'k') return 5;
+    if (c == 'l') return 3;
+    if (c == 't') return 4;
+    return 6;
+}
+
+void Paint::drawChar(int x, int y, u32 c, u16* buffer, u16 color) {
+    const u16* pixels = (const u16*) pawscript_fontBitmap;
 
     for (int row = 0; row < 8; row++) {
-        u8 bits = charData[row];
         for (int col = 0; col < 8; col++) {
-            if (bits & (1 << col)) { 
+            int xx = ((c % 16) * 8) + col;
+            int yy = ((c / 16) * 8) + row;
+
+            u16 pixel = pixels[xx + (yy * 128)];
+
+            if (pixel & BIT(15)) { 
                 int px = x + col;
                 int py = y + row;
                 
@@ -403,13 +453,17 @@ void Paint::drawChar(int x, int y, char c, u16* buffer, u16 color) {
 }
 
 void Paint::drawText(int x, int y, const char* text, u16* buffer, u16 color) {
-    while (*text) {
-        drawChar(x, y, *text++, buffer, color);
-        x += 8;
+    const char* textPtr = text;
+
+    while (*textPtr) {
+        u32 charCode = decodeChar(&textPtr);
+
+        drawChar(x, y, charCode, buffer, color);
+        x += getCharLength(charCode);
     }
 }
 
-void Paint::drawCharOutline(int x, int y, char c, u16* buffer, u16 color, u16 outlineColor) {
+void Paint::drawCharOutline(int x, int y, u32 c, u16* buffer, u16 color, u16 outlineColor) {
     for (int dx = -1; dx <= 1; dx++) {
         for (int dy = -1; dy <= 1; dy++) {
             drawChar(x + dx, y + dy, c, buffer, outlineColor);
@@ -426,7 +480,7 @@ void Paint::drawTextOutline(int x, int y, const char* text, u16* buffer, u16 col
 }
 
 void Paint::drawSprite(int x0, int y0, int x1, int y1, const unsigned int* spriteBitmap, u16* buffer) {
-    const u16* pixels = (const u16*) spriteBitmap; 
+    const u16* pixels = (const u16*) spriteBitmap;
 
     for (int y = 0; y < y1; y++) {
         for (int x = 0; x < x1; x++) {

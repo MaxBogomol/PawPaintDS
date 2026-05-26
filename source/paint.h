@@ -17,6 +17,8 @@ using namespace std;
 #include "saving.h"
 #include "info.h"
 
+#include "paint_icon.h"
+#include "pawscript_font.h"
 #include "brush_icon.h"
 #include "brush_square_icon.h"
 #include "brush_circle_icon.h"
@@ -151,10 +153,12 @@ class Paint {
         void drawCircleRadiusNoise(int xc, int yc, int r, u16* buffer, u16 color, int xSize, int ySize, int xShift, int yShift, int xOffset, int yOffset);
         void drawCircleDiameter(int xc, int yc, int d, u16* buffer, u16 color);
         void drawCircleDiameterNoise(int xc, int yc, int d, u16* buffer, u16 color, int xSize, int ySize, int xShift, int yShift, int xOffset, int yOffset);
+        u32 decodeChar(const char** s);
+        int getCharLength(u32 c);
         void drawLine(int x0, int y0, int x1, int y1, u16* buffer, u16 color);
-        void drawChar(int x, int y, char c, u16* buffer, u16 color);
+        void drawChar(int x, int y, u32 c, u16* buffer, u16 color);
         void drawText(int x, int y, const char* text, u16* buffer, u16 color);
-        void drawCharOutline(int x, int y, char c, u16* buffer, u16 color, u16 outlineColor);
+        void drawCharOutline(int x, int y, u32 c, u16* buffer, u16 color, u16 outlineColor);
         void drawTextOutline(int x, int y, const char* text, u16* buffer, u16 color, u16 outlineColor);
         void drawSprite(int x0, int y0, int x1, int y1, const unsigned int* spriteBitmap, u16* buffer);
 
