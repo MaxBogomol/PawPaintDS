@@ -204,8 +204,8 @@ void Brush::update(Paint& paint) {
         case 0:
         case 3: {
             if (touchCount >= 1 && paint.reverseScreens) {
-                if (touchX >= 176 && touchX < 176 + 64 && touchY >= 66 && touchY < 66 + 8) {
-                    squareSize = touchX - 176 + 1;
+                if (touchX >= SCREEN_WIDTH - 3 - 64 && touchX < SCREEN_WIDTH - 3 && touchY >= 66 && touchY < 66 + 8) {
+                    squareSize = touchX - (SCREEN_WIDTH - 3 - 64) + 1;
                     updateDrawTool = true;
                 }
             }
@@ -402,14 +402,16 @@ void Brush::close(Paint& paint) {
 }
 
 void Brush::drawIcon(Paint& paint, int x, int y, u16* buffer) {
+    const unsigned int* iconSprite = brush_square_iconBitmap;
     switch (type) {
-    	case 0: return paint.drawSprite(x, y, 16, 16, brush_square_iconBitmap, buffer); break;
-    	case 1: return paint.drawSprite(x, y, 16, 16, brush_circle_iconBitmap, buffer); break;
-		case 2: return paint.drawSprite(x, y, 16, 16, brush_dot_iconBitmap, buffer); break;
-		case 3: return paint.drawSprite(x, y, 16, 16, brush_square_noise_iconBitmap, buffer); break;
-    	case 4: return paint.drawSprite(x, y, 16, 16, brush_circle_noise_iconBitmap, buffer); break;
-		case 5: return paint.drawSprite(x, y, 16, 16, brush_dot_noise_iconBitmap, buffer); break;
+    	case 0: iconSprite = brush_square_iconBitmap; break;
+    	case 1: iconSprite = brush_circle_iconBitmap; break;
+		case 2: iconSprite = brush_dot_iconBitmap; break;
+		case 3: iconSprite = brush_square_noise_iconBitmap; break;
+    	case 4: iconSprite = brush_circle_noise_iconBitmap; break;
+		case 5: iconSprite = brush_dot_noise_iconBitmap; break;
     }
+    paint.drawSprite(x, y, 16, 16, iconSprite, buffer);
 }
 
 void Brush::drawLine(Paint& paint, int x0, int y0, int x1, int y1, u16* buffer, u16 color) {
@@ -462,22 +464,28 @@ void Brush::drawTool(Paint& paint) {
         }
     }
 
+    int yOffset = paint.getToolsYOffset();
+
     string moveString = string((line == 0) ? ">" : "") + "Move: " + ((line == 0 && active) ? "+" : "-"); 
-    paint.drawText(3, 48, moveString.c_str(), pixelBufferMain, blackColor);
-    paint.drawText(176, 48, "+", pixelBufferMain, blackColor);
+    paint.drawText(3, yOffset, moveString.c_str(), pixelBufferMain, blackColor);
+    paint.drawText(SCREEN_WIDTH - 8 - paint.getTextLength("+"), yOffset, "+", pixelBufferMain, blackColor);
+
+    yOffset += 9;
 
     string typeString = string((line == 1) ? ">" : "") + "Type: " + getTypeName(paint, type); 
-    paint.drawText(3, 57, typeString.c_str(), pixelBufferMain, blackColor);
-    paint.drawText(176, 57, "- +", pixelBufferMain, blackColor);
+    paint.drawText(3, yOffset, typeString.c_str(), pixelBufferMain, blackColor);
+    paint.drawText(SCREEN_WIDTH - 8 - paint.getTextLength("- +"), yOffset, "- +", pixelBufferMain, blackColor);
+
+    yOffset += 9;
 
     switch (type) {
         case 0:
     	case 3: {
             string sizeString = string((line == 2) ? ">" : "") + "Size: " + paint.intToChars(squareSize);
-            paint.drawText(3, 66, sizeString.c_str(), pixelBufferMain, blackColor);
+            paint.drawText(3, yOffset, sizeString.c_str(), pixelBufferMain, blackColor);
 
-            paint.drawLine(176, 67, 176 + 63, 67, pixelBufferMain, blackColor);
-            paint.drawSquareOutline(176 - 1 + (squareSize - 1), 67 + 2, 3, 4, pixelBufferMain, blackColor);
+            paint.drawLine(SCREEN_WIDTH - 9 - 63, yOffset + 1, SCREEN_WIDTH - 9, yOffset + 1, pixelBufferMain, blackColor);
+            paint.drawSquareOutline(SCREEN_WIDTH - 9 - 64 - 1 + (squareSize - 1), yOffset + 3, 3, 4, pixelBufferMain, blackColor);
             break;
         }
         case 1:

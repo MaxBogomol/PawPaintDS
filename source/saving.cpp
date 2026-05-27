@@ -52,14 +52,14 @@ void Saving::update(Paint& paint) {
         if (line == 0) {
             for (int x = 0; x < SCREEN_WIDTH; x++) {
                 for (int y = 0; y < SCREEN_HEIGHT; y++) {
-                    pixelBufferSubLayer0[x + (y * SCREEN_WIDTH)] = whiteColor;
+                    pixelBufferSubLayer0[x + (y * SCREEN_WIDTH)] = paint.selectedColorSub;
                     pixelBufferSubLayer1[x + (y * SCREEN_WIDTH)] = alphaColor;
                     pixelBufferSubLayer2[x + (y * SCREEN_WIDTH)] = alphaColor;
                     pixelBufferSubLayer3[x + (y * SCREEN_WIDTH)] = alphaColor;
                     paint.blendSubLayers(x, y);
                 }
             }
-            paint.setPaintName("Unnnamed");
+            paint.setPaintName("Unnamed");
         }
 
         if (paint.fileSystemInit) {
@@ -108,16 +108,17 @@ void Saving::close(Paint& paint) {
             paint.drawPixel(x, y + 48, pixelBufferMain, whiteColor);
         }
     }
+    doneTimer = 0;
 }
 
 void Saving::drawIcon(Paint& paint, int x, int y, u16* buffer) {
+    const unsigned int* iconSprite = paint.fileSystemInit ? saving_iconBitmap : saving_error_iconBitmap;
     if (loading || saving || savingExport) {
-        paint.drawSprite(x, y, 16, 16, saving_loading_iconBitmap, pixelBufferMain);
+        iconSprite = saving_loading_iconBitmap;
     } else if (doneTimer > 0) {
-        paint.drawSprite(x, y, 16, 16, saving_done_iconBitmap, pixelBufferMain);
-    } else {
-        paint.drawSprite(x, y, 16, 16, paint.fileSystemInit ? saving_iconBitmap : saving_error_iconBitmap, pixelBufferMain);
+        iconSprite = saving_done_iconBitmap;
     }
+    paint.drawSprite(x, y, 16, 16, iconSprite, buffer);
 }
 
 void Saving::drawTool(Paint& paint) {

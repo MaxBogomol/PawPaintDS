@@ -15,6 +15,7 @@ using namespace std;
 #include "color_picker.h"
 #include "layers.h"
 #include "saving.h"
+#include "settings.h"
 #include "info.h"
 
 #include "paint_icon.h"
@@ -40,6 +41,7 @@ using namespace std;
 #include "saving_error_icon.h"
 #include "saving_loading_icon.h"
 #include "saving_done_icon.h"
+#include "settings_icon.h"
 #include "info_icon.h"
 
 inline u16 alphaColor = ARGB16(0, 0, 0, 0);
@@ -49,6 +51,8 @@ inline u16 redColor = ARGB16(1, 31, 0, 0);
 inline u16 greenColor = ARGB16(1, 0, 31, 0);
 inline u16 blueColor = ARGB16(1, 0, 0, 31);
 inline u16 pinkColor = ARGB16(1, 31, 0, 31);
+
+inline u16 maidColorTheme = ARGB16(1, 12, 10, 14);
 
 inline u16 pixelBufferMain[SCREEN_WIDTH * SCREEN_HEIGHT];
 
@@ -81,6 +85,7 @@ inline Eyedropper eyedropper;
 inline ColorPicker colorPicker;
 inline Layers layers;
 inline Saving saving;
+inline Settings settings;
 inline Info info;
 
 inline bool activeSubLayer0 = true;
@@ -155,6 +160,7 @@ class Paint {
         void drawCircleDiameterNoise(int xc, int yc, int d, u16* buffer, u16 color, int xSize, int ySize, int xShift, int yShift, int xOffset, int yOffset);
         u32 decodeChar(const char** s);
         int getCharLength(u32 c);
+        int getTextLength(const char* text);
         void drawLine(int x0, int y0, int x1, int y1, u16* buffer, u16 color);
         void drawChar(int x, int y, u32 c, u16* buffer, u16 color);
         void drawText(int x, int y, const char* text, u16* buffer, u16 color);
@@ -175,4 +181,7 @@ class Paint {
         bool loadFileBuffer(const char* path, u16* buffer);
         bool makeDirectory(const char* path);
         bool directoryExist(const char* path);
+
+        int getToolYOffset();
+        int getToolsYOffset();
 };

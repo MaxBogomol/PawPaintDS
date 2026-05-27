@@ -7,14 +7,16 @@ const char* Eraser::getName(Paint& paint) {
 }
 
 void Eraser::drawIcon(Paint& paint, int x, int y, u16* buffer) {
+    const unsigned int* iconSprite = brush_square_iconBitmap;
     switch (type) {
-    	case 0: return paint.drawSprite(x, y, 16, 16, eraser_square_iconBitmap, buffer); break;
-    	case 1: return paint.drawSprite(x, y, 16, 16, eraser_circle_iconBitmap, buffer); break;
-		case 2: return paint.drawSprite(x, y, 16, 16, eraser_dot_iconBitmap, buffer); break;
-        case 3: return paint.drawSprite(x, y, 16, 16, eraser_square_noise_iconBitmap, buffer); break;
-    	case 4: return paint.drawSprite(x, y, 16, 16, eraser_circle_noise_iconBitmap, buffer); break;
-		case 5: return paint.drawSprite(x, y, 16, 16, eraser_dot_noise_iconBitmap, buffer); break;
+    	case 0: iconSprite = eraser_square_iconBitmap; break;
+    	case 1: iconSprite = eraser_circle_iconBitmap; break;
+		case 2: iconSprite = eraser_dot_iconBitmap; break;
+        case 3: iconSprite = eraser_square_noise_iconBitmap; break;
+    	case 4: iconSprite = eraser_circle_noise_iconBitmap; break;
+		case 5: iconSprite = eraser_dot_noise_iconBitmap; break;
     }
+    paint.drawSprite(x, y, 16, 16, iconSprite, buffer);
 }
 
 u16 Eraser::getSelectedColor(Paint& paint) {

@@ -53,6 +53,7 @@ void Paint::setupTools() {
     colorPicker.setup(*this);
     layers.setup(*this);
     saving.setup(*this);
+    settings.setup(*this);
     info.setup(*this);
 
     tools.push_back(&brush);
@@ -61,6 +62,7 @@ void Paint::setupTools() {
     tools.push_back(&colorPicker);
     tools.push_back(&layers);
     tools.push_back(&saving);
+    tools.push_back(&settings);
     tools.push_back(&info);
 }
 
@@ -107,13 +109,13 @@ void Paint::updateTools() {
     }
     if (keysD & KEY_R) {
         selectedTool++;
-        if (selectedTool > tools.size() - 1) selectedTool = 0;
+        if (selectedTool > (int) tools.size() - 1) selectedTool = 0;
         toolChanged = true;
     }
     if (keysD & KEY_TOUCH && reverseScreens) {
         int i = 0;
         int j = 0;
-        for (int t = 0; t < tools.size(); t++) { 
+        for (int t = 0; t < (int) tools.size(); t++) { 
             if (touchX >= 3 + (i * 18) && touchX < 3 + (i * 18) + 18 && touchY >= 3 + (j * 18) && touchY < 3 + (j * 18) + 18) {
                 selectedTool = t;
                 toolChanged = true;
@@ -176,7 +178,7 @@ void Paint::drawTools() {
 
     int i = 0;
     int j = 0;
-    for (int t = 0; t < tools.size(); t++) {
+    for (int t = 0; t < (int) tools.size(); t++) {
         tools[t]->drawIcon(*this, 3 + (i * 18), 3 + (j * 18), pixelBufferMain);
         if (t == selectedTool) drawSquareOutline(2 + (i * 18), 2 + (j * 18), 18, 18, pixelBufferMain, blackColor);
         i++;
@@ -187,7 +189,7 @@ void Paint::drawTools() {
     }
 
     string toolString = string("Tool: ") + tools[selectedTool]->getName(*this); 
-    drawText(3, 39, toolString.c_str(), pixelBufferMain, blackColor);
+    drawText(3, getToolYOffset(), toolString.c_str(), pixelBufferMain, blackColor);
 
     drawSprite(SCREEN_WIDTH - 32 - 3, SCREEN_HEIGHT - 32 - 3, 32, 32, paint_iconBitmap, pixelBufferMain);
 }
@@ -215,7 +217,7 @@ void Paint::drawColors() {
     string colorSubString = string("RGB: ") + intToChars(rs) + " " + intToChars(gs) + " " + intToChars(bs); 
     drawText(21, 177, colorSubString.c_str(), pixelBufferMain, blackColor);
 
-    drawText(3, 147, getPaintName(), pixelBufferMain, blackColor);
+    drawText(3, 145, getPaintName(), pixelBufferMain, blackColor);
 }
 
 void Paint::blendSubLayers(int x, int y) {
@@ -404,30 +406,43 @@ u32 Paint::decodeChar(const char** c) {
 }
 
 int Paint::getCharLength(u32 c) {
-    if (c == ' ') return 5;
-    if (c == '!') return 2;
-    if (c == '"') return 4;
-    if (c == '\'') return 2;
-    if (c == '(') return 4;
-    if (c == ')') return 4;
-    if (c == '*') return 4;
-    if (c == ',') return 2;
-    if (c == '.') return 2;
-    if (c == ':') return 2;
-    if (c == ';') return 2;
-    if (c == '@') return 7;
-    if (c == '[') return 4;
-    if (c == ']') return 4;
-    if (c == '`') return 3;
-    if (c == '|') return 2;
-    if (c == '~') return 7;
+    switch (c) {
+        case ' ': return 5; break;
+        case '!': return 2; break;
+        case '"': return 4; break;
+        case '\'': return 2; break;
+        case '(': return 4; break;
+        case ')': return 4; break;
+        case '*': return 4; break;
+        case ',': return 2; break;
+        case '.': return 2; break;
+        case ':': return 2; break;
+        case ';': return 2; break;
+        case '@': return 7; break;
+        case '[': return 4; break;
+        case ']': return 4; break;
+        case '`': return 3; break;
+        case '|': return 2; break;
+        case '~': return 7; break;
 
-    if (c == 'f') return 5;
-    if (c == 'i') return 2;
-    if (c == 'k') return 5;
-    if (c == 'l') return 3;
-    if (c == 't') return 4;
+        case 'f': return 5; break;
+        case 'i': return 2; break;
+        case 'k': return 5; break;
+        case 'l': return 3; break;
+        case 't': return 4; break;
+    }
     return 6;
+}
+
+int Paint::getTextLength(const char* text) {
+    const char* textPtr = text;
+    int l = 0;
+
+    while (*textPtr) {
+        u32 charCode = decodeChar(&textPtr);
+        l += getCharLength(charCode);
+    }
+    return l;
 }
 
 void Paint::drawChar(int x, int y, u32 c, u16* buffer, u16 color) {
@@ -473,9 +488,13 @@ void Paint::drawCharOutline(int x, int y, u32 c, u16* buffer, u16 color, u16 out
 }
 
 void Paint::drawTextOutline(int x, int y, const char* text, u16* buffer, u16 color, u16 outlineColor) {
-    while (*text) {
-        drawCharOutline(x, y, *text++, buffer, color, outlineColor);
-        x += 8;
+    const char* textPtr = text;
+
+    while (*textPtr) {
+        u32 charCode = decodeChar(&textPtr);
+
+        drawCharOutline(x, y, charCode, buffer, color, outlineColor);
+        x += getCharLength(charCode);
     }
 }
 
@@ -711,4 +730,12 @@ bool Paint::makeDirectory(const char* path) {
 bool Paint::directoryExist(const char* path) {
     struct stat st;
     return stat(path, &st) == 0;
+}
+
+int Paint::getToolYOffset() {
+    return 22;
+}
+
+int Paint::getToolsYOffset() {
+    return getToolYOffset() + 12;
 }
