@@ -11,12 +11,54 @@
             "problemMatcher": []
         },
         {
-            "label": "make",
+            "label": "makeW",
             "type": "process",
             "command": "make",
             "args": [
                 "DEBUG=0"
             ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "makeL",
+            "type": "process",
+            "command": "make",
+            "args": [
+                "DEBUG=0"
+            ],
+            "options": {
+                "env": {
+                    "DEVKITPRO": "/opt/devkitpro",
+                    "DEVKITARM": "/opt/devkitpro/devkitARM",
+                    "DEVKITPPC": "/opt/devkitpro/devkitPPC",
+                    "PATH": "/opt/devkitpro/devkitARM/bin:/opt/devkitpro/tools/bin:${env:PATH}"
+                }
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "makeSDD",
+            "type": "process",
+            "command": "make",
+            "args": [
+                "DEBUG=0"
+            ],
+            "options": {
+                "env": {
+                    "DEVKITPRO": "/home/deck/devkitpro/opt/devkitpro",
+                    "DEVKITARM": "/home/deck/devkitpro/opt/devkitpro/devkitARM",
+                    "DEVKITPPC": "/home/deck/devkitpro/opt/devkitpro/devkitPPC",
+                    "PATH": "/home/deck/devkitpro/opt/devkitpro/devkitARM/bin:/home/deck/devkitpro/opt/devkitpro/tools/bin:${env:PATH}"
+                }
+            },
             "problemMatcher": [],
             "group": {
                 "kind": "build",

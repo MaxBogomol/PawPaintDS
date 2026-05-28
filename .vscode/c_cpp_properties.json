@@ -68,7 +68,7 @@
             "intelliSenseMode": "linux-gcc-arm"
         },
         {
-            "name": "Steam Deck",
+            "name": "SDD",
             "includePath": [
                 "${workspaceFolder}",
                 "${workspaceFolder}/build",
