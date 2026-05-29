@@ -391,11 +391,8 @@ void Brush::open(Paint& paint) {
 }
 
 void Brush::close(Paint& paint) {
-    for (int x = 0; x < SCREEN_WIDTH; x++) {
-        for (int y = 0; y < 54; y++) {
-            paint.drawPixel(x, y + 48, pixelBufferMain, whiteColor);
-        }
-    }
+    int yOffset = paint.getToolsYOffset();
+    paint.drawClearBuffer(0, yOffset - 2, SCREEN_WIDTH, 62, pixelBufferMain, whiteColor);
 
     active = false;
     drawCursor(paint);
@@ -458,83 +455,59 @@ void Brush::drawLine(Paint& paint, int x0, int y0, int x1, int y1, u16* buffer, 
 }
 
 void Brush::drawTool(Paint& paint) {
-    for (int x = 0; x < SCREEN_WIDTH; x++) {
-        for (int y = 0; y < 54; y++) {
-            paint.drawPixel(x, y + 48, pixelBufferMain, whiteColor);
-        }
-    }
-
     int yOffset = paint.getToolsYOffset();
+    paint.drawClearBuffer(0, yOffset - 2, SCREEN_WIDTH, 62, pixelBufferMain, whiteColor);
 
     string moveString = string((line == 0) ? ">" : "") + "Move: " + ((line == 0 && active) ? "+" : "-"); 
     paint.drawText(3, yOffset, moveString.c_str(), pixelBufferMain, blackColor);
-    paint.drawText(SCREEN_WIDTH - 8 - paint.getTextLength("+"), yOffset, "+", pixelBufferMain, blackColor);
-
-    yOffset += 9;
+    paint.drawAButton(SCREEN_WIDTH - 8 - 8, yOffset, pixelBufferMain);
 
     string typeString = string((line == 1) ? ">" : "") + "Type: " + getTypeName(paint, type); 
-    paint.drawText(3, yOffset, typeString.c_str(), pixelBufferMain, blackColor);
-    paint.drawText(SCREEN_WIDTH - 8 - paint.getTextLength("- +"), yOffset, "- +", pixelBufferMain, blackColor);
+    paint.drawText(3, yOffset += 10, typeString.c_str(), pixelBufferMain, blackColor);
+    paint.drawSprite(SCREEN_WIDTH - 8 - 8 - 8 - 5, yOffset, 32, 32, 24, 0, 8, 8, buttons_iconBitmap, pixelBufferMain);
+    paint.drawSprite(SCREEN_WIDTH - 8 - 8, yOffset, 32, 32, 8, 0, 8, 8, buttons_iconBitmap, pixelBufferMain);
 
-    yOffset += 9;
+    yOffset += 10;
 
     switch (type) {
         case 0:
     	case 3: {
             string sizeString = string((line == 2) ? ">" : "") + "Size: " + paint.intToChars(squareSize);
             paint.drawText(3, yOffset, sizeString.c_str(), pixelBufferMain, blackColor);
-
-            paint.drawLine(SCREEN_WIDTH - 9 - 63, yOffset + 1, SCREEN_WIDTH - 9, yOffset + 1, pixelBufferMain, blackColor);
-            paint.drawSquareOutline(SCREEN_WIDTH - 9 - 64 - 1 + (squareSize - 1), yOffset + 3, 3, 4, pixelBufferMain, blackColor);
+            paint.drawScrollBox(SCREEN_WIDTH - 8 - 64, yOffset + 1, 64, squareSize - 1, pixelBufferMain);
             break;
         }
         case 1:
         case 4: {
             string diameterString = string((line == 2) ? ">" : "") + "Diameter: " + paint.intToChars(circleDiameter);
-            paint.drawText(3, 66, diameterString.c_str(), pixelBufferMain, blackColor);
-
-            paint.drawLine(176, 67, 176 + 63, 67, pixelBufferMain, blackColor);
-            paint.drawSquareOutline(176 - 1 + (circleDiameter - 1), 67 + 2, 3, 4, pixelBufferMain, blackColor);
+            paint.drawText(3, yOffset, diameterString.c_str(), pixelBufferMain, blackColor);
+            paint.drawScrollBox(SCREEN_WIDTH - 8 - 64, yOffset + 1, 64, circleDiameter - 1, pixelBufferMain);
             break;
         }
         case 2:
         case 5: {
             string radiusString = string((line == 2) ? ">" : "") + "Radius: " + paint.intToChars(dotRadius);
-            paint.drawText(3, 66, radiusString.c_str(), pixelBufferMain, blackColor);
-
-            paint.drawLine(176, 67, 176 + 31, 67, pixelBufferMain, blackColor);
-            paint.drawSquareOutline(176 - 1 + (dotRadius - 1), 67 + 2, 3, 4, pixelBufferMain, blackColor);
+            paint.drawText(3, yOffset, radiusString.c_str(), pixelBufferMain, blackColor);
+            paint.drawScrollBox(SCREEN_WIDTH - 8 - 32, yOffset + 1, 32, dotRadius - 1, pixelBufferMain);
             break;
         }
     }
 
     if (type >= 3) {
         string noiseSizeString = string((line == 3 && !active) ? ">" : "") + "Noise Size: " + ((line == 3 && active && !activeNoise) ? ">" : "") + paint.intToChars(noiseXSize) + " " + ((line == 3 && active && activeNoise) ? ">" : "") + paint.intToChars(noiseYSize);
-        paint.drawText(3, 75, noiseSizeString.c_str(), pixelBufferMain, blackColor);
-
-        paint.drawLine(176, 76, 176 + 15, 76, pixelBufferMain, blackColor);
-        paint.drawSquareOutline(176 - 1 + (noiseXSize - 1), 76 + 2, 3, 4, pixelBufferMain, blackColor);
-
-        paint.drawLine(176 + 24, 76, 176 + 15 + 24, 76, pixelBufferMain, blackColor);
-        paint.drawSquareOutline(176 - 1 + (noiseYSize - 1) + 24, 76 + 2, 3, 4, pixelBufferMain, blackColor);
+        paint.drawText(3, yOffset += 10, noiseSizeString.c_str(), pixelBufferMain, blackColor);
+        paint.drawScrollBox(SCREEN_WIDTH - 8 - 40, yOffset + 1, 16, noiseXSize - 1, pixelBufferMain);
+        paint.drawScrollBox(SCREEN_WIDTH - 8 - 16, yOffset + 1, 16, noiseYSize - 1, pixelBufferMain);
 
         string noiseShiftString = string((line == 4 && !active) ? ">" : "") + "Noise Shift: " + ((line == 4 && active && !activeNoise) ? ">" : "") + paint.intToChars(noiseXShift) + " " + ((line == 4 && active && activeNoise) ? ">" : "") + paint.intToChars(noiseYShift);
-        paint.drawText(3, 84, noiseShiftString.c_str(), pixelBufferMain, blackColor);
-
-        paint.drawLine(176, 85, 176 + 15, 85, pixelBufferMain, blackColor);
-        paint.drawSquareOutline(176 - 1 + noiseXShift, 85 + 2, 3, 4, pixelBufferMain, blackColor);
-
-        paint.drawLine(176 + 24, 85, 176 + 15 + 24, 85, pixelBufferMain, blackColor);
-        paint.drawSquareOutline(176 - 1 + noiseYShift + 24, 85 + 2, 3, 4, pixelBufferMain, blackColor);
+        paint.drawText(3, yOffset += 10, noiseShiftString.c_str(), pixelBufferMain, blackColor);
+        paint.drawScrollBox(SCREEN_WIDTH - 8 - 40, yOffset + 1, 16, noiseXShift, pixelBufferMain);
+        paint.drawScrollBox(SCREEN_WIDTH - 8 - 16, yOffset + 1, 16, noiseYShift, pixelBufferMain);
 
         string noiseOffsetString = string((line == 5 && !active) ? ">" : "") + "Noise Offset: " + ((line == 5 && active && !activeNoise) ? ">" : "") + paint.intToChars(noiseXOffset) + " " + ((line == 5 && active && activeNoise) ? ">" : "") + paint.intToChars(noiseYOffset);
-        paint.drawText(3, 95, noiseOffsetString.c_str(), pixelBufferMain, blackColor);
-
-        paint.drawLine(176, 96, 176 + 15, 96, pixelBufferMain, blackColor);
-        paint.drawSquareOutline(176 - 1 + noiseXOffset, 96 + 2, 3, 4, pixelBufferMain, blackColor);
-
-        paint.drawLine(176 + 24, 96, 176 + 15 + 24, 96, pixelBufferMain, blackColor);
-        paint.drawSquareOutline(176 - 1 + noiseYOffset + 24, 96 + 2, 3, 4, pixelBufferMain, blackColor);
+        paint.drawText(3, yOffset += 10, noiseOffsetString.c_str(), pixelBufferMain, blackColor);
+        paint.drawScrollBox(SCREEN_WIDTH - 8 - 40, yOffset + 1, 16, noiseXOffset, pixelBufferMain);
+        paint.drawScrollBox(SCREEN_WIDTH - 8 - 16, yOffset + 1, 16, noiseYOffset, pixelBufferMain);
     }
 }
 

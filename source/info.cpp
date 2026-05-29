@@ -26,11 +26,8 @@ void Info::open(Paint& paint) {
 }
 
 void Info::close(Paint& paint) {
-    for (int x = 0; x < SCREEN_WIDTH; x++) {
-        for (int y = 0; y < 54 + 27; y++) {
-            paint.drawPixel(x, y + 48, pixelBufferMain, whiteColor);
-        }
-    }
+    int yOffset = paint.getToolsYOffset();
+    paint.drawClearBuffer(0, yOffset - 2, SCREEN_WIDTH, 92, pixelBufferMain, whiteColor);
 }
 
 void Info::drawIcon(Paint& paint, int x, int y, u16* buffer) {
@@ -38,18 +35,15 @@ void Info::drawIcon(Paint& paint, int x, int y, u16* buffer) {
 }
 
 void Info::drawTool(Paint& paint) {
-    for (int x = 0; x < SCREEN_WIDTH; x++) {
-        for (int y = 0; y < 54 + 27; y++) {
-            paint.drawPixel(x, y + 48, pixelBufferMain, whiteColor);
-        }
-    }
+    int yOffset = paint.getToolsYOffset();
+    paint.drawClearBuffer(0, yOffset - 2, SCREEN_WIDTH, 92, pixelBufferMain, whiteColor);
 
-    paint.drawText(3, 48, "Paw Paint DS", pixelBufferMain, blackColor);
-    paint.drawText(3, 57, "Paint with your paws on Nintendo DS", pixelBufferMain, blackColor);
-    paint.drawText(3, 66, "By MaxBogomol (Pink Joke)", pixelBufferMain, blackColor);
+    paint.drawText(3, yOffset, "Paw Paint DS", pixelBufferMain, blackColor);
+    paint.drawText(3, yOffset += 10, "Paint with your paws on Nintendo DS", pixelBufferMain, blackColor);
+    paint.drawText(3, yOffset += 10, "By MaxBogomol (Pink Joke)", pixelBufferMain, blackColor);
     
-    paint.drawText(3, 84, "https://github.com/MaxBogomol/PawPaintDS", pixelBufferMain, blackColor);
-    paint.drawText(3, 93, "https://fluffy-village.dev/pages/eng/creations/", pixelBufferMain, blackColor);
-    paint.drawText(3, 102, "paw_paint.html", pixelBufferMain, blackColor);
-    paint.drawText(3, 120, "UwU", pixelBufferMain, blackColor);
+    paint.drawText(3, yOffset += 20, "https://github.com/MaxBogomol/PawPaintDS", pixelBufferMain, blackColor);
+    paint.drawText(3, yOffset += 10, "https://fluffy-village.dev/pages/eng/creations/", pixelBufferMain, blackColor);
+    paint.drawText(3, yOffset += 10, "paw_paint.html", pixelBufferMain, blackColor);
+    paint.drawText(3, yOffset += 20, "UwU", pixelBufferMain, blackColor);
 }

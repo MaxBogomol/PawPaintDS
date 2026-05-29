@@ -118,11 +118,8 @@ void Layers::open(Paint& paint) {
 }
 
 void Layers::close(Paint& paint) {
-    for (int x = 0; x < SCREEN_WIDTH; x++) {
-        for (int y = 0; y < 54; y++) {
-            paint.drawPixel(x, y + 48, pixelBufferMain, whiteColor);
-        }
-    }
+    int yOffset = paint.getToolsYOffset();
+    paint.drawClearBuffer(0, yOffset - 2, SCREEN_WIDTH, 22, pixelBufferMain, whiteColor);
 }
 
 void Layers::drawIcon(Paint& paint, int x, int y, u16* buffer) {
@@ -130,17 +127,16 @@ void Layers::drawIcon(Paint& paint, int x, int y, u16* buffer) {
 }
 
 void Layers::drawTool(Paint& paint) {
-    for (int x = 0; x < SCREEN_WIDTH; x++) {
-        for (int y = 0; y < 54; y++) {
-            paint.drawPixel(x, y + 48, pixelBufferMain, whiteColor);
-        }
-    }
+    int yOffset = paint.getToolsYOffset();
+    paint.drawClearBuffer(0, yOffset - 2, SCREEN_WIDTH, 22, pixelBufferMain, whiteColor);
 
     string moveString = string((line == 0) ? ">" : "") + "Layer: " + paint.intToChars(paint.selectedLayer + 1);
-    paint.drawText(3, 48, moveString.c_str(), pixelBufferMain, blackColor);
-    paint.drawText(176, 48, "- +", pixelBufferMain, blackColor);
+    paint.drawText(3, yOffset, moveString.c_str(), pixelBufferMain, blackColor);
+    paint.drawSprite(SCREEN_WIDTH - 8 - 8 - 8 - 5, yOffset, 32, 32, 24, 0, 8, 8, buttons_iconBitmap, pixelBufferMain);
+    paint.drawSprite(SCREEN_WIDTH - 8 - 8, yOffset, 32, 32, 8, 0, 8, 8, buttons_iconBitmap, pixelBufferMain);
 
     string typeString = string((line == 1) ? ">" : "") + "Move";
-    paint.drawText(3, 57, typeString.c_str(), pixelBufferMain, blackColor);
-    paint.drawText(176, 57, "- +", pixelBufferMain, blackColor);
+    paint.drawText(3, yOffset += 10, typeString.c_str(), pixelBufferMain, blackColor);
+    paint.drawSprite(SCREEN_WIDTH - 8 - 8 - 8 - 5, yOffset, 32, 32, 24, 0, 8, 8, buttons_iconBitmap, pixelBufferMain);
+    paint.drawSprite(SCREEN_WIDTH - 8 - 8, yOffset, 32, 32, 8, 0, 8, 8, buttons_iconBitmap, pixelBufferMain);
 }

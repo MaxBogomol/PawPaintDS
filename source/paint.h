@@ -19,6 +19,7 @@ using namespace std;
 #include "info.h"
 
 #include "paint_icon.h"
+#include "buttons_icon.h"
 #include "pawscript_font.h"
 #include "brush_icon.h"
 #include "brush_square_icon.h"
@@ -166,6 +167,7 @@ class Paint {
         void drawText(int x, int y, const char* text, u16* buffer, u16 color);
         void drawCharOutline(int x, int y, u32 c, u16* buffer, u16 color, u16 outlineColor);
         void drawTextOutline(int x, int y, const char* text, u16* buffer, u16 color, u16 outlineColor);
+        void drawSprite(int x0, int y0, int x1, int y1, int xShift, int yShift, int xSize, int ySize, const unsigned int* spriteBitmap, u16* buffer);
         void drawSprite(int x0, int y0, int x1, int y1, const unsigned int* spriteBitmap, u16* buffer);
 
         u16 blendColors(u16 src, u16 dst);
@@ -184,4 +186,11 @@ class Paint {
 
         int getToolYOffset();
         int getToolsYOffset();
+
+        void drawYButton(int x, int y, u16* buffer);
+        void drawXButton(int x, int y, u16* buffer);
+        void drawBButton(int x, int y, u16* buffer);
+        void drawAButton(int x, int y, u16* buffer);
+        void drawScrollBox(int x, int y, int size, int scroll, u16* buffer);
+        void drawClearBuffer(int x0, int y0, int x1, int y1, u16* buffer, u16 color);
 };

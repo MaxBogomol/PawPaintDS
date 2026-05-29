@@ -170,11 +170,7 @@ void Paint::updateVideo() {
 }
 
 void Paint::drawTools() {
-    for (int x = 0; x < SCREEN_WIDTH; x++) {
-        for (int y = 0; y < 48; y++) {
-            drawPixel(x, y, pixelBufferMain, whiteColor);
-        }
-    }
+    drawClearBuffer(0, 0, SCREEN_WIDTH, 48, pixelBufferMain, whiteColor);
 
     int i = 0;
     int j = 0;
@@ -195,11 +191,7 @@ void Paint::drawTools() {
 }
 
 void Paint::drawColors() {
-    for (int x = 0; x < 128; x++) {
-        for (int y = 0; y < 34; y++) {
-            drawPixel(x, y + 156, pixelBufferMain, whiteColor);
-        }
-    }
+    drawClearBuffer(0, 156, 128, 34, pixelBufferMain, whiteColor);
 
     drawSquareOutline(2, 156, 18, 34, pixelBufferMain, blackColor);
 
@@ -498,18 +490,22 @@ void Paint::drawTextOutline(int x, int y, const char* text, u16* buffer, u16 col
     }
 }
 
-void Paint::drawSprite(int x0, int y0, int x1, int y1, const unsigned int* spriteBitmap, u16* buffer) {
+void Paint::drawSprite(int x0, int y0, int x1, int y1, int xShift, int yShift, int xSize, int ySize, const unsigned int* spriteBitmap, u16* buffer) {
     const u16* pixels = (const u16*) spriteBitmap;
 
-    for (int y = 0; y < y1; y++) {
-        for (int x = 0; x < x1; x++) {
-            u16 color = pixels[x + (y * x1)];
+    for (int y = 0; y < ySize; y++) {
+        for (int x = 0; x < xSize; x++) {
+            u16 color = pixels[x + xShift + ((y + yShift) * x1)];
 
             if (color & BIT(15)) {
                 drawPixel(x0 + x, y0 + y, buffer, color);
             }
         }
     }
+}
+
+void Paint::drawSprite(int x0, int y0, int x1, int y1, const unsigned int* spriteBitmap, u16* buffer) {
+    drawSprite(x0, y0, x1, y1, 0, 0, x1, y1, spriteBitmap, buffer);
 }
 
 u16 Paint::blendColors(u16 src, u16 dst) {
@@ -738,4 +734,33 @@ int Paint::getToolYOffset() {
 
 int Paint::getToolsYOffset() {
     return getToolYOffset() + 12;
+}
+
+void Paint::drawYButton(int x, int y, u16* buffer) {
+    drawSprite(x, y, 32, 32, 0, 16, 8, 8, buttons_iconBitmap, buffer);
+}
+
+void Paint::drawXButton(int x, int y, u16* buffer) {
+    drawSprite(x, y, 32, 32, 8, 16, 8, 8, buttons_iconBitmap, buffer);
+}
+
+void Paint::drawBButton(int x, int y, u16* buffer) {
+    drawSprite(x, y, 32, 32, 0, 24, 8, 8, buttons_iconBitmap, buffer);
+}
+
+void Paint::drawAButton(int x, int y, u16* buffer) {
+    drawSprite(x, y, 32, 32, 8, 24, 8, 8, buttons_iconBitmap, buffer);
+}
+
+void Paint::drawScrollBox(int x, int y, int size, int scroll, u16* buffer) {
+    drawLine(x, y, x + size - 1, y, pixelBufferMain, blackColor);
+    drawSquareOutline(x + scroll - 1, y + 2, 3, 4, pixelBufferMain, blackColor);
+}
+
+void Paint::drawClearBuffer(int x0, int y0, int x1, int y1, u16* buffer, u16 color) {
+    for (int x = 0; x < x1; x++) {
+        for (int y = 0; y < y1; y++) {
+            drawPixel(x0 + x, y0 + y, buffer, color);
+        }
+    }
 }
