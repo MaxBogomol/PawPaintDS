@@ -84,6 +84,41 @@ void Saving::update(Paint& paint) {
         }
     }
 
+    int yOffset = paint.getToolsYOffset();
+    int bOffset = paint.getToolsButtonsOffset();
+
+    if (keysD & KEY_TOUCH && paint.reverseScreens) {
+        if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset + 8 && touchY >= yOffset && touchY < yOffset + 8) {
+            for (int x = 0; x < SCREEN_WIDTH; x++) {
+                for (int y = 0; y < SCREEN_HEIGHT; y++) {
+                    pixelBufferSubLayer0[x + (y * SCREEN_WIDTH)] = paint.selectedColorSub;
+                    pixelBufferSubLayer1[x + (y * SCREEN_WIDTH)] = alphaColor;
+                    pixelBufferSubLayer2[x + (y * SCREEN_WIDTH)] = alphaColor;
+                    pixelBufferSubLayer3[x + (y * SCREEN_WIDTH)] = alphaColor;
+                    paint.blendSubLayers(x, y);
+                }
+            }
+            paint.setPaintName("Unnamed");
+        }
+        yOffset += 10;
+        if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset + 8 && touchY >= yOffset && touchY < yOffset + 8) {
+            loading = true;
+            paint.updateDrawTools = true;
+        }
+        yOffset += 10;
+        if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset + 8 && touchY >= yOffset && touchY < yOffset + 8) {
+            saving = true;
+            paint.updateDrawTools = true;
+        }
+        yOffset += 10;
+        yOffset += 10;
+        if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset + 8 && touchY >= yOffset && touchY < yOffset + 8) {
+            pawName = paint.getPaintName();
+            savingExport = true;
+            paint.updateDrawTools = true;
+        }
+    }
+
     if (doneTimer > 0)  {
         doneTimer--;
         paint.updateDrawTools = true;

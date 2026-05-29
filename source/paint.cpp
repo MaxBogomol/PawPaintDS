@@ -170,7 +170,7 @@ void Paint::updateVideo() {
 }
 
 void Paint::drawTools() {
-    drawClearBuffer(0, 0, SCREEN_WIDTH, 48, pixelBufferMain, whiteColor);
+    drawClearBuffer(0, 0, SCREEN_WIDTH, getToolsYOffset(), pixelBufferMain, whiteColor);
 
     int i = 0;
     int j = 0;
