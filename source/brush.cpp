@@ -186,20 +186,24 @@ void Brush::update(Paint& paint) {
         if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset + 8 && touchY >= yOffset && touchY < yOffset + 8) {
             active = !active;
             line = 0;
-            updateDrawCursor = true;
             updateDrawTool = true;
+            updateDrawCursor = true;
         }
         yOffset += 10;
         if (touchX >= SCREEN_WIDTH - bOffset - 16 - 5 && touchX < SCREEN_WIDTH - bOffset - 16 - 5 + 8 && touchY >= yOffset && touchY < yOffset + 8) {
+            drawCursor(paint, true);
             type--;
             if (type < 0) type = 5;
             updateDrawTool = true;
+            updateDrawCursor = true;
             paint.updateDrawTools = true;
         }
         if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset + 8 && touchY >= yOffset && touchY < yOffset + 8) {
+            drawCursor(paint, true);
             type++;
             if (type > 5) type = 0;
             updateDrawTool = true;
+            updateDrawCursor = true;
             paint.updateDrawTools = true;
         }
     } else {
@@ -212,24 +216,30 @@ void Brush::update(Paint& paint) {
             case 0:
             case 3: {
                 if (touchX >= SCREEN_WIDTH - bOffset - 64 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
+                    drawCursor(paint, true);
                     squareSize = touchX - (SCREEN_WIDTH - bOffset - 64) + 1;
                     updateDrawTool = true;
+                    updateDrawCursor = true;
                 }
                 break;
             }
             case 1:
             case 4: {
                 if (touchX >= SCREEN_WIDTH - bOffset - 64 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
+                    drawCursor(paint, true);
                     circleDiameter = touchX - (SCREEN_WIDTH - bOffset - 64) + 1;
                     updateDrawTool = true;
+                    updateDrawCursor = true;
                 }
                 break;
             }
             case 2:
             case 5: {
                 if (touchX >= SCREEN_WIDTH - bOffset - 32 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
+                    drawCursor(paint, true);
                     dotRadius = touchX - (SCREEN_WIDTH - bOffset - 32) + 1;
                     updateDrawTool = true;
+                    updateDrawCursor = true;
                 }
                 break;
             }
@@ -340,30 +350,42 @@ void Brush::update(Paint& paint) {
         if (touchCount >= 1 && paint.reverseScreens) {
             yOffset += 10;
             if (touchX >= SCREEN_WIDTH - bOffset - 16 - 24 && touchX < SCREEN_WIDTH - bOffset - 24 && touchY >= yOffset && touchY < yOffset + 8) {
+                drawCursor(paint, true);
                 noiseXSize = touchX - (SCREEN_WIDTH - bOffset - 16 - 24) + 1;
                 updateDrawTool = true;
+                updateDrawCursor = true;
             }
             if (touchX >= SCREEN_WIDTH - bOffset - 16 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
+                drawCursor(paint, true);
                 noiseYSize = touchX - (SCREEN_WIDTH - bOffset - 16) + 1;
                 updateDrawTool = true;
+                updateDrawCursor = true;
             }
             yOffset += 10;
             if (touchX >= SCREEN_WIDTH - bOffset - 16 - 24 && touchX < SCREEN_WIDTH - bOffset - 24 && touchY >= yOffset && touchY < yOffset + 8) {
+                drawCursor(paint, true);
                 noiseXShift = touchX - (SCREEN_WIDTH - bOffset - 16 - 24);
                 updateDrawTool = true;
+                updateDrawCursor = true;
             }
             if (touchX >= SCREEN_WIDTH - bOffset - 16 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
+                drawCursor(paint, true);
                 noiseYShift = touchX - (SCREEN_WIDTH - bOffset - 16);
                 updateDrawTool = true;
+                updateDrawCursor = true;
             }
             yOffset += 10;
             if (touchX >= SCREEN_WIDTH - bOffset - 16 - 24 && touchX < SCREEN_WIDTH - bOffset - 24 && touchY >= yOffset && touchY < yOffset + 8) {
+                drawCursor(paint, true);
                 noiseXOffset = touchX - (SCREEN_WIDTH - bOffset - 16 - 24);
                 updateDrawTool = true;
+                updateDrawCursor = true;
             }
             if (touchX >= SCREEN_WIDTH - bOffset - 16 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
+                drawCursor(paint, true);
                 noiseYOffset = touchX - (SCREEN_WIDTH - bOffset - 16);
                 updateDrawTool = true;
+                updateDrawCursor = true;
             }
         }
     }
@@ -511,7 +533,7 @@ void Brush::drawTool(Paint& paint) {
     }
 }
 
-void Brush::drawCursor(Paint& paint) {
+void Brush::drawCursor(Paint& paint, bool clear) {
     int size = 0;
     switch (type) {
         case 0:
@@ -519,7 +541,7 @@ void Brush::drawCursor(Paint& paint) {
         case 1:
     	case 4: size = circleDiameter; break;
         case 2:
-    	case 5: size = dotRadius; break;
+    	case 5: size = dotRadius * 2; break;
     }
     size = size + 2;
     for (int x = 0; x < size; x++) {
@@ -528,10 +550,14 @@ void Brush::drawCursor(Paint& paint) {
         }
     }
 
-    if (active) drawLine(paint, cursorX, cursorY, cursorX, cursorY, pixelBufferSub, getSelectedColor(paint));
+    if (active && !clear) drawLine(paint, cursorX, cursorY, cursorX, cursorY, pixelBufferSub, getSelectedColor(paint));
 
     cursorXOld = cursorX;
     cursorYOld = cursorY;
+}
+
+void Brush::drawCursor(Paint& paint) {
+    drawCursor(paint, false);
 }
 
 const char* Brush::getTypeName(Paint& paint, int type) {
