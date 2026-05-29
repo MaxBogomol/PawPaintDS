@@ -179,57 +179,60 @@ void Brush::update(Paint& paint) {
         }
     }
 
+    int yOffset = paint.getToolsYOffset();
+    int bOffset = paint.getToolsButtonsOffset();
+
     if (keysD & KEY_TOUCH && paint.reverseScreens) {
-        if (touchX >= 176 && touchX < 176 + 8 && touchY >= 48 && touchY < 48 + 8) {
+        if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset + 8 && touchY >= yOffset && touchY < yOffset + 8) {
             active = !active;
             line = 0;
             updateDrawCursor = true;
             updateDrawTool = true;
         }
-        if (touchX >= 176 && touchX < 176 + 8 && touchY >= 57 && touchY < 57 + 8) {
+        yOffset += 10;
+        if (touchX >= SCREEN_WIDTH - bOffset - 16 - 5 && touchX < SCREEN_WIDTH - bOffset - 16 - 5 + 8 && touchY >= yOffset && touchY < yOffset + 8) {
             type--;
             if (type < 0) type = 5;
             updateDrawTool = true;
             paint.updateDrawTools = true;
         }
-        if (touchX >= 192 && touchX < 192 + 8 && touchY >= 57 && touchY < 57 + 8) {
+        if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset + 8 && touchY >= yOffset && touchY < yOffset + 8) {
             type++;
             if (type > 5) type = 0;
             updateDrawTool = true;
             paint.updateDrawTools = true;
         }
+    } else {
+        yOffset += 10;
     }
+    yOffset += 10;
 
-    switch (type) {
-        case 0:
-        case 3: {
-            if (touchCount >= 1 && paint.reverseScreens) {
-                if (touchX >= SCREEN_WIDTH - 3 - 64 && touchX < SCREEN_WIDTH - 3 && touchY >= 66 && touchY < 66 + 8) {
-                    squareSize = touchX - (SCREEN_WIDTH - 3 - 64) + 1;
+    if (touchCount >= 1 && paint.reverseScreens) {
+        switch (type) {
+            case 0:
+            case 3: {
+                if (touchX >= SCREEN_WIDTH - bOffset - 64 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
+                    squareSize = touchX - (SCREEN_WIDTH - bOffset - 64) + 1;
                     updateDrawTool = true;
                 }
+                break;
             }
-            break;
-        }
-        case 1:
-        case 4: {
-            if (touchCount >= 1 && paint.reverseScreens) {
-                if (touchX >= 176 && touchX < 176 + 64 && touchY >= 66 && touchY < 66 + 8) {
-                    circleDiameter = touchX - 176 + 1;
+            case 1:
+            case 4: {
+                if (touchX >= SCREEN_WIDTH - bOffset - 64 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
+                    circleDiameter = touchX - (SCREEN_WIDTH - bOffset - 64) + 1;
                     updateDrawTool = true;
                 }
+                break;
             }
-            break;
-        }
-        case 2:
-        case 5: {
-            if (touchCount >= 1 && paint.reverseScreens) {
-                if (touchX >= 176 && touchX < 176 + 32 && touchY >= 66 && touchY < 66 + 8) {
-                    dotRadius = touchX - 176 + 1;
+            case 2:
+            case 5: {
+                if (touchX >= SCREEN_WIDTH - bOffset - 32 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
+                    dotRadius = touchX - (SCREEN_WIDTH - bOffset - 32) + 1;
                     updateDrawTool = true;
                 }
+                break;
             }
-            break;
         }
     }
 
@@ -243,26 +246,26 @@ void Brush::update(Paint& paint) {
             switch (line) {
                 case 3: {
                     if (!activeNoise) {
-                        if (keysD & KEY_LEFT) {
+                        if (keysR & KEY_LEFT) {
                             if (noiseXSize - 1 >= 1) {
                                 noiseXSize--;
                                 updateDrawTool = true;
                             }
                         }
-                        if (keysD & KEY_RIGHT) {
+                        if (keysR & KEY_RIGHT) {
                             if (noiseXSize + 1 <= 16) {
                                 noiseXSize++;
                                 updateDrawTool = true;
                             }
                         }
                     } else {
-                        if (keysD & KEY_LEFT) {
+                        if (keysR & KEY_LEFT) {
                             if (noiseYSize - 1 >= 1) {
                                 noiseYSize--;
                                 updateDrawTool = true;
                             }
                         }
-                        if (keysD & KEY_RIGHT) {
+                        if (keysR & KEY_RIGHT) {
                             if (noiseYSize + 1 <= 16) {
                                 noiseYSize++;
                                 updateDrawTool = true;
@@ -273,26 +276,26 @@ void Brush::update(Paint& paint) {
                 }
                 case 4: {
                     if (!activeNoise) {
-                        if (keysD & KEY_LEFT) {
+                        if (keysR & KEY_LEFT) {
                             if (noiseXShift - 1 >= 0) {
                                 noiseXShift--;
                                 updateDrawTool = true;
                             }
                         }
-                        if (keysD & KEY_RIGHT) {
+                        if (keysR & KEY_RIGHT) {
                             if (noiseXShift + 1 < 16) {
                                 noiseXShift++;
                                 updateDrawTool = true;
                             }
                         }
                     } else {
-                        if (keysD & KEY_LEFT) {
+                        if (keysR & KEY_LEFT) {
                             if (noiseYShift - 1 >= 0) {
                                 noiseYShift--;
                                 updateDrawTool = true;
                             }
                         }
-                        if (keysD & KEY_RIGHT) {
+                        if (keysR & KEY_RIGHT) {
                             if (noiseYShift + 1 < 16) {
                                 noiseYShift++;
                                 updateDrawTool = true;
@@ -303,26 +306,26 @@ void Brush::update(Paint& paint) {
                 }
                 case 5: {
                     if (!activeNoise) {
-                        if (keysD & KEY_LEFT) {
+                        if (keysR & KEY_LEFT) {
                             if (noiseXOffset - 1 >= 0) {
                                 noiseXOffset--;
                                 updateDrawTool = true;
                             }
                         }
-                        if (keysD & KEY_RIGHT) {
+                        if (keysR & KEY_RIGHT) {
                             if (noiseXOffset + 1 < 16) {
                                 noiseXOffset++;
                                 updateDrawTool = true;
                             }
                         }
                     } else {
-                        if (keysD & KEY_LEFT) {
+                        if (keysR & KEY_LEFT) {
                             if (noiseYOffset - 1 >= 0) {
                                 noiseYOffset--;
                                 updateDrawTool = true;
                             }
                         }
-                        if (keysD & KEY_RIGHT) {
+                        if (keysR & KEY_RIGHT) {
                             if (noiseYOffset + 1 < 16) {
                                 noiseYOffset++;
                                 updateDrawTool = true;
@@ -335,35 +338,31 @@ void Brush::update(Paint& paint) {
         }
 
         if (touchCount >= 1 && paint.reverseScreens) {
-            if (touchX >= 176 && touchX < 176 + 64 && touchY >= 66 && touchY < 66 + 8) {
-                squareSize = touchX - 176 + 1;
+            yOffset += 10;
+            if (touchX >= SCREEN_WIDTH - bOffset - 16 - 24 && touchX < SCREEN_WIDTH - bOffset - 24 && touchY >= yOffset && touchY < yOffset + 8) {
+                noiseXSize = touchX - (SCREEN_WIDTH - bOffset - 16 - 24) + 1;
                 updateDrawTool = true;
             }
-
-            if (touchX >= 176 && touchX < 176 + 16 && touchY >= 75 && touchY < 75 + 8) {
-                noiseXSize = touchX - 176 + 1;
+            if (touchX >= SCREEN_WIDTH - bOffset - 16 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
+                noiseYSize = touchX - (SCREEN_WIDTH - bOffset - 16) + 1;
                 updateDrawTool = true;
             }
-            if (touchX >= 176 + 24 && touchX < 176 + 24 + 16 && touchY >= 75 && touchY < 75 + 8) {
-                noiseYSize = touchX - 176 + 1 - 24;
+            yOffset += 10;
+            if (touchX >= SCREEN_WIDTH - bOffset - 16 - 24 && touchX < SCREEN_WIDTH - bOffset - 24 && touchY >= yOffset && touchY < yOffset + 8) {
+                noiseXShift = touchX - (SCREEN_WIDTH - bOffset - 16 - 24);
                 updateDrawTool = true;
             }
-
-            if (touchX >= 176 && touchX < 176 + 16 && touchY >= 84 && touchY < 84 + 8) {
-                noiseXShift = touchX - 176;
+            if (touchX >= SCREEN_WIDTH - bOffset - 16 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
+                noiseYShift = touchX - (SCREEN_WIDTH - bOffset - 16);
                 updateDrawTool = true;
             }
-            if (touchX >= 176 + 24 && touchX < 176 + 24 + 16 && touchY >= 84 && touchY < 84 + 8) {
-                noiseYShift = touchX - 176 - 24;
+            yOffset += 10;
+            if (touchX >= SCREEN_WIDTH - bOffset - 16 - 24 && touchX < SCREEN_WIDTH - bOffset - 24 && touchY >= yOffset && touchY < yOffset + 8) {
+                noiseXOffset = touchX - (SCREEN_WIDTH - bOffset - 16 - 24);
                 updateDrawTool = true;
             }
-
-            if (touchX >= 176 && touchX < 176 + 16 && touchY >= 93 && touchY < 93 + 8) {
-                noiseXOffset = touchX - 176;
-                updateDrawTool = true;
-            }
-            if (touchX >= 176 + 24 && touchX < 176 + 24 + 16 && touchY >= 93 && touchY < 93 + 8) {
-                noiseYOffset = touchX - 176 - 24;
+            if (touchX >= SCREEN_WIDTH - bOffset - 16 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
+                noiseYOffset = touchX - (SCREEN_WIDTH - bOffset - 16);
                 updateDrawTool = true;
             }
         }
@@ -456,16 +455,17 @@ void Brush::drawLine(Paint& paint, int x0, int y0, int x1, int y1, u16* buffer, 
 
 void Brush::drawTool(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
+    int bOffset = paint.getToolsButtonsOffset();
     paint.drawClearBuffer(0, yOffset - 2, SCREEN_WIDTH, 62, pixelBufferMain, whiteColor);
 
     string moveString = string((line == 0) ? ">" : "") + "Move: " + ((line == 0 && active) ? "+" : "-"); 
     paint.drawText(3, yOffset, moveString.c_str(), pixelBufferMain, blackColor);
-    paint.drawAButton(SCREEN_WIDTH - 8 - 8, yOffset, pixelBufferMain);
+    paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 
     string typeString = string((line == 1) ? ">" : "") + "Type: " + getTypeName(paint, type); 
     paint.drawText(3, yOffset += 10, typeString.c_str(), pixelBufferMain, blackColor);
-    paint.drawSprite(SCREEN_WIDTH - 8 - 8 - 8 - 5, yOffset, 32, 32, 24, 0, 8, 8, buttons_iconBitmap, pixelBufferMain);
-    paint.drawSprite(SCREEN_WIDTH - 8 - 8, yOffset, 32, 32, 8, 0, 8, 8, buttons_iconBitmap, pixelBufferMain);
+    paint.drawSprite(SCREEN_WIDTH - bOffset - 16 - 5, yOffset, 32, 32, 24, 0, 8, 8, buttons_iconBitmap, pixelBufferMain);
+    paint.drawSprite(SCREEN_WIDTH - bOffset - 8, yOffset, 32, 32, 8, 0, 8, 8, buttons_iconBitmap, pixelBufferMain);
 
     yOffset += 10;
 
@@ -474,21 +474,21 @@ void Brush::drawTool(Paint& paint) {
     	case 3: {
             string sizeString = string((line == 2) ? ">" : "") + "Size: " + paint.intToChars(squareSize);
             paint.drawText(3, yOffset, sizeString.c_str(), pixelBufferMain, blackColor);
-            paint.drawScrollBox(SCREEN_WIDTH - 8 - 64, yOffset + 1, 64, squareSize - 1, pixelBufferMain);
+            paint.drawScrollBox(SCREEN_WIDTH - bOffset - 64, yOffset + 1, 64, squareSize - 1, pixelBufferMain);
             break;
         }
         case 1:
         case 4: {
             string diameterString = string((line == 2) ? ">" : "") + "Diameter: " + paint.intToChars(circleDiameter);
             paint.drawText(3, yOffset, diameterString.c_str(), pixelBufferMain, blackColor);
-            paint.drawScrollBox(SCREEN_WIDTH - 8 - 64, yOffset + 1, 64, circleDiameter - 1, pixelBufferMain);
+            paint.drawScrollBox(SCREEN_WIDTH - bOffset - 64, yOffset + 1, 64, circleDiameter - 1, pixelBufferMain);
             break;
         }
         case 2:
         case 5: {
             string radiusString = string((line == 2) ? ">" : "") + "Radius: " + paint.intToChars(dotRadius);
             paint.drawText(3, yOffset, radiusString.c_str(), pixelBufferMain, blackColor);
-            paint.drawScrollBox(SCREEN_WIDTH - 8 - 32, yOffset + 1, 32, dotRadius - 1, pixelBufferMain);
+            paint.drawScrollBox(SCREEN_WIDTH - bOffset - 32, yOffset + 1, 32, dotRadius - 1, pixelBufferMain);
             break;
         }
     }
@@ -496,18 +496,18 @@ void Brush::drawTool(Paint& paint) {
     if (type >= 3) {
         string noiseSizeString = string((line == 3 && !active) ? ">" : "") + "Noise Size: " + ((line == 3 && active && !activeNoise) ? ">" : "") + paint.intToChars(noiseXSize) + " " + ((line == 3 && active && activeNoise) ? ">" : "") + paint.intToChars(noiseYSize);
         paint.drawText(3, yOffset += 10, noiseSizeString.c_str(), pixelBufferMain, blackColor);
-        paint.drawScrollBox(SCREEN_WIDTH - 8 - 40, yOffset + 1, 16, noiseXSize - 1, pixelBufferMain);
-        paint.drawScrollBox(SCREEN_WIDTH - 8 - 16, yOffset + 1, 16, noiseYSize - 1, pixelBufferMain);
+        paint.drawScrollBox(SCREEN_WIDTH - bOffset - 40, yOffset + 1, 16, noiseXSize - 1, pixelBufferMain);
+        paint.drawScrollBox(SCREEN_WIDTH - bOffset - 16, yOffset + 1, 16, noiseYSize - 1, pixelBufferMain);
 
         string noiseShiftString = string((line == 4 && !active) ? ">" : "") + "Noise Shift: " + ((line == 4 && active && !activeNoise) ? ">" : "") + paint.intToChars(noiseXShift) + " " + ((line == 4 && active && activeNoise) ? ">" : "") + paint.intToChars(noiseYShift);
         paint.drawText(3, yOffset += 10, noiseShiftString.c_str(), pixelBufferMain, blackColor);
-        paint.drawScrollBox(SCREEN_WIDTH - 8 - 40, yOffset + 1, 16, noiseXShift, pixelBufferMain);
-        paint.drawScrollBox(SCREEN_WIDTH - 8 - 16, yOffset + 1, 16, noiseYShift, pixelBufferMain);
+        paint.drawScrollBox(SCREEN_WIDTH - bOffset - 40, yOffset + 1, 16, noiseXShift, pixelBufferMain);
+        paint.drawScrollBox(SCREEN_WIDTH - bOffset - 16, yOffset + 1, 16, noiseYShift, pixelBufferMain);
 
         string noiseOffsetString = string((line == 5 && !active) ? ">" : "") + "Noise Offset: " + ((line == 5 && active && !activeNoise) ? ">" : "") + paint.intToChars(noiseXOffset) + " " + ((line == 5 && active && activeNoise) ? ">" : "") + paint.intToChars(noiseYOffset);
         paint.drawText(3, yOffset += 10, noiseOffsetString.c_str(), pixelBufferMain, blackColor);
-        paint.drawScrollBox(SCREEN_WIDTH - 8 - 40, yOffset + 1, 16, noiseXOffset, pixelBufferMain);
-        paint.drawScrollBox(SCREEN_WIDTH - 8 - 16, yOffset + 1, 16, noiseYOffset, pixelBufferMain);
+        paint.drawScrollBox(SCREEN_WIDTH - bOffset - 40, yOffset + 1, 16, noiseXOffset, pixelBufferMain);
+        paint.drawScrollBox(SCREEN_WIDTH - bOffset - 16, yOffset + 1, 16, noiseYOffset, pixelBufferMain);
     }
 }
 

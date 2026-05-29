@@ -120,31 +120,32 @@ void Saving::drawIcon(Paint& paint, int x, int y, u16* buffer) {
 
 void Saving::drawTool(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
+    int bOffset = paint.getToolsButtonsOffset();
     paint.drawClearBuffer(0, yOffset - 2, SCREEN_WIDTH, 62, pixelBufferMain, whiteColor);
 
     string newString = string((line == 0) ? ">" : "") + "New";
     paint.drawText(3, yOffset, newString.c_str(), pixelBufferMain, blackColor);
-    paint.drawAButton(SCREEN_WIDTH - 8 - 8, yOffset, pixelBufferMain);
+    paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 
     string loadString = string((line == 1) ? ">" : "") + "Load";
     paint.drawText(3, yOffset += 10, loadString.c_str(), pixelBufferMain, blackColor);
-    paint.drawAButton(SCREEN_WIDTH - 8 - 8, yOffset, pixelBufferMain);
+    paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 
     string saveString = string((line == 2) ? ">" : "") + "Save";
     paint.drawText(3, yOffset += 10, saveString.c_str(), pixelBufferMain, blackColor);
-    paint.drawAButton(SCREEN_WIDTH - 8 - 8, yOffset, pixelBufferMain);
+    paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 
     string saveAsString = string((line == 3) ? ">" : "") + "Save As";
     paint.drawText(3, yOffset += 10, saveAsString.c_str(), pixelBufferMain, blackColor);
-    paint.drawAButton(SCREEN_WIDTH - 8 - 8, yOffset, pixelBufferMain);
+    paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 
     string exportString = string((line == 4) ? ">" : "") + "Export";
     paint.drawText(3, yOffset += 10, exportString.c_str(), pixelBufferMain, blackColor);
-    paint.drawAButton(SCREEN_WIDTH - 8 - 8, yOffset, pixelBufferMain);
+    paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 
     string exportAsString = string((line == 5) ? ">" : "") + "Export As";
     paint.drawText(3, yOffset += 10, exportAsString.c_str(), pixelBufferMain, blackColor);
-    paint.drawAButton(SCREEN_WIDTH - 8 - 8, yOffset, pixelBufferMain);
+    paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 }
 
 void Saving::createPaintDirectory(Paint& paint, const char* paintName) {

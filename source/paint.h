@@ -186,6 +186,7 @@ class Paint {
 
         int getToolYOffset();
         int getToolsYOffset();
+        int getToolsButtonsOffset();
 
         void drawYButton(int x, int y, u16* buffer);
         void drawXButton(int x, int y, u16* buffer);

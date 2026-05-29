@@ -736,6 +736,10 @@ int Paint::getToolsYOffset() {
     return getToolYOffset() + 12;
 }
 
+int Paint::getToolsButtonsOffset() {
+    return 8;
+}
+
 void Paint::drawYButton(int x, int y, u16* buffer) {
     drawSprite(x, y, 32, 32, 0, 16, 8, 8, buttons_iconBitmap, buffer);
 }
