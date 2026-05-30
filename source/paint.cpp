@@ -170,7 +170,7 @@ void Paint::updateVideo() {
 }
 
 void Paint::drawTools() {
-    drawClearBuffer(0, 0, SCREEN_WIDTH, getToolsYOffset(), pixelBufferMain, whiteColor);
+    clearBuffer(0, 0, SCREEN_WIDTH, getToolsYOffset(), pixelBufferMain, whiteColor);
 
     int i = 0;
     int j = 0;
@@ -191,7 +191,7 @@ void Paint::drawTools() {
 }
 
 void Paint::drawColors() {
-    drawClearBuffer(0, 156, 128, 34, pixelBufferMain, whiteColor);
+    clearBuffer(0, 156, 128, 34, pixelBufferMain, whiteColor);
 
     drawSquareOutline(2, 156, 18, 34, pixelBufferMain, blackColor);
 
@@ -761,10 +761,18 @@ void Paint::drawScrollBox(int x, int y, int size, int scroll, u16* buffer) {
     drawSquareOutline(x + scroll - 1, y + 2, 3, 4, pixelBufferMain, blackColor);
 }
 
-void Paint::drawClearBuffer(int x0, int y0, int x1, int y1, u16* buffer, u16 color) {
+void Paint::clearBuffer(int x0, int y0, int x1, int y1, u16* buffer, u16 color) {
     for (int x = 0; x < x1; x++) {
         for (int y = 0; y < y1; y++) {
             drawPixel(x0 + x, y0 + y, buffer, color);
+        }
+    }
+}
+
+void Paint::blendSubLayers(int x0, int y0, int x1, int y1) {
+    for (int x = 0; x < x1; x++) {
+        for (int y = 0; y < y1; y++) {
+            blendSubLayers(x0 + x, y0 + y);
         }
     }
 }

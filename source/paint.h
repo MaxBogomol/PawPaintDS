@@ -193,5 +193,6 @@ class Paint {
         void drawBButton(int x, int y, u16* buffer);
         void drawAButton(int x, int y, u16* buffer);
         void drawScrollBox(int x, int y, int size, int scroll, u16* buffer);
-        void drawClearBuffer(int x0, int y0, int x1, int y1, u16* buffer, u16 color);
+        void clearBuffer(int x0, int y0, int x1, int y1, u16* buffer, u16 color);
+        void blendSubLayers(int x0, int y0, int x1, int y1);
 };

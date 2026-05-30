@@ -101,11 +101,7 @@ void Layers::update(Paint& paint) {
     }
 
     if (updateSubLayers) {
-        for (int x = 0; x < SCREEN_WIDTH; x++) {
-            for (int y = 0; y < SCREEN_HEIGHT; y++) {
-                paint.blendSubLayers(x, y);
-            }
-        }
+        paint.blendSubLayers(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
 }
 
@@ -123,7 +119,7 @@ void Layers::open(Paint& paint) {
 
 void Layers::close(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
-    paint.drawClearBuffer(0, yOffset - 2, SCREEN_WIDTH, 22, pixelBufferMain, whiteColor);
+    paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 22, pixelBufferMain, whiteColor);
 }
 
 void Layers::drawIcon(Paint& paint, int x, int y, u16* buffer) {
@@ -133,7 +129,7 @@ void Layers::drawIcon(Paint& paint, int x, int y, u16* buffer) {
 void Layers::drawTool(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
     int bOffset = paint.getToolsButtonsOffset();
-    paint.drawClearBuffer(0, yOffset - 2, SCREEN_WIDTH, 22, pixelBufferMain, whiteColor);
+    paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 22, pixelBufferMain, whiteColor);
 
     string moveString = string((line == 0) ? ">" : "") + "Layer: " + paint.intToChars(paint.selectedLayer + 1);
     paint.drawText(3, yOffset, moveString.c_str(), pixelBufferMain, blackColor);

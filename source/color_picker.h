@@ -37,4 +37,12 @@ class ColorPicker : public Tool {
         virtual void drawOutlines(Paint& paint);
         virtual void drawPickerPointers(Paint& paint);
         virtual void drawHuePointer(Paint& paint);
+
+        virtual void clearPicker(Paint& paint);
+        virtual void clearHue(Paint& paint);
+        virtual void clearColors(Paint& paint);
+        virtual void clearSelectedColor(Paint& paint);
+        virtual void clearNewSelectedColor(Paint& paint);
+        virtual void clearPickerPointers(Paint& paint);
+        virtual void clearHuePointer(Paint& paint);
 };

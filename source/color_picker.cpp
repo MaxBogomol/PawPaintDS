@@ -189,11 +189,13 @@ void ColorPicker::open(Paint& paint) {
 }
 
 void ColorPicker::close(Paint& paint) {
-    for (int x = 0; x < SCREEN_WIDTH; x++) {
-        for (int y = 0; y < SCREEN_HEIGHT; y++) {
-            paint.blendSubLayers(x, y);
-        }
-    }
+    clearPicker(paint);
+    clearHue(paint);
+    clearColors(paint);
+    clearSelectedColor(paint);
+    clearNewSelectedColor(paint);
+    clearPickerPointers(paint);
+    clearHuePointer(paint);
 }
 
 void ColorPicker::drawIcon(Paint& paint, int x, int y, u16* buffer) {
@@ -224,15 +226,9 @@ void ColorPicker::drawHue(Paint& paint) {
     }
 }
 
-
 void ColorPicker::drawSelectedColor(Paint& paint) {
     paint.drawSquare(24, 96, 16, 16, getDrawLayer(paint), selectedColor);
-
-    for (int x = 0; x < 120; x++) {
-        for (int y = 0; y < 10; y++) {
-            paint.blendSubLayers(x + 23, y + 175);
-        }
-    }
+    clearSelectedColor(paint);
 
     int r = (selectedColor) & 31;
     int g = (selectedColor >> 5) & 31;
@@ -244,12 +240,7 @@ void ColorPicker::drawSelectedColor(Paint& paint) {
 
 void ColorPicker::drawNewSelectedColor(Paint& paint) {
     paint.drawSquare(24, 80, 16, 16, getDrawLayer(paint), newSelectedColor);
-
-    for (int x = 0; x < 120; x++) {
-        for (int y = 0; y < 10; y++) {
-            paint.blendSubLayers(x + 23, y + 7);
-        }
-    }
+    clearNewSelectedColor(paint);
 
     int r = (newSelectedColor) & 31;
     int g = (newSelectedColor >> 5) & 31;
@@ -266,27 +257,7 @@ void ColorPicker::drawOutlines(Paint& paint) {
 }
 
 void ColorPicker::drawPickerPointers(Paint& paint) {
-    for (int i = 0; i < 6; i++) {
-        for (int j = 0; j < 6; j++) {
-            paint.blendSubLayers(colorXOld * 4 + 63 + i, 23 + j);
-        }
-    }
-    for (int i = 0; i < 6; i++) {
-        for (int j = 0; j < 6; j++) {
-            paint.blendSubLayers(colorXOld * 4 + 63 + i, 162 + j);
-        }
-    }
-
-    for (int i = 0; i < 6; i++) {
-        for (int j = 0; j < 6; j++) {
-            paint.blendSubLayers(55 + i, colorYOld * 4 + 31 + j);
-        }
-    }
-    for (int i = 0; i < 6; i++) {
-        for (int j = 0; j < 6; j++) {
-            paint.blendSubLayers(194 + i, colorYOld * 4 + 31 + j);
-        }
-    }
+    clearPickerPointers(paint);
 
     paint.drawSquare(colorX * 4 + 63, 23, 6, 6, getDrawLayer(paint), blackColor);
     paint.drawSquare(colorX * 4 + 64, 24, 4, 4, getDrawLayer(paint), whiteColor);
@@ -307,20 +278,10 @@ void ColorPicker::drawPickerPointers(Paint& paint) {
 }
 
 void ColorPicker::drawHuePointer(Paint& paint) {
-    int x = 0;
-    int y = hueOld;
-    if (hueOld >= 180) {
-        y = y - 180;
-        x = x + 40;
-    }
-    for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < 3; j++) {
-            paint.blendSubLayers(x + 202 + i, y + 5 + j);
-        }
-    }
+    clearHuePointer(paint);
 
-    x = 0;
-    y = hue;
+    int x = 0;
+    int y = hue;
     if (hue >= 180) {
         y = y - 180;
         x = x + 40;
@@ -329,4 +290,42 @@ void ColorPicker::drawHuePointer(Paint& paint) {
     paint.drawSquare(x + 202 + 1, y + 6, 2, 1, getDrawLayer(paint), whiteColor);
 
     hueOld = hue;
+}
+
+void ColorPicker::clearPicker(Paint& paint) {
+    paint.blendSubLayers(207, 5, 34, 182);
+}
+
+void ColorPicker::clearHue(Paint& paint) {
+    paint.blendSubLayers(63, 31, 130, 130);
+}
+
+void ColorPicker::clearColors(Paint& paint) {
+    paint.blendSubLayers(23, 79, 34, 34);
+}
+
+void ColorPicker::clearSelectedColor(Paint& paint) {
+    paint.blendSubLayers(23, 175, 120, 10);
+}
+
+void ColorPicker::clearNewSelectedColor(Paint& paint) {
+    paint.blendSubLayers(23, 7, 120, 10);
+}
+
+void ColorPicker::clearPickerPointers(Paint& paint) {
+    paint.blendSubLayers(colorXOld * 4 + 63, 23, 6, 6);
+    paint.blendSubLayers(colorXOld * 4 + 63, 162, 6, 6);
+
+    paint.blendSubLayers(55, colorYOld * 4 + 31, 6, 6);
+    paint.blendSubLayers(194, colorYOld * 4 + 31, 6, 6);
+}
+
+void ColorPicker::clearHuePointer(Paint& paint) {
+    int x = 0;
+    int y = hueOld;
+    if (hueOld >= 180) {
+        y = y - 180;
+        x = x + 40;
+    }
+    paint.blendSubLayers(x + 202, y + 5, 4, 3);
 }

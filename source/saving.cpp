@@ -139,7 +139,7 @@ void Saving::open(Paint& paint) {
 
 void Saving::close(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
-    paint.drawClearBuffer(0, yOffset - 2, SCREEN_WIDTH, 62, pixelBufferMain, whiteColor);
+    paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 62, pixelBufferMain, whiteColor);
     doneTimer = 0;
 }
 
@@ -156,7 +156,7 @@ void Saving::drawIcon(Paint& paint, int x, int y, u16* buffer) {
 void Saving::drawTool(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
     int bOffset = paint.getToolsButtonsOffset();
-    paint.drawClearBuffer(0, yOffset - 2, SCREEN_WIDTH, 62, pixelBufferMain, whiteColor);
+    paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 62, pixelBufferMain, whiteColor);
 
     string newString = string((line == 0) ? ">" : "") + "New";
     paint.drawText(3, yOffset, newString.c_str(), pixelBufferMain, blackColor);
@@ -218,12 +218,7 @@ void Saving::loadPaint(Paint& paint) {
     loadLayer(paint, pathString.c_str(), "layer1.png", pixelBufferSubLayer1);
     loadLayer(paint, pathString.c_str(), "layer2.png", pixelBufferSubLayer2);
     loadLayer(paint, pathString.c_str(), "layer3.png", pixelBufferSubLayer3);
-
-    for (int x = 0; x < SCREEN_WIDTH; x++) {
-        for (int y = 0; y < SCREEN_HEIGHT; y++) {
-            paint.blendSubLayers(x, y);
-        }
-    }
+    paint.blendSubLayers(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 }
 
 void Saving::savePaw(Paint& paint) {
