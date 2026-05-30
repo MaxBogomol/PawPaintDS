@@ -107,7 +107,7 @@ void Layers::open(Paint& paint) {
 
 void Layers::close(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
-    paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 22, pixelBufferMain, paint.getSelectedThemeColor());
+    paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 22, pixelBufferMain);
 }
 
 void Layers::drawIcon(Paint& paint, int x, int y, u16* buffer) {
@@ -117,7 +117,7 @@ void Layers::drawIcon(Paint& paint, int x, int y, u16* buffer) {
 void Layers::drawTool(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
     int bOffset = paint.getToolsButtonsOffset();
-    paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 22, pixelBufferMain, paint.getSelectedThemeColor());
+    paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 22, pixelBufferMain);
 
     string moveString = string((line == 0) ? ">" : "") + "Layer: " + paint.intToChars(paint.selectedLayer + 1);
     paint.drawText(3, yOffset, moveString.c_str(), pixelBufferMain, blackColor);

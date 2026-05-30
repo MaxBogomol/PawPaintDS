@@ -54,7 +54,9 @@ inline u16 greenColor = ARGB16(1, 0, 31, 0);
 inline u16 blueColor = ARGB16(1, 0, 0, 31);
 inline u16 pinkColor = ARGB16(1, 31, 0, 31);
 
-inline u16 maidColorTheme = ARGB16(1, 12, 10, 14); //#2e2939
+inline u16 pinkFoxThemeColor = ARGB16(1, 31, 24, 25); //#fec8cf
+inline u16 maidThemeColor = ARGB16(1, 6, 5, 7); //#2e2939
+inline u16 aceThemeColor = ARGB16(1, 20, 6, 20); //#a231a2
 
 inline u16 pixelBufferMain[SCREEN_WIDTH * SCREEN_HEIGHT];
 
@@ -98,6 +100,9 @@ inline bool activeSubLayer3 = true;
 inline const char* pawPaintPath = "fat:/PawPaintDS";
 inline const char* paintsPath = "Paints";
 inline const char* pawsPath = "Paws";
+
+inline int maxPaintThemes = 4;
+inline int maxPaintIcons = 2;
 
 struct HSV {
     int h;
@@ -202,6 +207,7 @@ class Paint {
         void drawAButton(int x, int y, u16* buffer);
         void drawScrollBox(int x, int y, int size, int scroll, u16* buffer);
         void clearBuffer(int x0, int y0, int x1, int y1, u16* buffer, u16 color);
+        void clearBuffer(int x0, int y0, int x1, int y1, u16* buffer);
         void blendSubLayers(int x0, int y0, int x1, int y1);
 
         u16 getThemeColor(int theme);
@@ -209,4 +215,6 @@ class Paint {
 
         const unsigned int* getIconSprite(int icon);
         const unsigned int* getSelectedIconSprite();
+
+        void clearSubLayers();
 };

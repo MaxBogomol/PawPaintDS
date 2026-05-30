@@ -85,15 +85,7 @@ void Saving::update(Paint& paint) {
 
     if (keysD & KEY_TOUCH && paint.reverseScreens) {
         if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset + 8 && touchY >= yOffset && touchY < yOffset + 8) {
-            for (int x = 0; x < SCREEN_WIDTH; x++) {
-                for (int y = 0; y < SCREEN_HEIGHT; y++) {
-                    pixelBufferSubLayer0[x + (y * SCREEN_WIDTH)] = paint.selectedColorSub;
-                    pixelBufferSubLayer1[x + (y * SCREEN_WIDTH)] = alphaColor;
-                    pixelBufferSubLayer2[x + (y * SCREEN_WIDTH)] = alphaColor;
-                    pixelBufferSubLayer3[x + (y * SCREEN_WIDTH)] = alphaColor;
-                    paint.blendSubLayers(x, y);
-                }
-            }
+            paint.clearSubLayers();
             paint.setPaintName("Unnamed");
         }
         yOffset += 10;
@@ -135,7 +127,7 @@ void Saving::open(Paint& paint) {
 
 void Saving::close(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
-    paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 62, pixelBufferMain, paint.getSelectedThemeColor());
+    paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 62, pixelBufferMain);
     doneTimer = 0;
 }
 
@@ -152,7 +144,7 @@ void Saving::drawIcon(Paint& paint, int x, int y, u16* buffer) {
 void Saving::drawTool(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
     int bOffset = paint.getToolsButtonsOffset();
-    paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 62, pixelBufferMain, paint.getSelectedThemeColor());
+    paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 62, pixelBufferMain);
 
     string newString = string((line == 0) ? ">" : "") + "New";
     paint.drawText(3, yOffset, newString.c_str(), pixelBufferMain, blackColor);
