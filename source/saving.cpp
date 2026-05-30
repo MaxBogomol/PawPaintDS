@@ -46,16 +46,9 @@ void Saving::update(Paint& paint) {
 
     if (keysD & KEY_A) {
         if (line == 0) {
-            for (int x = 0; x < SCREEN_WIDTH; x++) {
-                for (int y = 0; y < SCREEN_HEIGHT; y++) {
-                    pixelBufferSubLayer0[x + (y * SCREEN_WIDTH)] = paint.selectedColorSub;
-                    pixelBufferSubLayer1[x + (y * SCREEN_WIDTH)] = alphaColor;
-                    pixelBufferSubLayer2[x + (y * SCREEN_WIDTH)] = alphaColor;
-                    pixelBufferSubLayer3[x + (y * SCREEN_WIDTH)] = alphaColor;
-                    paint.blendSubLayers(x, y);
-                }
-            }
-            paint.setPaintName("Unnamed");
+            paint.clearSubLayers();
+            paint.setPaintName(STR_UNNAMED.c_str());
+            paint.updateDrawPaintName = true;
         }
 
         if (paint.fileSystemInit) {
@@ -86,7 +79,8 @@ void Saving::update(Paint& paint) {
     if (keysD & KEY_TOUCH && paint.reverseScreens) {
         if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset + 8 && touchY >= yOffset && touchY < yOffset + 8) {
             paint.clearSubLayers();
-            paint.setPaintName("Unnamed");
+            paint.setPaintName(STR_UNNAMED.c_str());
+            paint.updateDrawPaintName = true;
         }
         yOffset += 10;
         if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset + 8 && touchY >= yOffset && touchY < yOffset + 8) {

@@ -13,8 +13,12 @@ std::string getString(FILE* &fp, const std::string &item, const std::string &def
     char line[256];
     while (fgets(line, sizeof(line), fp)) {
         char key[100], value[100];
-        if (sscanf(line, "%99[^=]=%99s", key, value) == 2) {
-            if (strcmp(key, item.c_str()) == 0) return strdup(value);
+        if (sscanf(line, "%99[^=]=%99[^\n]", key, value) == 2) {
+            if (strcmp(key, item.c_str()) == 0) {
+                std::string str = strdup(value);
+                if (str.back() == '\r') str.pop_back();
+                return str;
+            }
         }
     }
     return "";

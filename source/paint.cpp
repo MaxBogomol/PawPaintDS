@@ -36,6 +36,7 @@ void Paint::setup() {
     keysSetRepeat(10, 2);
 
     readSelectedLanguage();
+    setPaintName(STR_UNNAMED.c_str());
 }
 
 void Paint::setupVideo() {
@@ -465,6 +466,22 @@ int Paint::getCharLength(u32 c) {
         case 'k': return 5; break;
         case 'l': return 3; break;
         case 't': return 4; break;
+
+        case 0x0414: return 7; break; //Д
+        case 0x0416: return 8; break; //Ж
+        case 0x0424: return 8; break; //Ф
+        case 0x0426: return 8; break; //Ц
+        case 0x0428: return 8; break; //Ш
+        case 0x0429: return 9; break; //Щ
+        case 0x042A: return 7; break; //Ъ
+        case 0x042B: return 8; break; //Ы
+        case 0x042E: return 8; break; //Ю
+        case 0x0434: return 7; break; //д
+        case 0x043A: return 5; break; //к
+        case 0x0449: return 7; break; //щ
+        case 0x044A: return 7; break; //ъ
+        case 0x044B: return 7; break; //ы
+        case 0x044E: return 7; break; //ю
     }
     return 6;
 }
@@ -482,6 +499,18 @@ int Paint::getTextLength(const char* text) {
 
 void Paint::drawChar(int x, int y, u32 c, u16* buffer, u16 color) {
     const u16* pixels = (const u16*) pawscript_fontBitmap;
+    u32 cc = 0;
+
+    if (c >= 0x0410 && c <= 0x044F) {
+        cc -= (0x0410);
+        if (c >= 0x0419) cc -= 0x0001;
+        if (c >= 0x0430) cc += 0x0001;
+        if (c >= 0x0439) cc -= 0x0001;
+
+        pixels = (const u16*) pawscript_font_testBitmap;
+    }
+    c += cc;
+    //if (c >= 0x0401) c -= 1;
 
     for (int row = 0; row < 8; row++) {
         for (int col = 0; col < 8; col++) {

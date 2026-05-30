@@ -20,10 +20,11 @@ using namespace std;
 #include "info.h"
 #include "language.h"
 
+#include "pawscript_font.h"
+#include "pawscript_font_test.h"
 #include "paint_icon.h"
 #include "paint_monochrome_icon.h"
 #include "buttons_icon.h"
-#include "pawscript_font.h"
 #include "brush_icon.h"
 #include "brush_square_icon.h"
 #include "brush_circle_icon.h"
