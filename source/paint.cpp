@@ -1,5 +1,18 @@
 #include "paint.h"
 
+void Paint::setupNitroFS() {
+    if (!nitroFSInit(NULL)){
+		consoleDemoInit();
+		printf("Loading Paw Paint DS\n\n");
+        printf("\x1B[31mFailed to start nitroFS\n");
+        printf("\x1B[31mPlease reset the system\n");
+
+        while (pmMainLoop()) {
+            swiWaitForVBlank();
+        }
+    }
+}
+
 void Paint::setup() {
     firstFrameTool = true;
     updateSubLayers = false;

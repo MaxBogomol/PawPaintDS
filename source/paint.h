@@ -1,6 +1,7 @@
 #pragma once
 
 #include <nds.h>
+#include <filesystem.h>
 #include <fat.h>
 #include <png.h>
 #include <string>
@@ -104,6 +105,10 @@ inline const char* pawsPath = "Paws";
 inline int maxPaintThemes = 4;
 inline int maxPaintIcons = 2;
 
+struct Language {
+    const char* language;
+};
+
 struct HSV {
     int h;
     int s;
@@ -138,6 +143,7 @@ class Paint {
 
         vector<Tool*> tools;
 
+        void setupNitroFS();
         void setup();
         void setupVideo();
         void setupLayers();
