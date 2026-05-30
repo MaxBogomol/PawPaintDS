@@ -3,15 +3,21 @@
 #include "paint.h"
 
 const char* Settings::getName(Paint& paint) {
-    return "Settings";
+    return STR_SETTINGS.c_str();
 }
 
 void Settings::setup(Paint& paint) {
     line = 0;
+    updateTheme = false;
     updateDrawTool = true;
 }
 
 void Settings::update(Paint& paint) {
+    if (updateTheme) {
+        updateDrawTool = true;
+        updateTheme = false;
+    }
+
     int maxLine = 3;
 
     if ((keysD & KEY_UP) && (line - 1 >= 0)) {
@@ -29,11 +35,13 @@ void Settings::update(Paint& paint) {
                 paint.selectedTheme--;
                 if (paint.selectedTheme < 0) paint.selectedTheme = maxPaintThemes - 1;
                 paint.updateDrawAll = true;
+                updateTheme = true;
             }
             if (keysD & KEY_RIGHT) {
                 paint.selectedTheme++;
                 if (paint.selectedTheme > maxPaintThemes - 1) paint.selectedTheme = 0;
                 paint.updateDrawAll = true;
+                updateTheme = true;
             }
             break;
         }
@@ -51,6 +59,67 @@ void Settings::update(Paint& paint) {
                 updateDrawTool = true;
             }
             break;
+        }
+        case 2: {
+            if (keysD & KEY_LEFT) {
+                paint.selectedLanguage--;
+                if (paint.selectedLanguage < 0) paint.selectedLanguage = maxLanguages - 1;
+                paint.updateDrawTools = true;
+                updateTheme = true;
+                paint.readSelectedLanguage();
+            }
+            if (keysD & KEY_RIGHT) {
+                paint.selectedLanguage++;
+                if (paint.selectedLanguage > maxLanguages - 1) paint.selectedLanguage = 0;
+                paint.updateDrawTools = true;
+                updateTheme = true;
+                paint.readSelectedLanguage();
+            }
+            break;
+        }
+    }
+
+    int yOffset = paint.getToolsYOffset();
+    int bOffset = paint.getToolsButtonsOffset();
+
+     if (keysD & KEY_TOUCH && paint.reverseScreens) {
+        if (touchX >= SCREEN_WIDTH - bOffset - 16 - 24 && touchX < SCREEN_WIDTH - bOffset - 24 && touchY >= yOffset && touchY < yOffset + 8) {
+            paint.selectedTheme--;
+            if (paint.selectedTheme < 0) paint.selectedTheme = maxPaintThemes - 1;
+            paint.updateDrawAll = true;
+        }
+        if (touchX >= SCREEN_WIDTH - bOffset - 16 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
+            paint.selectedTheme++;
+            if (paint.selectedTheme > maxPaintThemes - 1) paint.selectedTheme = 0;
+            paint.updateDrawAll = true;
+        }
+        yOffset += 10;
+        if (touchX >= SCREEN_WIDTH - bOffset - 16 - 24 && touchX < SCREEN_WIDTH - bOffset - 24 && touchY >= yOffset && touchY < yOffset + 8) {
+            paint.selectedIcon--;
+            if (paint.selectedIcon < 0) paint.selectedIcon = maxPaintIcons - 1;
+            paint.updateDrawPaintIcon = true;
+            updateDrawTool = true;
+        }
+        if (touchX >= SCREEN_WIDTH - bOffset - 16 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
+            paint.selectedIcon++;
+            if (paint.selectedIcon > maxPaintIcons - 1) paint.selectedIcon = 0;
+            paint.updateDrawPaintIcon = true;
+            updateDrawTool = true;
+        }
+        yOffset += 10;
+        if (touchX >= SCREEN_WIDTH - bOffset - 16 - 24 && touchX < SCREEN_WIDTH - bOffset - 24 && touchY >= yOffset && touchY < yOffset + 8) {
+            paint.selectedLanguage--;
+            if (paint.selectedLanguage < 0) paint.selectedLanguage = maxLanguages - 1;
+            paint.updateDrawTools = true;
+            updateDrawTool = true;
+            paint.readSelectedLanguage();
+        }
+        if (touchX >= SCREEN_WIDTH - bOffset - 16 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
+            paint.selectedLanguage++;
+            if (paint.selectedLanguage > maxLanguages - 1) paint.selectedLanguage = 0;
+            paint.updateDrawTools = true;
+            updateDrawTool = true;
+            paint.readSelectedLanguage();
         }
     }
 }
@@ -81,17 +150,17 @@ void Settings::drawTool(Paint& paint) {
     int bOffset = paint.getToolsButtonsOffset();
     paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 32, pixelBufferMain);
 
-    string themeString = string((line == 0) ? ">" : "") + "Theme: " + getThemeName(paint, paint.selectedTheme);
+    string themeString = string((line == 0) ? ">" : "") + STR_SETTINGS_THEME + ": " + getThemeName(paint, paint.selectedTheme);
     paint.drawText(3, yOffset, themeString.c_str(), pixelBufferMain, blackColor);
     paint.drawSprite(SCREEN_WIDTH - bOffset - 16 - 5, yOffset, 32, 32, 24, 0, 8, 8, buttons_iconBitmap, pixelBufferMain);
     paint.drawSprite(SCREEN_WIDTH - bOffset - 8, yOffset, 32, 32, 8, 0, 8, 8, buttons_iconBitmap, pixelBufferMain);
 
-    string iconString = string((line == 1) ? ">" : "") + "Icon: " + getIconName(paint, paint.selectedIcon);
+    string iconString = string((line == 1) ? ">" : "") + STR_SETTINGS_ICON + ": " + getIconName(paint, paint.selectedIcon);
     paint.drawText(3, yOffset += 10, iconString.c_str(), pixelBufferMain, blackColor);
     paint.drawSprite(SCREEN_WIDTH - bOffset - 16 - 5, yOffset, 32, 32, 24, 0, 8, 8, buttons_iconBitmap, pixelBufferMain);
     paint.drawSprite(SCREEN_WIDTH - bOffset - 8, yOffset, 32, 32, 8, 0, 8, 8, buttons_iconBitmap, pixelBufferMain);
 
-    string languageString = string((line == 2) ? ">" : "") + "Language: " + "English";
+    string languageString = string((line == 2) ? ">" : "") + STR_SETTINGS_LANGUAGE + ": " + STR_LANGUAGE;
     paint.drawText(3, yOffset += 10, languageString.c_str(), pixelBufferMain, blackColor);
     paint.drawSprite(SCREEN_WIDTH - bOffset - 16 - 5, yOffset, 32, 32, 24, 0, 8, 8, buttons_iconBitmap, pixelBufferMain);
     paint.drawSprite(SCREEN_WIDTH - bOffset - 8, yOffset, 32, 32, 8, 0, 8, 8, buttons_iconBitmap, pixelBufferMain);
@@ -99,18 +168,18 @@ void Settings::drawTool(Paint& paint) {
 
 const char* Settings::getThemeName(Paint& paint, int theme) {
     switch (theme) {
-        case 0: return "White"; break;
-        case 1: return "Pink Fox"; break;
-        case 2: return "Maid"; break;
-        case 3: return "Ace"; break;
+        case 0: return STR_THEME_WHITE.c_str(); break;
+        case 1: return STR_THEME_PINK_FOX.c_str(); break;
+        case 2: return STR_THEME_MAID.c_str(); break;
+        case 3: return STR_THEME_ACE.c_str(); break;
     }
-    return "White";
+    return STR_THEME_WHITE.c_str();
 }
 
 const char* Settings::getIconName(Paint& paint, int icon) {
     switch (icon) {
-        case 0: return "Pride"; break;
-        case 1: return "Monochrome"; break;
+        case 0: return STR_ICON_PRIDE.c_str(); break;
+        case 1: return STR_ICON_MONOCHROME.c_str(); break;
     }
-    return "Pride";
+    return STR_ICON_PRIDE.c_str();
 }

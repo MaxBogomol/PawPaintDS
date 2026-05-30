@@ -5,6 +5,7 @@
 class Settings : public Tool {
     public:
         int line = 0;
+        bool updateTheme = false;
         bool updateDrawTool = true;
 
         virtual ~Settings() {} 

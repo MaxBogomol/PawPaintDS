@@ -3,7 +3,7 @@
 #include "paint.h"
 
 const char* Eyedropper::getName(Paint& paint) {
-    return "Eyedropper";
+    return STR_EYEDROPPER.c_str();
 }
 
 void Eyedropper::update(Paint& paint) {

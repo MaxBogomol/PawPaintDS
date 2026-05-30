@@ -3,7 +3,7 @@
 #include "paint.h"
 
 const char* Saving::getName(Paint& paint) {
-    return "Saving";
+    return STR_SAVING.c_str();
 }
 
 void Saving::setup(Paint& paint) {
@@ -146,27 +146,27 @@ void Saving::drawTool(Paint& paint) {
     int bOffset = paint.getToolsButtonsOffset();
     paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 62, pixelBufferMain);
 
-    string newString = string((line == 0) ? ">" : "") + "New";
+    string newString = string((line == 0) ? ">" : "") + STR_SAVING_NEW;
     paint.drawText(3, yOffset, newString.c_str(), pixelBufferMain, blackColor);
     paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 
-    string loadString = string((line == 1) ? ">" : "") + "Load";
+    string loadString = string((line == 1) ? ">" : "") + STR_SAVING_LOAD;
     paint.drawText(3, yOffset += 10, loadString.c_str(), pixelBufferMain, blackColor);
     paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 
-    string saveString = string((line == 2) ? ">" : "") + "Save";
+    string saveString = string((line == 2) ? ">" : "") + STR_SAVING_SAVE;
     paint.drawText(3, yOffset += 10, saveString.c_str(), pixelBufferMain, blackColor);
     paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 
-    string saveAsString = string((line == 3) ? ">" : "") + "Save As";
+    string saveAsString = string((line == 3) ? ">" : "") + STR_SAVING_SAVE_AS;
     paint.drawText(3, yOffset += 10, saveAsString.c_str(), pixelBufferMain, blackColor);
     paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 
-    string exportString = string((line == 4) ? ">" : "") + "Export";
+    string exportString = string((line == 4) ? ">" : "") + STR_SAVING_EXPORT;
     paint.drawText(3, yOffset += 10, exportString.c_str(), pixelBufferMain, blackColor);
     paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 
-    string exportAsString = string((line == 5) ? ">" : "") + "Export As";
+    string exportAsString = string((line == 5) ? ">" : "") + STR_SAVING_EXPORT_AS;
     paint.drawText(3, yOffset += 10, exportAsString.c_str(), pixelBufferMain, blackColor);
     paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 }

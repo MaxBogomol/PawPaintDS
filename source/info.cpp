@@ -3,7 +3,7 @@
 #include "paint.h"
 
 const char* Info::getName(Paint& paint) {
-    return "Info";
+    return STR_INFO.c_str();
 }
 
 void Info::setup(Paint& paint) {
@@ -39,7 +39,7 @@ void Info::drawTool(Paint& paint) {
     paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 92, pixelBufferMain);
 
     paint.drawText(3, yOffset, "Paw Paint DS", pixelBufferMain, blackColor);
-    paint.drawText(3, yOffset += 10, "Paint with your paws on Nintendo DS", pixelBufferMain, blackColor);
+    paint.drawText(3, yOffset += 10, STR_DESCRIPTION.c_str(), pixelBufferMain, blackColor);
     paint.drawText(3, yOffset += 10, "By MaxBogomol (Pink Joke)", pixelBufferMain, blackColor);
     
     paint.drawText(3, yOffset += 20, "https://github.com/MaxBogomol/PawPaintDS", pixelBufferMain, blackColor);

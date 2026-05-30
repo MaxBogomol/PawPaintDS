@@ -3,7 +3,7 @@
 #include "paint.h"
 
 const char* Layers::getName(Paint& paint) {
-    return "Layers";
+    return STR_LAYERS.c_str();
 }
 
 void Layers::setup(Paint& paint) {
@@ -119,12 +119,12 @@ void Layers::drawTool(Paint& paint) {
     int bOffset = paint.getToolsButtonsOffset();
     paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 22, pixelBufferMain);
 
-    string moveString = string((line == 0) ? ">" : "") + "Layer: " + paint.intToChars(paint.selectedLayer + 1);
+    string moveString = string((line == 0) ? ">" : "") + STR_LAYERS_LAYER + ": " + paint.intToChars(paint.selectedLayer + 1);
     paint.drawText(3, yOffset, moveString.c_str(), pixelBufferMain, blackColor);
     paint.drawSprite(SCREEN_WIDTH - bOffset - 16 - 5, yOffset, 32, 32, 24, 0, 8, 8, buttons_iconBitmap, pixelBufferMain);
     paint.drawSprite(SCREEN_WIDTH - bOffset - 8, yOffset, 32, 32, 8, 0, 8, 8, buttons_iconBitmap, pixelBufferMain);
 
-    string typeString = string((line == 1) ? ">" : "") + "Move";
+    string typeString = string((line == 1) ? ">" : "") + STR_LAYERS_MOVE;
     paint.drawText(3, yOffset += 10, typeString.c_str(), pixelBufferMain, blackColor);
     paint.drawSprite(SCREEN_WIDTH - bOffset - 16 - 5, yOffset, 32, 32, 24, 0, 8, 8, buttons_iconBitmap, pixelBufferMain);
     paint.drawSprite(SCREEN_WIDTH - bOffset - 8, yOffset, 32, 32, 8, 0, 8, 8, buttons_iconBitmap, pixelBufferMain);

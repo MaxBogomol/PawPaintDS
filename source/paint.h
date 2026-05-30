@@ -18,6 +18,7 @@ using namespace std;
 #include "saving.h"
 #include "settings.h"
 #include "info.h"
+#include "language.h"
 
 #include "paint_icon.h"
 #include "paint_monochrome_icon.h"
@@ -70,8 +71,6 @@ inline u16 pixelBufferSubLayer3[SCREEN_WIDTH * SCREEN_HEIGHT];
 inline u16* bgMainDest;
 inline u16* bgSubDest;
 
-extern const u8 default_font_bin[];
-
 inline touchPosition touch;
 inline int keysD;
 inline int keysH;
@@ -101,12 +100,15 @@ inline bool activeSubLayer3 = true;
 inline const char* pawPaintPath = "fat:/PawPaintDS";
 inline const char* paintsPath = "Paints";
 inline const char* pawsPath = "Paws";
+inline const char* languagesPath = "nitro:/languages";
 
+inline int maxLanguages = 2;
 inline int maxPaintThemes = 4;
 inline int maxPaintIcons = 2;
 
-struct Language {
-    const char* language;
+inline const char* languageCodes[2] = {
+    "en_us",
+    "ru_ru"
 };
 
 struct HSV {
@@ -124,6 +126,7 @@ class Paint {
         const char* paintName = "Unnamed";
 
     public:
+        int selectedLanguage = 0;
         int selectedTheme = 0;
         int selectedIcon = 0;
         int selectedLayer = 0;
@@ -222,5 +225,10 @@ class Paint {
         const unsigned int* getIconSprite(int icon);
         const unsigned int* getSelectedIconSprite();
 
+        const char* getLanguageCode(int language);
+        const char* getSelectedLanguageCode();
+
         void clearSubLayers();
+
+        bool readSelectedLanguage();
 };

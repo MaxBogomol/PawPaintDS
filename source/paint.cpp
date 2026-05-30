@@ -34,6 +34,8 @@ void Paint::setup() {
     updateDrawPaintIcon = true;
 
     keysSetRepeat(10, 2);
+
+    readSelectedLanguage();
 }
 
 void Paint::setupVideo() {
@@ -107,7 +109,6 @@ void Paint::updateTools() {
         updateDrawColors = true;
         updateDrawPaintName = true;
         updateDrawPaintIcon = true;
-        toolChanged = true;
         updateDrawAll = false;
     }
 
@@ -212,7 +213,7 @@ void Paint::drawTools() {
         }
     }
 
-    string toolString = string("Tool: ") + tools[selectedTool]->getName(*this); 
+    string toolString = string(STR_TOOL) + ": " + tools[selectedTool]->getName(*this); 
     drawText(3, getToolYOffset(), toolString.c_str(), pixelBufferMain, blackColor);
 }
 
@@ -849,6 +850,17 @@ const unsigned int* Paint::getSelectedIconSprite() {
 	return getIconSprite(selectedIcon);
 }
 
+const char* Paint::getLanguageCode(int language) {
+    if (language >= 0 && language < (int) sizeof(languageCodes)) {
+        return languageCodes[language];
+    }
+	return "en_us";
+}
+
+const char* Paint::getSelectedLanguageCode() {
+	return getLanguageCode(selectedLanguage);
+}
+
 void Paint::clearSubLayers() {
     for (int x = 0; x < SCREEN_WIDTH; x++) {
 		for (int y = 0; y < SCREEN_HEIGHT; y++) {
@@ -859,4 +871,9 @@ void Paint::clearSubLayers() {
 			blendSubLayers(x, y);
 		}
 	}
+}
+
+bool Paint::readSelectedLanguage() {
+    string path = string(languagesPath) + "/" + getSelectedLanguageCode() + ".ini";
+    return readLanguage(path.c_str());
 }

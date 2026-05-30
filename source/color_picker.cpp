@@ -3,7 +3,7 @@
 #include "paint.h"
 
 const char* ColorPicker::getName(Paint& paint) {
-    return "Color Picker";
+    return STR_COLOR_PICKER.c_str();
 }
 
 void ColorPicker::setup(Paint& paint) {

@@ -3,7 +3,7 @@
 #include "paint.h"
 
 const char* Brush::getName(Paint& paint) {
-    return "Brush";
+    return STR_BRUSH.c_str();
 }
 
 void Brush::setup(Paint& paint) {
@@ -441,11 +441,11 @@ void Brush::drawTool(Paint& paint) {
     int bOffset = paint.getToolsButtonsOffset();
     paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 62, pixelBufferMain);
 
-    string moveString = string((line == 0) ? ">" : "") + "Move: " + ((line == 0 && active) ? "+" : "-"); 
+    string moveString = string((line == 0) ? ">" : "") + STR_BRUSH_MOVE + ": " + ((line == 0 && active) ? "+" : "-"); 
     paint.drawText(3, yOffset, moveString.c_str(), pixelBufferMain, blackColor);
     paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 
-    string typeString = string((line == 1) ? ">" : "") + "Type: " + getTypeName(paint, type); 
+    string typeString = string((line == 1) ? ">" : "") + STR_BRUSH_TYPE + ": " + getTypeName(paint, type); 
     paint.drawText(3, yOffset += 10, typeString.c_str(), pixelBufferMain, blackColor);
     paint.drawSprite(SCREEN_WIDTH - bOffset - 16 - 5, yOffset, 32, 32, 24, 0, 8, 8, buttons_iconBitmap, pixelBufferMain);
     paint.drawSprite(SCREEN_WIDTH - bOffset - 8, yOffset, 32, 32, 8, 0, 8, 8, buttons_iconBitmap, pixelBufferMain);
@@ -455,21 +455,21 @@ void Brush::drawTool(Paint& paint) {
     switch (type) {
         case 0:
     	case 3: {
-            string sizeString = string((line == 2) ? ">" : "") + "Size: " + paint.intToChars(squareSize);
+            string sizeString = string((line == 2) ? ">" : "") + STR_BRUSH_SIZE + ": " + paint.intToChars(squareSize);
             paint.drawText(3, yOffset, sizeString.c_str(), pixelBufferMain, blackColor);
             paint.drawScrollBox(SCREEN_WIDTH - bOffset - 64, yOffset + 1, 64, squareSize - 1, pixelBufferMain);
             break;
         }
         case 1:
         case 4: {
-            string diameterString = string((line == 2) ? ">" : "") + "Diameter: " + paint.intToChars(circleDiameter);
+            string diameterString = string((line == 2) ? ">" : "") + STR_BRUSH_DIAMETER + ": " + paint.intToChars(circleDiameter);
             paint.drawText(3, yOffset, diameterString.c_str(), pixelBufferMain, blackColor);
             paint.drawScrollBox(SCREEN_WIDTH - bOffset - 64, yOffset + 1, 64, circleDiameter - 1, pixelBufferMain);
             break;
         }
         case 2:
         case 5: {
-            string radiusString = string((line == 2) ? ">" : "") + "Radius: " + paint.intToChars(dotRadius);
+            string radiusString = string((line == 2) ? ">" : "") + STR_BRUSH_RADIUS + ": " + paint.intToChars(dotRadius);
             paint.drawText(3, yOffset, radiusString.c_str(), pixelBufferMain, blackColor);
             paint.drawScrollBox(SCREEN_WIDTH - bOffset - 32, yOffset + 1, 32, dotRadius - 1, pixelBufferMain);
             break;
@@ -477,17 +477,17 @@ void Brush::drawTool(Paint& paint) {
     }
 
     if (type >= 3) {
-        string noiseSizeString = string((line == 3 && !active) ? ">" : "") + "Noise Size: " + ((line == 3 && active && !activeNoise) ? ">" : "") + paint.intToChars(noiseXSize) + " " + ((line == 3 && active && activeNoise) ? ">" : "") + paint.intToChars(noiseYSize);
+        string noiseSizeString = string((line == 3 && !active) ? ">" : "") + STR_BRUSH_NOISE_SIZE + ": " + ((line == 3 && active && !activeNoise) ? ">" : "") + paint.intToChars(noiseXSize) + " " + ((line == 3 && active && activeNoise) ? ">" : "") + paint.intToChars(noiseYSize);
         paint.drawText(3, yOffset += 10, noiseSizeString.c_str(), pixelBufferMain, blackColor);
         paint.drawScrollBox(SCREEN_WIDTH - bOffset - 40, yOffset + 1, 16, noiseXSize - 1, pixelBufferMain);
         paint.drawScrollBox(SCREEN_WIDTH - bOffset - 16, yOffset + 1, 16, noiseYSize - 1, pixelBufferMain);
 
-        string noiseShiftString = string((line == 4 && !active) ? ">" : "") + "Noise Shift: " + ((line == 4 && active && !activeNoise) ? ">" : "") + paint.intToChars(noiseXShift) + " " + ((line == 4 && active && activeNoise) ? ">" : "") + paint.intToChars(noiseYShift);
+        string noiseShiftString = string((line == 4 && !active) ? ">" : "") + STR_BRUSH_NOISE_SHIFT + ": " + ((line == 4 && active && !activeNoise) ? ">" : "") + paint.intToChars(noiseXShift) + " " + ((line == 4 && active && activeNoise) ? ">" : "") + paint.intToChars(noiseYShift);
         paint.drawText(3, yOffset += 10, noiseShiftString.c_str(), pixelBufferMain, blackColor);
         paint.drawScrollBox(SCREEN_WIDTH - bOffset - 40, yOffset + 1, 16, noiseXShift, pixelBufferMain);
         paint.drawScrollBox(SCREEN_WIDTH - bOffset - 16, yOffset + 1, 16, noiseYShift, pixelBufferMain);
 
-        string noiseOffsetString = string((line == 5 && !active) ? ">" : "") + "Noise Offset: " + ((line == 5 && active && !activeNoise) ? ">" : "") + paint.intToChars(noiseXOffset) + " " + ((line == 5 && active && activeNoise) ? ">" : "") + paint.intToChars(noiseYOffset);
+        string noiseOffsetString = string((line == 5 && !active) ? ">" : "") + STR_BRUSH_NOISE_OFFSET + ": " + ((line == 5 && active && !activeNoise) ? ">" : "") + paint.intToChars(noiseXOffset) + " " + ((line == 5 && active && activeNoise) ? ">" : "") + paint.intToChars(noiseYOffset);
         paint.drawText(3, yOffset += 10, noiseOffsetString.c_str(), pixelBufferMain, blackColor);
         paint.drawScrollBox(SCREEN_WIDTH - bOffset - 40, yOffset + 1, 16, noiseXOffset, pixelBufferMain);
         paint.drawScrollBox(SCREEN_WIDTH - bOffset - 16, yOffset + 1, 16, noiseYOffset, pixelBufferMain);
@@ -523,12 +523,12 @@ void Brush::drawCursor(Paint& paint) {
 
 const char* Brush::getTypeName(Paint& paint, int type) {
 	switch (type) {
-    	case 0: return "Square";
-    	case 1: return "Circle";
-		case 2: return "Dot";
-		case 3: return "Square Noise";
-    	case 4: return "Circle Noise";
-		case 5: return "Dot Noise";
+    	case 0: return STR_BRUSH_TYPE_SQUARE.c_str();
+    	case 1: return STR_BRUSH_TYPE_CIRLCE.c_str();
+		case 2: return STR_BRUSH_TYPE_DOT.c_str();
+		case 3: return STR_BRUSH_TYPE_SQUARE_NOISE.c_str();
+    	case 4: return STR_BRUSH_TYPE_CIRLCE_NOISE.c_str();
+		case 5: return STR_BRUSH_TYPE_DOT_NOISE.c_str();
     }
 	return "Type";
 }

@@ -3,7 +3,7 @@
 #include "paint.h"
 
 const char* Eraser::getName(Paint& paint) {
-    return "Eraser";
+    return STR_ERASER.c_str();
 }
 
 void Eraser::drawIcon(Paint& paint, int x, int y, u16* buffer) {
