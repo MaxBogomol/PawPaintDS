@@ -20,4 +20,7 @@ class Settings : public Tool {
         virtual void drawIcon(Paint& paint, int x, int y, u16* buffer) override;
 
         virtual void drawTool(Paint& paint);
+
+        virtual const char* getThemeName(Paint& paint, int theme);
+        virtual const char* getIconName(Paint& paint, int icon);
 };

@@ -27,7 +27,7 @@ void Info::open(Paint& paint) {
 
 void Info::close(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
-    paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 92, pixelBufferMain, whiteColor);
+    paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 92, pixelBufferMain, paint.getSelectedThemeColor());
 }
 
 void Info::drawIcon(Paint& paint, int x, int y, u16* buffer) {
@@ -36,7 +36,7 @@ void Info::drawIcon(Paint& paint, int x, int y, u16* buffer) {
 
 void Info::drawTool(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
-    paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 92, pixelBufferMain, whiteColor);
+    paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 92, pixelBufferMain, paint.getSelectedThemeColor());
 
     paint.drawText(3, yOffset, "Paw Paint DS", pixelBufferMain, blackColor);
     paint.drawText(3, yOffset += 10, "Paint with your paws on Nintendo DS", pixelBufferMain, blackColor);

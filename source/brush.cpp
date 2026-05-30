@@ -47,6 +47,7 @@ void Brush::update(Paint& paint) {
         paint.selectedColorSub = paint.selectedColor;
         paint.selectedColor = color;
         paint.updateDrawColors = true;
+        if (line == 0) updateDrawCursor = true;
     }
 
     if (keysD & KEY_A) {
@@ -342,6 +343,8 @@ void Brush::update(Paint& paint) {
         }
     }
 
+    if (paint.updateDrawSelectedColor && (line == 0)) updateDrawCursor = true;
+
     if (updateDrawCursor) {
         drawCursor(paint);
         updateDrawCursor = false;
@@ -365,7 +368,7 @@ void Brush::open(Paint& paint) {
 
 void Brush::close(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
-    paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 62, pixelBufferMain, whiteColor);
+    paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 62, pixelBufferMain, paint.getSelectedThemeColor());
 
     active = false;
     drawCursor(paint);
@@ -436,7 +439,7 @@ void Brush::drawLine(Paint& paint, int x0, int y0, int x1, int y1, u16* buffer, 
 void Brush::drawTool(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
     int bOffset = paint.getToolsButtonsOffset();
-    paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 62, pixelBufferMain, whiteColor);
+    paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 62, pixelBufferMain, paint.getSelectedThemeColor());
 
     string moveString = string((line == 0) ? ">" : "") + "Move: " + ((line == 0 && active) ? "+" : "-"); 
     paint.drawText(3, yOffset, moveString.c_str(), pixelBufferMain, blackColor);

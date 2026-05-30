@@ -12,7 +12,47 @@ void Settings::setup(Paint& paint) {
 }
 
 void Settings::update(Paint& paint) {
+    int maxLine = 3;
 
+    if ((keysD & KEY_UP) && (line - 1 >= 0)) {
+        line--;
+        updateDrawTool = true;
+    }
+    if ((keysD & KEY_DOWN) && (line + 1 < maxLine)) {
+        line++;
+        updateDrawTool = true;
+    }
+
+    switch (line) {
+        case 0: {
+            if (keysD & KEY_LEFT) {
+                paint.selectedTheme--;
+                if (paint.selectedTheme < 0) paint.selectedTheme = 1;
+                paint.updateDrawAll = true;
+            }
+            if (keysD & KEY_RIGHT) {
+                paint.selectedTheme++;
+                if (paint.selectedTheme > 1) paint.selectedTheme = 0;
+                paint.updateDrawAll = true;
+            }
+            break;
+        }
+        case 1: {
+            if (keysD & KEY_LEFT) {
+                paint.selectedIcon--;
+                if (paint.selectedIcon < 0) paint.selectedIcon = 1;
+                paint.updateDrawPaintIcon = true;
+                updateDrawTool = true;
+            }
+            if (keysD & KEY_RIGHT) {
+                paint.selectedIcon++;
+                if (paint.selectedIcon > 1) paint.selectedIcon = 0;
+                paint.updateDrawPaintIcon = true;
+                updateDrawTool = true;
+            }
+            break;
+        }
+    }
 }
 
 void Settings::updateTool(Paint& paint) {
@@ -28,7 +68,8 @@ void Settings::open(Paint& paint) {
 }
 
 void Settings::close(Paint& paint) {
-
+    int yOffset = paint.getToolsYOffset();
+    paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 32, pixelBufferMain, paint.getSelectedThemeColor());
 }
 
 void Settings::drawIcon(Paint& paint, int x, int y, u16* buffer) {
@@ -36,5 +77,38 @@ void Settings::drawIcon(Paint& paint, int x, int y, u16* buffer) {
 }
 
 void Settings::drawTool(Paint& paint) {
+    int yOffset = paint.getToolsYOffset();
+    int bOffset = paint.getToolsButtonsOffset();
+    paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 32, pixelBufferMain, paint.getSelectedThemeColor());
 
+    string themeString = string((line == 0) ? ">" : "") + "Theme: " + getThemeName(paint, paint.selectedTheme);
+    paint.drawText(3, yOffset, themeString.c_str(), pixelBufferMain, blackColor);
+    paint.drawSprite(SCREEN_WIDTH - bOffset - 16 - 5, yOffset, 32, 32, 24, 0, 8, 8, buttons_iconBitmap, pixelBufferMain);
+    paint.drawSprite(SCREEN_WIDTH - bOffset - 8, yOffset, 32, 32, 8, 0, 8, 8, buttons_iconBitmap, pixelBufferMain);
+
+    string iconString = string((line == 1) ? ">" : "") + "Icon: " + getIconName(paint, paint.selectedIcon);
+    paint.drawText(3, yOffset += 10, iconString.c_str(), pixelBufferMain, blackColor);
+    paint.drawSprite(SCREEN_WIDTH - bOffset - 16 - 5, yOffset, 32, 32, 24, 0, 8, 8, buttons_iconBitmap, pixelBufferMain);
+    paint.drawSprite(SCREEN_WIDTH - bOffset - 8, yOffset, 32, 32, 8, 0, 8, 8, buttons_iconBitmap, pixelBufferMain);
+
+    string languageString = string((line == 2) ? ">" : "") + "Language: " + "English";
+    paint.drawText(3, yOffset += 10, languageString.c_str(), pixelBufferMain, blackColor);
+    paint.drawSprite(SCREEN_WIDTH - bOffset - 16 - 5, yOffset, 32, 32, 24, 0, 8, 8, buttons_iconBitmap, pixelBufferMain);
+    paint.drawSprite(SCREEN_WIDTH - bOffset - 8, yOffset, 32, 32, 8, 0, 8, 8, buttons_iconBitmap, pixelBufferMain);
+}
+
+const char* Settings::getThemeName(Paint& paint, int theme) {
+    switch (theme) {
+        case 0: return "White"; break;
+        case 1: return "Maid"; break;
+    }
+    return "White";
+}
+
+const char* Settings::getIconName(Paint& paint, int icon) {
+    switch (icon) {
+        case 0: return "Pride"; break;
+        case 1: return "Monochrome"; break;
+    }
+    return "Pride";
 }

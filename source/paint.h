@@ -54,7 +54,7 @@ inline u16 greenColor = ARGB16(1, 0, 31, 0);
 inline u16 blueColor = ARGB16(1, 0, 0, 31);
 inline u16 pinkColor = ARGB16(1, 31, 0, 31);
 
-inline u16 maidColorTheme = ARGB16(1, 12, 10, 14);
+inline u16 maidColorTheme = ARGB16(1, 12, 10, 14); //#2e2939
 
 inline u16 pixelBufferMain[SCREEN_WIDTH * SCREEN_HEIGHT];
 
@@ -114,12 +114,15 @@ class Paint {
         const char* paintName = "Unnamed";
 
     public:
+        int selectedTheme = 0;
+        int selectedIcon = 0;
         int selectedLayer = 0;
         int selectedTool = 0;
         u16 selectedColor = blackColor;
         u16 selectedColorSub = whiteColor;
         bool reverseScreens = false;
 
+        bool updateDrawAll = false;
         bool updateDrawSelectedColor = false;
         bool updateDrawTools = true;
         bool updateDrawColors = true;
@@ -200,4 +203,10 @@ class Paint {
         void drawScrollBox(int x, int y, int size, int scroll, u16* buffer);
         void clearBuffer(int x0, int y0, int x1, int y1, u16* buffer, u16 color);
         void blendSubLayers(int x0, int y0, int x1, int y1);
+
+        u16 getThemeColor(int theme);
+        u16 getSelectedThemeColor();
+
+        const unsigned int* getIconSprite(int icon);
+        const unsigned int* getSelectedIconSprite();
 };

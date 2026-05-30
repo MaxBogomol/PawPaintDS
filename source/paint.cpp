@@ -5,12 +5,15 @@ void Paint::setup() {
     updateSubLayers = false;
     updateBlendSubLayers = false;
 
+    selectedTheme = 0;
+    selectedIcon = 0;
     selectedLayer = 0;
     selectedTool = 0;
     selectedColor = blackColor;
     selectedColorSub = whiteColor;
     reverseScreens = false;
 
+    updateDrawAll = false;
     updateDrawSelectedColor = false;
     updateDrawTools = true;
     updateDrawColors = true;
@@ -37,7 +40,7 @@ void Paint::setupVideo() {
 void Paint::setupLayers() {
     for (int x = 0; x < SCREEN_WIDTH; x++) {
 		for (int y = 0; y < SCREEN_HEIGHT; y++) {
-			pixelBufferMain[x + (y * SCREEN_WIDTH)] = whiteColor;
+			pixelBufferMain[x + (y * SCREEN_WIDTH)] = getSelectedThemeColor();
 
 			pixelBufferSubLayer0[x + (y * SCREEN_WIDTH)] = whiteColor;
 			pixelBufferSubLayer1[x + (y * SCREEN_WIDTH)] = alphaColor;
@@ -94,6 +97,15 @@ void Paint::updateTools() {
     bool toolChanged = false;
 
     if (updateDrawSelectedColor) updateDrawSelectedColor = false;
+    if (updateDrawAll) {
+        clearBuffer(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, pixelBufferMain, getSelectedThemeColor());
+        updateDrawTools = true;
+        updateDrawColors = true;
+        updateDrawPaintName = true;
+        updateDrawPaintIcon = true;
+        toolChanged = true;
+        updateDrawAll = false;
+    }
 
     if (keysD & KEY_START) {
         reverseScreens = !reverseScreens;
@@ -182,7 +194,7 @@ void Paint::updateVideo() {
 }
 
 void Paint::drawTools() {
-    clearBuffer(0, 0, SCREEN_WIDTH, getToolsYOffset(), pixelBufferMain, whiteColor);
+    clearBuffer(0, 0, SCREEN_WIDTH, getToolsYOffset(), pixelBufferMain, getSelectedThemeColor());
 
     int i = 0;
     int j = 0;
@@ -201,7 +213,7 @@ void Paint::drawTools() {
 }
 
 void Paint::drawColors() {
-    clearBuffer(2, 156, 90, 34, pixelBufferMain, whiteColor);
+    clearBuffer(2, 156, 90, 34, pixelBufferMain, getSelectedThemeColor());
 
     drawSquareOutline(2, 156, 18, 34, pixelBufferMain, blackColor);
 
@@ -221,11 +233,13 @@ void Paint::drawColors() {
 }
 
 void Paint::drawPaintName() {
+    clearBuffer(0, 143, SCREEN_WIDTH, 12, pixelBufferMain, getSelectedThemeColor());
     drawText(3, 145, getPaintName(), pixelBufferMain, blackColor);
 }
 
 void Paint::drawPaintIcon() {
-    drawSprite(SCREEN_WIDTH - 32 - 3, SCREEN_HEIGHT - 32 - 3, 32, 32, paint_iconBitmap, pixelBufferMain);
+    clearBuffer(SCREEN_WIDTH - 32 - 3, SCREEN_HEIGHT - 32 - 3, 32, 32, pixelBufferMain, getSelectedThemeColor());
+    drawSprite(SCREEN_WIDTH - 32 - 3, SCREEN_HEIGHT - 32 - 3, 32, 32, getSelectedIconSprite(), pixelBufferMain);
 }
 
 void Paint::blendSubLayers(int x, int y) {
@@ -432,6 +446,8 @@ int Paint::getCharLength(u32 c) {
         case '.': return 2; break;
         case ':': return 2; break;
         case ';': return 2; break;
+        case '<': return 5; break;
+        case '>': return 5; break;
         case '@': return 7; break;
         case '[': return 4; break;
         case ']': return 4; break;
@@ -797,4 +813,28 @@ void Paint::blendSubLayers(int x0, int y0, int x1, int y1) {
             blendSubLayers(x0 + x, y0 + y);
         }
     }
+}
+
+u16 Paint::getThemeColor(int theme) {
+    switch (theme) {
+        case 0: return whiteColor; break;
+        case 1: return maidColorTheme; break;
+    }
+	return whiteColor;
+}
+
+u16 Paint::getSelectedThemeColor() {
+	return getThemeColor(selectedTheme);
+}
+
+const unsigned int* Paint::getIconSprite(int icon) {
+    switch (icon) {
+        case 0: return paint_iconBitmap; break;
+        case 1: return paint_monochrome_iconBitmap; break;
+    }
+	return paint_iconBitmap;
+}
+
+const unsigned int* Paint::getSelectedIconSprite() {
+	return getIconSprite(selectedIcon);
 }
