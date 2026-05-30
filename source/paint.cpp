@@ -14,6 +14,8 @@ void Paint::setup() {
     updateDrawSelectedColor = false;
     updateDrawTools = true;
     updateDrawColors = true;
+    updateDrawPaintName = true;
+    updateDrawPaintIcon = true;
 
     keysSetRepeat(10, 2);
 }
@@ -161,6 +163,16 @@ void Paint::updateVideo() {
         updateDrawColors = false;
     }
 
+    if (updateDrawPaintName) {
+        drawPaintName();
+        updateDrawPaintName = false;
+    }
+
+    if (updateDrawPaintIcon) {
+        drawPaintIcon();
+        updateDrawPaintIcon = false;
+    }
+
     tools[selectedTool]->updateTool(*this);
 
     swiWaitForVBlank();
@@ -186,12 +198,10 @@ void Paint::drawTools() {
 
     string toolString = string("Tool: ") + tools[selectedTool]->getName(*this); 
     drawText(3, getToolYOffset(), toolString.c_str(), pixelBufferMain, blackColor);
-
-    drawSprite(SCREEN_WIDTH - 32 - 3, SCREEN_HEIGHT - 32 - 3, 32, 32, paint_iconBitmap, pixelBufferMain);
 }
 
 void Paint::drawColors() {
-    clearBuffer(0, 156, 128, 34, pixelBufferMain, whiteColor);
+    clearBuffer(2, 156, 90, 34, pixelBufferMain, whiteColor);
 
     drawSquareOutline(2, 156, 18, 34, pixelBufferMain, blackColor);
 
@@ -208,8 +218,14 @@ void Paint::drawColors() {
     int bs = (selectedColorSub >> 10) & 31;
     string colorSubString = string("RGB: ") + intToChars(rs) + " " + intToChars(gs) + " " + intToChars(bs); 
     drawText(21, 177, colorSubString.c_str(), pixelBufferMain, blackColor);
+}
 
+void Paint::drawPaintName() {
     drawText(3, 145, getPaintName(), pixelBufferMain, blackColor);
+}
+
+void Paint::drawPaintIcon() {
+    drawSprite(SCREEN_WIDTH - 32 - 3, SCREEN_HEIGHT - 32 - 3, 32, 32, paint_iconBitmap, pixelBufferMain);
 }
 
 void Paint::blendSubLayers(int x, int y) {
@@ -375,8 +391,14 @@ void Paint::drawLine(int x0, int y0, int x1, int y1, u16* buffer, u16 color) {
         if (x0 == x1 && y0 == y1) break;
         
         e2 = 2 * err;
-        if (e2 >= dy) { err += dy; x0 += sx; }
-        if (e2 <= dx) { err += dx; y0 += sy; }
+        if (e2 >= dy) {
+            err += dy;
+            x0 += sx;
+        }
+        if (e2 <= dx) {
+            err += dx;
+            y0 += sy;
+        }
     }
 }
 

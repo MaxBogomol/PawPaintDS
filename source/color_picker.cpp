@@ -73,56 +73,44 @@ void ColorPicker::update(Paint& paint) {
     }
 
     if (keysH & KEY_B) {
-        if (keysR & KEY_UP) {
-            if (hue - 1 >= 0) {
-                hue--;
-                updatePicker = true;
-                updateHue = true;
-                updateNewSelected = true;
-                setNewColor = true;
-            }
+        if ((keysR & KEY_UP) && (hue - 1 >= 0)) {
+            hue--;
+            updatePicker = true;
+            updateHue = true;
+            updateNewSelected = true;
+            setNewColor = true;
         }
-        if (keysR & KEY_DOWN) {
-            if (hue + 1 < 360) {
-                hue++;
-                updatePicker = true;
-                updateHue = true;
-                updateNewSelected = true;
-                setNewColor = true;
-            }
+        if ((keysR & KEY_DOWN) && (hue + 1 < 360)) {
+            hue++;
+            updatePicker = true;
+            updateHue = true;
+            updateNewSelected = true;
+            setNewColor = true;
         }
     } else {
-        if (keysR & KEY_LEFT) {
-            if (colorX - 1 >= 0) {
-                colorX--;
-                updatePicker = true;
-                updateNewSelected = true;
-                setNewColor = true;
-            }
+        if ((keysR & KEY_LEFT) && (colorX - 1 >= 0)) {
+            colorX--;
+            updatePicker = true;
+            updateNewSelected = true;
+            setNewColor = true;
         }
-        if (keysR & KEY_RIGHT) {
-            if (colorX + 1 < 32) {
-                colorX++;
-                updatePicker = true;
-                updateNewSelected = true;
-                setNewColor = true;
-            }
+        if ((keysR & KEY_RIGHT) && (colorX + 1 < 32)) {
+            colorX++;
+            updatePicker = true;
+            updateNewSelected = true;
+            setNewColor = true;
         }
-        if (keysR & KEY_UP) {
-            if (colorY - 1 >= 0) {
-                colorY--;
-                updatePicker = true;
-                updateNewSelected = true;
-                setNewColor = true;
-            }
+        if ((keysR & KEY_UP) && (colorY - 1 >= 0)) {
+            colorY--;
+            updatePicker = true;
+            updateNewSelected = true;
+            setNewColor = true;
         }
-        if (keysR & KEY_DOWN) {
-            if (colorY + 1 < 32) {
-                colorY++;
-                updatePicker = true;
-                updateNewSelected = true;
-                setNewColor = true;
-            }
+        if ((keysR & KEY_DOWN) && (colorY + 1 < 32)) {
+            colorY++;
+            updatePicker = true;
+            updateNewSelected = true;
+            setNewColor = true;
         }
     }
 
@@ -305,11 +293,11 @@ void ColorPicker::clearColors(Paint& paint) {
 }
 
 void ColorPicker::clearSelectedColor(Paint& paint) {
-    paint.blendSubLayers(23, 175, 120, 10);
+    paint.blendSubLayers(23, 175, 73, 10);
 }
 
 void ColorPicker::clearNewSelectedColor(Paint& paint) {
-    paint.blendSubLayers(23, 7, 120, 10);
+    paint.blendSubLayers(23, 7, 73, 10);
 }
 
 void ColorPicker::clearPickerPointers(Paint& paint) {

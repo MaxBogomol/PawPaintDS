@@ -19,6 +19,7 @@ using namespace std;
 #include "info.h"
 
 #include "paint_icon.h"
+#include "paint_monochrome_icon.h"
 #include "buttons_icon.h"
 #include "pawscript_font.h"
 #include "brush_icon.h"
@@ -122,6 +123,8 @@ class Paint {
         bool updateDrawSelectedColor = false;
         bool updateDrawTools = true;
         bool updateDrawColors = true;
+        bool updateDrawPaintName = true;
+        bool updateDrawPaintIcon = true;
 
         bool fileSystemInit = false;
 
@@ -138,6 +141,8 @@ class Paint {
 
         void drawTools();
         void drawColors();
+        void drawPaintName();
+        void drawPaintIcon();
 
         void blendSubLayers(int x, int y);
         void blendSubLayers(int x, int y, u16* buffer);

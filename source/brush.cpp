@@ -62,43 +62,31 @@ void Brush::update(Paint& paint) {
     if (type >= 3) maxLine = 6;
 
     if (!active) {
-        if (keysD & KEY_UP) {
-            if (line - 1 >= 0) {
-                line--;
-                updateDrawTool = true;
-            }
+        if ((keysD & KEY_UP) && (line - 1 >= 0)) {
+            line--;
+            updateDrawTool = true;
         }
-        if (keysD & KEY_DOWN) {
-            if (line + 1 < maxLine) {
-                line++;
-                updateDrawTool = true;
-            }
+        if ((keysD & KEY_DOWN) && (line + 1 < maxLine)) {
+            line++;
+            updateDrawTool = true;
         }
     } else {
         if (line == 0) {
-            if (keysR & KEY_LEFT) {
-                if (cursorX - 1 >= 0) {
-                    cursorX--;
-                    updateDrawCursor = true;
-                }
+            if ((keysR & KEY_LEFT) && (cursorX - 1 >= 0)) {
+                cursorX--;
+                updateDrawCursor = true;
             }
-            if (keysR & KEY_RIGHT) {
-                if (cursorX + 1 < SCREEN_WIDTH) {
-                    cursorX++;
-                    updateDrawCursor = true;
-                }
+            if ((keysR & KEY_RIGHT) && (cursorX + 1 < SCREEN_WIDTH)) {
+                cursorX++;
+                updateDrawCursor = true;
             }
-            if (keysR & KEY_UP) {
-                if (cursorY - 1 >= 0) {
-                    cursorY--;
-                    updateDrawCursor = true;
-                }
+            if ((keysR & KEY_UP) && (cursorY - 1 >= 0)) {
+                cursorY--;
+                updateDrawCursor = true;
             }
-            if (keysR & KEY_DOWN) {
-                if (cursorY + 1 < SCREEN_HEIGHT) {
-                    cursorY++;
-                    updateDrawCursor = true;
-                }
+            if ((keysR & KEY_DOWN) && (cursorY + 1 < SCREEN_HEIGHT)) {
+                cursorY++;
+                updateDrawCursor = true;
             }
             if (keysH & KEY_B) {
                 paint.updateSubLayersEnable();
@@ -128,49 +116,37 @@ void Brush::update(Paint& paint) {
             switch (type) {
                 case 0:
                 case 3: {
-                    if (keysR & KEY_LEFT) {
-                        if (squareSize - 1 >= 1) {
-                            squareSize--;
-                            updateDrawTool = true;
-                        }
+                    if ((keysR & KEY_LEFT) && (squareSize - 1 >= 1)) {
+                        squareSize--;
+                        updateDrawTool = true;
                     }
-                    if (keysR & KEY_RIGHT) {
-                        if (squareSize + 1 <= 64) {
-                            squareSize++;
-                            updateDrawTool = true;
-                        }
+                    if ((keysR & KEY_RIGHT) && (squareSize + 1 <= 64)) {
+                        squareSize++;
+                        updateDrawTool = true;
                     }
                     break;
                 }
                 case 1:
                 case 4: {
-                    if (keysR & KEY_LEFT) {
-                        if (circleDiameter - 1 >= 1) {
-                            circleDiameter--;
-                            updateDrawTool = true;
-                        }
+                    if ((keysR & KEY_LEFT) && (circleDiameter - 1 >= 1)) {
+                        circleDiameter--;
+                        updateDrawTool = true;
                     }
-                    if (keysR & KEY_RIGHT) {
-                        if (circleDiameter + 1 <= 64) {
-                            circleDiameter++;
-                            updateDrawTool = true;
-                        }
+                    if ((keysR & KEY_RIGHT) && (circleDiameter + 1 <= 64)) {
+                        circleDiameter++;
+                        updateDrawTool = true;
                     }
                     break;
                 }
                 case 2:
                 case 5: {
-                    if (keysR & KEY_LEFT) {
-                        if (dotRadius - 1 >= 1) {
-                            dotRadius--;
-                            updateDrawTool = true;
-                        }
+                    if ((keysR & KEY_LEFT) && (dotRadius - 1 >= 1)) {
+                        dotRadius--;
+                        updateDrawTool = true;
                     }
-                    if (keysR & KEY_RIGHT) {
-                        if (dotRadius + 1 <= 32) {
-                            dotRadius++;
-                            updateDrawTool = true;
-                        }
+                    if ((keysR & KEY_RIGHT) && (dotRadius + 1 <= 32)) {
+                        dotRadius++;
+                        updateDrawTool = true;
                     }
                     break;
                 }
@@ -256,90 +232,66 @@ void Brush::update(Paint& paint) {
             switch (line) {
                 case 3: {
                     if (!activeNoise) {
-                        if (keysR & KEY_LEFT) {
-                            if (noiseXSize - 1 >= 1) {
-                                noiseXSize--;
-                                updateDrawTool = true;
-                            }
+                        if ((keysR & KEY_LEFT) && (noiseXSize - 1 >= 1)) {
+                            noiseXSize--;
+                            updateDrawTool = true;
                         }
-                        if (keysR & KEY_RIGHT) {
-                            if (noiseXSize + 1 <= 16) {
-                                noiseXSize++;
-                                updateDrawTool = true;
-                            }
+                        if ((keysR & KEY_RIGHT) && (noiseXSize + 1 <= 16)) {
+                            noiseXSize++;
+                            updateDrawTool = true;
                         }
                     } else {
-                        if (keysR & KEY_LEFT) {
-                            if (noiseYSize - 1 >= 1) {
-                                noiseYSize--;
-                                updateDrawTool = true;
-                            }
+                        if ((keysR & KEY_LEFT) && (noiseYSize - 1 >= 1)) {
+                            noiseYSize--;
+                            updateDrawTool = true;
                         }
-                        if (keysR & KEY_RIGHT) {
-                            if (noiseYSize + 1 <= 16) {
-                                noiseYSize++;
-                                updateDrawTool = true;
-                            }
+                        if ((keysR & KEY_RIGHT) && (noiseYSize + 1 <= 16)) {
+                            noiseYSize++;
+                            updateDrawTool = true;
                         }
                     }
                     break;
                 }
                 case 4: {
                     if (!activeNoise) {
-                        if (keysR & KEY_LEFT) {
-                            if (noiseXShift - 1 >= 0) {
-                                noiseXShift--;
-                                updateDrawTool = true;
-                            }
+                        if ((keysR & KEY_LEFT) && (noiseXShift - 1 >= 0)) {
+                            noiseXShift--;
+                            updateDrawTool = true;
                         }
-                        if (keysR & KEY_RIGHT) {
-                            if (noiseXShift + 1 < 16) {
-                                noiseXShift++;
-                                updateDrawTool = true;
-                            }
+                        if ((keysR & KEY_RIGHT) && (noiseXShift + 1 < 16)) {
+                            noiseXShift++;
+                            updateDrawTool = true;
                         }
                     } else {
-                        if (keysR & KEY_LEFT) {
-                            if (noiseYShift - 1 >= 0) {
-                                noiseYShift--;
-                                updateDrawTool = true;
-                            }
+                        if ((keysR & KEY_LEFT) && (noiseYShift - 1 >= 0)) {
+                            noiseYShift--;
+                            updateDrawTool = true;
                         }
-                        if (keysR & KEY_RIGHT) {
-                            if (noiseYShift + 1 < 16) {
-                                noiseYShift++;
-                                updateDrawTool = true;
-                            }
+                        if ((keysR & KEY_RIGHT) && (noiseYShift + 1 < 16)) {
+                            noiseYShift++;
+                            updateDrawTool = true;
                         }
                     }
                     break;
                 }
                 case 5: {
                     if (!activeNoise) {
-                        if (keysR & KEY_LEFT) {
-                            if (noiseXOffset - 1 >= 0) {
-                                noiseXOffset--;
-                                updateDrawTool = true;
-                            }
+                        if ((keysR & KEY_LEFT) && (noiseXOffset - 1 >= 0)) {
+                            noiseXOffset--;
+                            updateDrawTool = true;
                         }
-                        if (keysR & KEY_RIGHT) {
-                            if (noiseXOffset + 1 < 16) {
-                                noiseXOffset++;
-                                updateDrawTool = true;
-                            }
+                        if ((keysR & KEY_RIGHT) && (noiseXOffset + 1 < 16)) {
+                            noiseXOffset++;
+                            updateDrawTool = true;
                         }
                     } else {
-                        if (keysR & KEY_LEFT) {
-                            if (noiseYOffset - 1 >= 0) {
-                                noiseYOffset--;
-                                updateDrawTool = true;
-                            }
+                        if ((keysR & KEY_LEFT) && (noiseYOffset - 1 >= 0)) {
+                            noiseYOffset--;
+                            updateDrawTool = true;
                         }
-                        if (keysR & KEY_RIGHT) {
-                            if (noiseYOffset + 1 < 16) {
-                                noiseYOffset++;
-                                updateDrawTool = true;
-                            }
+                        if ((keysR & KEY_RIGHT) && (noiseYOffset + 1 < 16)) {
+                            noiseYOffset++;
+                            updateDrawTool = true;
                         }
                     }
                     break;
@@ -470,8 +422,14 @@ void Brush::drawLine(Paint& paint, int x0, int y0, int x1, int y1, u16* buffer, 
         if (x0 == x1 && y0 == y1) break;
         
         e2 = 2 * err;
-        if (e2 >= dy) { err += dy; x0 += sx; }
-        if (e2 <= dx) { err += dx; y0 += sy; }
+        if (e2 >= dy) {
+            err += dy;
+            x0 += sx; 
+        }
+        if (e2 <= dx) {
+            err += dx;
+            y0 += sy;
+        }
     }
 }
 

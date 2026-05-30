@@ -35,17 +35,13 @@ void Saving::update(Paint& paint) {
 
     int maxLine = 6;
 
-    if (keysD & KEY_UP) {
-        if (line - 1 >= 0) {
-            line--;
-            updateDrawTool = true;
-        }
+    if ((keysD & KEY_UP) && (line - 1 >= 0)) {
+        line--;
+        updateDrawTool = true;
     }
-    if (keysD & KEY_DOWN) {
-        if (line + 1 < maxLine) {
-            line++;
-            updateDrawTool = true;
-        }
+    if ((keysD & KEY_DOWN) && (line + 1 < maxLine)) {
+        line++;
+        updateDrawTool = true;
     }
 
     if (keysD & KEY_A) {

@@ -15,51 +15,39 @@ void Layers::update(Paint& paint) {
     bool updateSubLayers = false;
     int maxLine = 2;
 
-    if (keysD & KEY_UP) {
-        if (line - 1 >= 0) {
-            line--;
-            updateDrawTool = true;
-        }
+    if ((keysD & KEY_UP) && (line - 1 >= 0)) {
+        line--;
+        updateDrawTool = true;
     }
-    if (keysD & KEY_DOWN) {
-        if (line + 1 < maxLine) {
-            line++;
-            updateDrawTool = true;
-        }
+    if ((keysD & KEY_DOWN) && (line + 1 < maxLine)) {
+        line++;
+        updateDrawTool = true;
     }
 
     switch (line) {
         case 0: {
-            if (keysD & KEY_LEFT) {
-                if (paint.selectedLayer - 1 >= 0) {
-                    paint.selectedLayer--;
-                    updateDrawTool = true;
-                }
+            if ((keysD & KEY_LEFT) && (paint.selectedLayer - 1 >= 0)) {
+                paint.selectedLayer--;
+                updateDrawTool = true;
             }
-            if (keysD & KEY_RIGHT) {
-                if (paint.selectedLayer + 1 <= 3) {
-                    paint.selectedLayer++;
-                    updateDrawTool = true;
-                }
+            if ((keysD & KEY_RIGHT) && (paint.selectedLayer + 1 <= 3)) {
+                paint.selectedLayer++;
+                updateDrawTool = true;
             }
             break;
         }
         case 1: {
-            if (keysD & KEY_LEFT) {
-                if (paint.selectedLayer - 1 >= 0) {
-                    paint.swapSubLayers(paint.selectedLayer, paint.selectedLayer - 1);
-                    paint.selectedLayer--;
-                    updateSubLayers = true;
-                    updateDrawTool = true;
-                }
+            if ((keysD & KEY_LEFT) && (paint.selectedLayer - 1 >= 0)) {
+                paint.swapSubLayers(paint.selectedLayer, paint.selectedLayer - 1);
+                paint.selectedLayer--;
+                updateSubLayers = true;
+                updateDrawTool = true;
             }
-            if (keysD & KEY_RIGHT) {
-                if (paint.selectedLayer + 1 <= 3) {
-                    paint.swapSubLayers(paint.selectedLayer, paint.selectedLayer + 1);
-                    paint.selectedLayer++;
-                    updateSubLayers = true;
-                    updateDrawTool = true;
-                }
+            if ((keysD & KEY_RIGHT) && (paint.selectedLayer + 1 <= 3)) {
+                paint.swapSubLayers(paint.selectedLayer, paint.selectedLayer + 1);
+                paint.selectedLayer++;
+                updateSubLayers = true;
+                updateDrawTool = true;
             }
             break;
         }

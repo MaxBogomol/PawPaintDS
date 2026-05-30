@@ -28,11 +28,7 @@ void Settings::open(Paint& paint) {
 }
 
 void Settings::close(Paint& paint) {
-    for (int x = 0; x < SCREEN_WIDTH; x++) {
-        for (int y = 0; y < 54; y++) {
-            paint.drawPixel(x, y + 48, pixelBufferMain, whiteColor);
-        }
-    }
+
 }
 
 void Settings::drawIcon(Paint& paint, int x, int y, u16* buffer) {
@@ -40,9 +36,5 @@ void Settings::drawIcon(Paint& paint, int x, int y, u16* buffer) {
 }
 
 void Settings::drawTool(Paint& paint) {
-    for (int x = 0; x < SCREEN_WIDTH; x++) {
-        for (int y = 0; y < 54; y++) {
-            paint.drawPixel(x, y + 48, pixelBufferMain, whiteColor);
-        }
-    }
+
 }
