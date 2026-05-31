@@ -105,13 +105,19 @@ inline const char* paintsPath = "Paints";
 inline const char* pawsPath = "Paws";
 inline const char* languagesPath = "nitro:/languages";
 
-inline int maxLanguages = 2;
+inline const char* paintVerstion = "v0.1";
+
+inline int maxLanguages = 6;
 inline int maxPaintThemes = 4;
 inline int maxPaintIcons = 2;
 
-inline const char* languageCodes[2] = {
+inline const char* languageCodes[6] = {
     "en_us",
-    "ru_ru"
+    "ru_ru",
+    "be_by",
+    "be_tar",
+    "be_by_lat",
+    "be_tar_lat"
 };
 
 struct HSV {

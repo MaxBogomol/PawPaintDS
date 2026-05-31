@@ -38,7 +38,8 @@ void Info::drawTool(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
     paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 92, pixelBufferMain);
 
-    paint.drawText(3, yOffset, "Paw Paint DS", pixelBufferMain, blackColor);
+    string paintString = string("Paw Paint DS") + " - " + paintVerstion;
+    paint.drawText(3, yOffset, paintString.c_str(), pixelBufferMain, blackColor);
     paint.drawText(3, yOffset += 10, STR_DESCRIPTION.c_str(), pixelBufferMain, blackColor);
     paint.drawText(3, yOffset += 10, "By MaxBogomol (Pink Joke)", pixelBufferMain, blackColor);
     
