@@ -57,20 +57,20 @@ void Layers::update(Paint& paint) {
     int bOffset = paint.getToolsButtonsOffset();
 
     if (keysD & KEY_TOUCH && paint.reverseScreens) {
-        if (touchX >= SCREEN_WIDTH - bOffset - 16 - 5 && touchX < SCREEN_WIDTH - bOffset - 16 - 5 + 8 && touchY >= yOffset && touchY < yOffset + 8) {
+        if (touchX >= SCREEN_WIDTH - bOffset - 16 - 5 && touchX < SCREEN_WIDTH - bOffset - 8 - 5 && touchY >= yOffset && touchY < yOffset + 8) {
             if (paint.selectedLayer - 1 >= 0) {
                 paint.selectedLayer--;
                 updateDrawTool = true;
             }
         }
-        if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset + 8 && touchY >= yOffset && touchY < yOffset + 8) {
+        if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
             if (paint.selectedLayer + 1 <= 3) {
                 paint.selectedLayer++;
                 updateDrawTool = true;
             }
         }
         yOffset += 10;
-        if (touchX >= SCREEN_WIDTH - bOffset - 16 - 5 && touchX < SCREEN_WIDTH - bOffset - 16 - 5 + 8 && touchY >= yOffset && touchY < yOffset + 8) {
+        if (touchX >= SCREEN_WIDTH - bOffset - 16 - 5 && touchX < SCREEN_WIDTH - bOffset - 8 - 5 && touchY >= yOffset && touchY < yOffset + 8) {
             if (paint.selectedLayer - 1 >= 0) {
                 paint.swapSubLayers(paint.selectedLayer, paint.selectedLayer - 1);
                 paint.selectedLayer--;
@@ -78,7 +78,7 @@ void Layers::update(Paint& paint) {
                 updateDrawTool = true;
             }
         }
-        if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset + 8 && touchY >= yOffset && touchY < yOffset + 8) {
+        if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
             if (paint.selectedLayer + 1 <= 3) {
                 paint.swapSubLayers(paint.selectedLayer, paint.selectedLayer + 1);
                 paint.selectedLayer++;
@@ -107,7 +107,7 @@ void Layers::open(Paint& paint) {
 
 void Layers::close(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
-    paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 22, pixelBufferMain);
+    paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 21, pixelBufferMain);
 }
 
 void Layers::drawIcon(Paint& paint, int x, int y, u16* buffer) {
@@ -117,7 +117,7 @@ void Layers::drawIcon(Paint& paint, int x, int y, u16* buffer) {
 void Layers::drawTool(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
     int bOffset = paint.getToolsButtonsOffset();
-    paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 22, pixelBufferMain);
+    paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 21, pixelBufferMain);
 
     string moveString = string((line == 0) ? ">" : "") + STR_LAYERS_LAYER + ": " + paint.intToChars(paint.selectedLayer + 1);
     paint.drawText(3, yOffset, moveString.c_str(), pixelBufferMain, blackColor);

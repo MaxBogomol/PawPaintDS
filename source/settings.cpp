@@ -83,38 +83,40 @@ void Settings::update(Paint& paint) {
     int bOffset = paint.getToolsButtonsOffset();
 
      if (keysD & KEY_TOUCH && paint.reverseScreens) {
-        if (touchX >= SCREEN_WIDTH - bOffset - 16 - 24 && touchX < SCREEN_WIDTH - bOffset - 24 && touchY >= yOffset && touchY < yOffset + 8) {
+        if (touchX >= SCREEN_WIDTH - bOffset - 16 - 5 && touchX < SCREEN_WIDTH - bOffset - 8 - 5 && touchY >= yOffset && touchY < yOffset + 8) {
             paint.selectedTheme--;
             if (paint.selectedTheme < 0) paint.selectedTheme = maxPaintThemes - 1;
             paint.updateDrawAll = true;
+            updateTheme = true;
         }
-        if (touchX >= SCREEN_WIDTH - bOffset - 16 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
+        if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
             paint.selectedTheme++;
             if (paint.selectedTheme > maxPaintThemes - 1) paint.selectedTheme = 0;
             paint.updateDrawAll = true;
+            updateTheme = true;
         }
         yOffset += 10;
-        if (touchX >= SCREEN_WIDTH - bOffset - 16 - 24 && touchX < SCREEN_WIDTH - bOffset - 24 && touchY >= yOffset && touchY < yOffset + 8) {
+        if (touchX >= SCREEN_WIDTH - bOffset - 16 - 5 && touchX < SCREEN_WIDTH - bOffset - 8 - 5 && touchY >= yOffset && touchY < yOffset + 8) {
             paint.selectedIcon--;
             if (paint.selectedIcon < 0) paint.selectedIcon = maxPaintIcons - 1;
             paint.updateDrawPaintIcon = true;
             updateDrawTool = true;
         }
-        if (touchX >= SCREEN_WIDTH - bOffset - 16 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
+        if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
             paint.selectedIcon++;
             if (paint.selectedIcon > maxPaintIcons - 1) paint.selectedIcon = 0;
             paint.updateDrawPaintIcon = true;
             updateDrawTool = true;
         }
         yOffset += 10;
-        if (touchX >= SCREEN_WIDTH - bOffset - 16 - 24 && touchX < SCREEN_WIDTH - bOffset - 24 && touchY >= yOffset && touchY < yOffset + 8) {
+        if (touchX >= SCREEN_WIDTH - bOffset - 16 - 5 && touchX < SCREEN_WIDTH - bOffset - 8 - 5 && touchY >= yOffset && touchY < yOffset + 8) {
             paint.selectedLanguage--;
             if (paint.selectedLanguage < 0) paint.selectedLanguage = maxLanguages - 1;
             paint.updateDrawTools = true;
             updateDrawTool = true;
             paint.readSelectedLanguage();
         }
-        if (touchX >= SCREEN_WIDTH - bOffset - 16 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
+        if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
             paint.selectedLanguage++;
             if (paint.selectedLanguage > maxLanguages - 1) paint.selectedLanguage = 0;
             paint.updateDrawTools = true;
@@ -138,7 +140,7 @@ void Settings::open(Paint& paint) {
 
 void Settings::close(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
-    paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 32, pixelBufferMain);
+    paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 31, pixelBufferMain);
 }
 
 void Settings::drawIcon(Paint& paint, int x, int y, u16* buffer) {

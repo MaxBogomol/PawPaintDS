@@ -160,14 +160,14 @@ void Brush::update(Paint& paint) {
     int bOffset = paint.getToolsButtonsOffset();
 
     if (keysD & KEY_TOUCH && paint.reverseScreens) {
-        if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset + 8 && touchY >= yOffset && touchY < yOffset + 8) {
+        if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
             active = !active;
             line = 0;
             updateDrawTool = true;
             updateDrawCursor = true;
         }
         yOffset += 10;
-        if (touchX >= SCREEN_WIDTH - bOffset - 16 - 5 && touchX < SCREEN_WIDTH - bOffset - 16 - 5 + 8 && touchY >= yOffset && touchY < yOffset + 8) {
+        if (touchX >= SCREEN_WIDTH - bOffset - 16 - 5 && touchX < SCREEN_WIDTH - bOffset - 8 - 5 && touchY >= yOffset && touchY < yOffset + 8) {
             drawCursor(paint, true);
             type--;
             if (type < 0) type = 5;
@@ -175,7 +175,7 @@ void Brush::update(Paint& paint) {
             updateDrawCursor = true;
             paint.updateDrawTools = true;
         }
-        if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset + 8 && touchY >= yOffset && touchY < yOffset + 8) {
+        if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
             drawCursor(paint, true);
             type++;
             if (type > 5) type = 0;
@@ -368,7 +368,7 @@ void Brush::open(Paint& paint) {
 
 void Brush::close(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
-    paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 62, pixelBufferMain);
+    paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 61, pixelBufferMain);
 
     active = false;
     drawCursor(paint);
@@ -439,7 +439,7 @@ void Brush::drawLine(Paint& paint, int x0, int y0, int x1, int y1, u16* buffer, 
 void Brush::drawTool(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
     int bOffset = paint.getToolsButtonsOffset();
-    paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 62, pixelBufferMain);
+    paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 61, pixelBufferMain);
 
     string moveString = string((line == 0) ? ">" : "") + STR_BRUSH_MOVE + ": " + ((line == 0 && active) ? "+" : "-"); 
     paint.drawText(3, yOffset, moveString.c_str(), pixelBufferMain, blackColor);

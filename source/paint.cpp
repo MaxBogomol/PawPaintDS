@@ -240,7 +240,7 @@ void Paint::drawColors() {
 
 void Paint::drawPaintName() {
     clearBuffer(0, 143, SCREEN_WIDTH, 12, pixelBufferMain);
-    drawText(3, 145, getPaintName(), pixelBufferMain, blackColor);
+    drawText(3, 146, getPaintName(), pixelBufferMain, blackColor);
 }
 
 void Paint::drawPaintIcon() {
@@ -498,30 +498,90 @@ int Paint::getTextLength(const char* text) {
 }
 
 void Paint::drawChar(int x, int y, u32 c, u16* buffer, u16 color) {
-    const u16* pixels = (const u16*) pawscript_fontBitmap;
+    const u16* pixels = (const u16*) pawscript_font_asciiBitmap;
     u32 cc = 0;
+    u32 cce = 0;
+    bool extended = false;
 
-    if (c >= 0x0410 && c <= 0x044F) {
-        cc -= (0x0410);
+    if (c >= 0x0400) {
+        cc -= (0x0400);
+        if (c >= 0x0400) cc -= 0x0001;
+        if (c >= 0x0401) cc -= 0x0001;
+        if (c >= 0x0403) cc -= 0x0001;
+        if (c >= 0x0407) cc -= 0x0001;
+        if (c >= 0x040C) cc -= 0x0001;
+        if (c >= 0x040D) cc -= 0x0001;
+        if (c >= 0x040E) cc -= 0x0001;
+        if (c >= 0x040F) cc -= 0x0001;
+
         if (c >= 0x0419) cc -= 0x0001;
-        if (c >= 0x0430) cc += 0x0001;
         if (c >= 0x0439) cc -= 0x0001;
 
-        pixels = (const u16*) pawscript_font_testBitmap;
+        if (c == 0x0400) {
+            cc = -c;
+            extended = true;
+        }
+        if (c == 0x0401) {
+            cc = -c + 1;
+            extended = true;
+        }
+        if (c == 0x0403) {
+            cc = -c + 2;
+            extended = true;
+        }
+        if (c == 0x0407) {
+            cc = -c + 3;
+            extended = true;
+        }
+        if (c == 0x040C) {
+            cc = -c + 4;
+            extended = true;
+        }
+        if (c == 0x040D) {
+            cc = -c + 5;
+            extended = true;
+        }
+        if (c == 0x040E) {
+            cc = -c + 6;
+            extended = true;
+        }
+        if (c == 0x040F) {
+            cc = -c + 7;
+            extended = true;
+        }
+        if (c == 0x0419) {
+            cc = -c + 8;
+            extended = true;
+        }
+        if (c == 0x0439) {
+            cc = -c + 17;
+            extended = true;
+        }
+
+        if (extended) {
+            pixels = (const u16*) pawscript_font_cyrillic_extendedBitmap;
+        } else {
+            pixels = (const u16*) pawscript_font_cyrillicBitmap;
+        }
     }
     c += cc;
     //if (c >= 0x0401) c -= 1;
 
-    for (int row = 0; row < 8; row++) {
-        for (int col = 0; col < 8; col++) {
-            int xx = ((c % 16) * 8) + col;
-            int yy = ((c / 16) * 8) + row;
+    int xSize = extended ? 9 : 8;
+    int ySize = extended ? 12 : 8;
+    int spriteWidth = extended ? 144 : 128;
+    int yOffset = extended ? 3 : 0;
 
-            u16 pixel = pixels[xx + (yy * 128)];
+    for (int row = 0; row < ySize; row++) {
+        for (int col = 0; col < xSize; col++) {
+            int xx = ((c % 16) * xSize) + col;
+            int yy = ((c / 16) * ySize) + row;
+
+            u16 pixel = pixels[xx + (yy * spriteWidth)];
 
             if (pixel & BIT(15)) { 
                 int px = x + col;
-                int py = y + row;
+                int py = y + row - yOffset;
                 
                 if (px >= 0 && px < SCREEN_WIDTH && py >= 0 && py < SCREEN_HEIGHT) {
                     buffer[py * SCREEN_WIDTH + px] = color;
@@ -671,7 +731,7 @@ const char* Paint::intToChars(int val) {
 }
 
 void Paint::setPaintName(const char* name) {
-    paintName = name;
+    paintName = strdup(name);
 }
 
 const char* Paint::getPaintName() {
@@ -801,7 +861,7 @@ bool Paint::directoryExist(const char* path) {
 }
 
 int Paint::getToolYOffset() {
-    return 22;
+    return 23;
 }
 
 int Paint::getToolsYOffset() {
