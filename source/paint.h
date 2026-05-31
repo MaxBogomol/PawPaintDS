@@ -116,8 +116,8 @@ inline const char* languageCodes[6] = {
     "ru_ru",
     "be_by",
     "be_tar",
-    "be_by_lat",
-    "be_tar_lat"
+    "be_by_latn",
+    "be_tar_latn"
 };
 
 struct HSV {
