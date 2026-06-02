@@ -27,7 +27,7 @@ void Info::open(Paint& paint) {
 
 void Info::close(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
-    paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 92, pixelBufferMain);
+    paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 92, pixelBufferMain);
 }
 
 void Info::drawIcon(Paint& paint, int x, int y, u16* buffer) {
@@ -36,7 +36,7 @@ void Info::drawIcon(Paint& paint, int x, int y, u16* buffer) {
 
 void Info::drawTool(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
-    paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 92, pixelBufferMain);
+    paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 92, pixelBufferMain);
 
     string paintString = string("Paw Paint DS") + " - " + paintVerstion;
     paint.drawText(3, yOffset, paintString.c_str(), pixelBufferMain, blackColor);

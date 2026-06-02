@@ -368,7 +368,7 @@ void Brush::open(Paint& paint) {
 
 void Brush::close(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
-    paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 61, pixelBufferMain);
+    paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 62, pixelBufferMain);
 
     active = false;
     drawCursor(paint);

@@ -19,6 +19,7 @@ using namespace std;
 #include "settings.h"
 #include "info.h"
 #include "language.h"
+#include "pawscript.h"
 
 #include "pawscript_font_ascii.h"
 #include "pawscript_font_latin_extended.h"

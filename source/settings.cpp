@@ -140,7 +140,7 @@ void Settings::open(Paint& paint) {
 
 void Settings::close(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
-    paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 31, pixelBufferMain);
+    paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 32, pixelBufferMain);
 }
 
 void Settings::drawIcon(Paint& paint, int x, int y, u16* buffer) {
@@ -150,7 +150,7 @@ void Settings::drawIcon(Paint& paint, int x, int y, u16* buffer) {
 void Settings::drawTool(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
     int bOffset = paint.getToolsButtonsOffset();
-    paint.clearBuffer(0, yOffset - 2, SCREEN_WIDTH, 32, pixelBufferMain);
+    paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 32, pixelBufferMain);
 
     string themeString = string((line == 0) ? ">" : "") + STR_SETTINGS_THEME + ": " + getThemeName(paint, paint.selectedTheme);
     paint.drawText(3, yOffset, themeString.c_str(), pixelBufferMain, blackColor);

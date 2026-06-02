@@ -107,7 +107,7 @@ void Layers::open(Paint& paint) {
 
 void Layers::close(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
-    paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 21, pixelBufferMain);
+    paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 22, pixelBufferMain);
 }
 
 void Layers::drawIcon(Paint& paint, int x, int y, u16* buffer) {

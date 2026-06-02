@@ -121,7 +121,7 @@ void Saving::open(Paint& paint) {
 
 void Saving::close(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
-    paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 61, pixelBufferMain);
+    paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 62, pixelBufferMain);
     doneTimer = 0;
 }
 
@@ -138,7 +138,7 @@ void Saving::drawIcon(Paint& paint, int x, int y, u16* buffer) {
 void Saving::drawTool(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
     int bOffset = paint.getToolsButtonsOffset();
-    paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 61, pixelBufferMain);
+    paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 62, pixelBufferMain);
 
     string newString = string((line == 0) ? ">" : "") + STR_SAVING_NEW;
     paint.drawText(3, yOffset, newString.c_str(), pixelBufferMain, blackColor);

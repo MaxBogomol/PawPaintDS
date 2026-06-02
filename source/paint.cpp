@@ -440,48 +440,9 @@ u32 Paint::decodeChar(const char** c) {
 }
 
 int Paint::getCharLength(u32 c) {
-    switch (c) {
-        case ' ': return 5; break;
-        case '!': return 2; break;
-        case '"': return 4; break;
-        case '\'': return 2; break;
-        case '(': return 4; break;
-        case ')': return 4; break;
-        case '*': return 4; break;
-        case ',': return 2; break;
-        case '.': return 2; break;
-        case ':': return 2; break;
-        case ';': return 2; break;
-        case '<': return 5; break;
-        case '>': return 5; break;
-        case '@': return 7; break;
-        case '[': return 4; break;
-        case ']': return 4; break;
-        case '`': return 3; break;
-        case '|': return 2; break;
-        case '~': return 7; break;
-
-        case 'f': return 5; break;
-        case 'i': return 2; break;
-        case 'k': return 5; break;
-        case 'l': return 3; break;
-        case 't': return 4; break;
-
-        case 0x0414: return 7; break; //Д
-        case 0x0416: return 8; break; //Ж
-        case 0x0424: return 8; break; //Ф
-        case 0x0426: return 8; break; //Ц
-        case 0x0428: return 8; break; //Ш
-        case 0x0429: return 9; break; //Щ
-        case 0x042A: return 7; break; //Ъ
-        case 0x042B: return 8; break; //Ы
-        case 0x042E: return 8; break; //Ю
-        case 0x0434: return 7; break; //д
-        case 0x043A: return 5; break; //к
-        case 0x0449: return 7; break; //щ
-        case 0x044A: return 7; break; //ъ
-        case 0x044B: return 7; break; //ы
-        case 0x044E: return 7; break; //ю
+    int listSize = sizeof(pawscriptCharLengthList) / sizeof(pawscriptCharLengthList[0]);
+    for (int i = 0; i < listSize; i++) {
+        if (c == (u32) pawscriptCharLengthList[i][0]) return (int) pawscriptCharLengthList[i][1];
     }
     return 6;
 }
@@ -499,63 +460,41 @@ int Paint::getTextLength(const char* text) {
 
 void Paint::drawChar(int x, int y, u32 c, u16* buffer, u16 color) {
     const u16* pixels = (const u16*) pawscript_font_asciiBitmap;
-    u32 cc = 0;
-    u32 cce = 0;
+    int index = (int) c;
     bool extended = false;
 
-    if (c >= 0x0400) {
-        cc -= (0x0400);
-        if (c >= 0x0400) cc -= 0x0001;
-        if (c >= 0x0401) cc -= 0x0001;
-        if (c >= 0x0403) cc -= 0x0001;
-        if (c >= 0x0407) cc -= 0x0001;
-        if (c >= 0x040C) cc -= 0x0001;
-        if (c >= 0x040D) cc -= 0x0001;
-        if (c >= 0x040E) cc -= 0x0001;
-        if (c >= 0x040F) cc -= 0x0001;
+    if (c >= 0x00C0 && c <= 0x017F) {
+        int latinSize = sizeof(pawscriptLatinExtendedList) / sizeof(pawscriptLatinExtendedList[0]);
+        for (int i = 0; i < latinSize; i++) {
+            if (c == pawscriptLatinExtendedList[i]) {
+                index = i;
+                extended = true;
+                break;
+            }
+        }
+        
+        if (extended) {
+            pixels = (const u16*) pawscript_font_latin_extendedBitmap;
+        } else {
+            //pixels = (const u16*) pawscript_font_latinBitmap;
+        }
+    }
 
-        if (c >= 0x0419) cc -= 0x0001;
-        if (c >= 0x0439) cc -= 0x0001;
-
-        if (c == 0x0400) {
-            cc = -c;
-            extended = true;
+    if (c >= 0x0400 && c <= 0x04FF) {
+        int cyrillicSize = sizeof(pawscriptCyrillicList) / sizeof(pawscriptCyrillicList[0]);
+        for (int i = 0; i < cyrillicSize; i++) {
+            if (c == pawscriptCyrillicList[i]) {
+                index = i;
+                break;
+            }
         }
-        if (c == 0x0401) {
-            cc = -c + 1;
-            extended = true;
-        }
-        if (c == 0x0403) {
-            cc = -c + 2;
-            extended = true;
-        }
-        if (c == 0x0407) {
-            cc = -c + 3;
-            extended = true;
-        }
-        if (c == 0x040C) {
-            cc = -c + 4;
-            extended = true;
-        }
-        if (c == 0x040D) {
-            cc = -c + 5;
-            extended = true;
-        }
-        if (c == 0x040E) {
-            cc = -c + 6;
-            extended = true;
-        }
-        if (c == 0x040F) {
-            cc = -c + 7;
-            extended = true;
-        }
-        if (c == 0x0419) {
-            cc = -c + 8;
-            extended = true;
-        }
-        if (c == 0x0439) {
-            cc = -c + 17;
-            extended = true;
+        int cyrillicExtendedSize = sizeof(pawscriptCyrillicExtendedList) / sizeof(pawscriptCyrillicExtendedList[0]);
+        for (int i = 0; i < cyrillicExtendedSize; i++) {
+            if (c == pawscriptCyrillicExtendedList[i]) {
+                index = i;
+                extended = true;
+                break;
+            }
         }
 
         if (extended) {
@@ -564,8 +503,6 @@ void Paint::drawChar(int x, int y, u32 c, u16* buffer, u16 color) {
             pixels = (const u16*) pawscript_font_cyrillicBitmap;
         }
     }
-    c += cc;
-    //if (c >= 0x0401) c -= 1;
 
     int xSize = extended ? 9 : 8;
     int ySize = extended ? 12 : 8;
@@ -574,8 +511,8 @@ void Paint::drawChar(int x, int y, u32 c, u16* buffer, u16 color) {
 
     for (int row = 0; row < ySize; row++) {
         for (int col = 0; col < xSize; col++) {
-            int xx = ((c % 16) * xSize) + col;
-            int yy = ((c / 16) * ySize) + row;
+            int xx = ((index % 16) * xSize) + col;
+            int yy = ((index / 16) * ySize) + row;
 
             u16 pixel = pixels[xx + (yy * spriteWidth)];
 
@@ -861,7 +798,7 @@ bool Paint::directoryExist(const char* path) {
 }
 
 int Paint::getToolYOffset() {
-    return 23;
+    return 24;
 }
 
 int Paint::getToolsYOffset() {
