@@ -1,10 +1,4 @@
-#---------------------------------------------------------------------------------
 .SUFFIXES:
-#---------------------------------------------------------------------------------
-
-ifeq ($(strip $(DEVKITARM)),)
-$(error "Please set DEVKITARM in your environment. export DEVKITARM=<path to>devkitARM")
-endif
 
 include $(DEVKITARM)/ds_rules
 
@@ -23,15 +17,13 @@ INCLUDES	:=	include
 SPRITES		:=  sprites
 NITRODATA   := nitrofiles
 
-GAME_ICON  := ../icon.bmp
+GAME_ICON 	:= ../icon.bmp
 
-GAME_TITLE  := Paw Paint Ds
-GAME_SUBTITLE1 := MaxBogomol (Pink Joke)
-GAME_SUBTITLE2 := The Fluffy Village
+GAME_TITLE		:= Paw Paint Ds
+GAME_SUBTITLE1	:= MaxBogomol (Pink Joke)
+GAME_SUBTITLE2	:= The Fluffy Village
 
-#---------------------------------------------------------------------------------
 # options for code generation
-#---------------------------------------------------------------------------------
 ARCH	:=	-march=armv5te -mtune=arm946e-s -mthumb
 
 CFLAGS	:=	-g -Wall -O2 -ffunction-sections -fdata-sections\
@@ -43,24 +35,17 @@ CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions
 ASFLAGS	:=	-g $(ARCH)
 LDFLAGS	=	-specs=ds_arm9.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 
-#---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project (order is important)
-#---------------------------------------------------------------------------------
-LIBS	:= 	 -lpng -lz -lfilesystem -lfat -lnds9
+LIBS	:= -lpng -lz -lfilesystem -lfat -lnds9
 
 
-#---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
 # include and lib
-#---------------------------------------------------------------------------------
-LIBDIRS	:=	../libs $(LIBNDS) $(PORTLIBS)
+LIBDIRS	:= ../libs $(LIBNDS) $(PORTLIBS)
 
-#---------------------------------------------------------------------------------
 # no real need to edit anything past this point unless you need to add additional
 # rules for different file extensions
-#---------------------------------------------------------------------------------
 ifneq ($(BUILD),$(notdir $(CURDIR)))
-#---------------------------------------------------------------------------------
 
 export OUTPUT	:=	$(CURDIR)/$(TARGET)
 
@@ -74,25 +59,18 @@ ifneq ($(strip $(NITRODATA)),)
 	export NITRO_FILES	:=	$(CURDIR)/$(NITRODATA)
 endif
 
-CFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.c)))
-CPPFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.cpp)))
-SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
-BINFILES	:=	$(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*.*)))
-SPRITE_FILES   :=  $(foreach dir, $(SPRITES),$(notdir $(wildcard $(dir)/*.png)))
+CFILES			:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.c)))
+CPPFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.cpp)))
+SFILES			:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
+BINFILES		:=	$(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*.*)))
+SPRITE_FILES	:=  $(foreach dir,$(SPRITES),$(notdir $(wildcard $(dir)/*.png)))
 
-#---------------------------------------------------------------------------------
 # use CXX for linking C++ projects, CC for standard C
-#---------------------------------------------------------------------------------
 ifeq ($(strip $(CPPFILES)),)
-#---------------------------------------------------------------------------------
 	export LD	:=	$(CC)
-#---------------------------------------------------------------------------------
 else
-#---------------------------------------------------------------------------------
 	export LD	:=	$(CXX)
-#---------------------------------------------------------------------------------
 endif
-#---------------------------------------------------------------------------------
 
 export OFILES	:=	$(SPRITE_FILES:.png=.o) \
 				$(addsuffix .o,$(BINFILES)) \
@@ -107,39 +85,27 @@ export LIBPATHS	:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib)
 
 .PHONY: $(BUILD) clean
 
-#---------------------------------------------------------------------------------
 $(BUILD):
 	@[ -d $@ ] || mkdir -p $@
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 
-#---------------------------------------------------------------------------------
 clean:
 	@echo clean ...
 	@rm -fr $(BUILD) $(TARGET).elf $(TARGET).nds
 
-#---------------------------------------------------------------------------------
 else
 
-#---------------------------------------------------------------------------------
 # main targets
-#---------------------------------------------------------------------------------
 $(OUTPUT).nds	: 	$(OUTPUT).elf
 $(OUTPUT).elf	:	$(OFILES)
 
-#---------------------------------------------------------------------------------
 %.s %.h : %.png
 	grit $< -ff../sprites/sprite.grit -o$*
-#---------------------------------------------------------------------------------
 
-
-#---------------------------------------------------------------------------------
 %.bin.o	:	%.bin
-#---------------------------------------------------------------------------------
 	@echo $(notdir $<)
 	$(bin2o)
 
 -include $(DEPSDIR)/*.d
 
-#---------------------------------------------------------------------------------------
 endif
-#---------------------------------------------------------------------------------------

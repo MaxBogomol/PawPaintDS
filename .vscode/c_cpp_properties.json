@@ -10,16 +10,7 @@
                 "C:/devkitPro/calico/include/**",
                 "C:/devkitPro/portlibs/nds/include/**"
             ],
-            "defines": [
-                "_DEBUG",
-                "_UNICODE",
-                "WIN32",
-                "ARM7",
-                "ARM9",
-                "__NDS__",
-                "_DEFAULT_SOURCE"
-            ],
-             "browse": {
+            "browse": {
                 "path": [
                     "${workspaceFolder}",
                     "C:/devkitPro/libnds/include/**",
@@ -29,6 +20,15 @@
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""
             },
+            "defines": [
+                "_DEBUG",
+                "_UNICODE",
+                "WIN32",
+                "ARM7",
+                "ARM9",
+                "__NDS__",
+                "_DEFAULT_SOURCE"
+            ],
             "cStandard": "c11",
             "cppStandard": "c++11",
             "compilerPath": "C:/devkitPro/devkitARM/bin/arm-none-eabi-g++.exe"
@@ -43,15 +43,7 @@
                 "/opt/devkitpro/calico/include/**",
                 "/opt/devkitpro/portlibs/nds/include/**"
             ],
-            "defines": [
-                "_DEBUG",
-                "_UNICODE",
-                "ARM7",
-                "ARM9",
-                "__NDS__",
-                "_DEFAULT_SOURCE"
-            ],
-             "browse": {
+            "browse": {
                 "path": [
                     "${workspaceFolder}",
                     "/opt/devkitpro/libnds/include/**",
@@ -62,6 +54,14 @@
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""
             },
+            "defines": [
+                "_DEBUG",
+                "_UNICODE",
+                "ARM7",
+                "ARM9",
+                "__NDS__",
+                "_DEFAULT_SOURCE"
+            ],
             "cStandard": "c11",
             "cppStandard": "c++11",
             "compilerPath": "/opt/devkitpro/devkitARM/bin/arm-none-eabi-g++",
@@ -77,15 +77,7 @@
                 "~/devkitpro/opt/devkitpro/calico/include/**",
                 "~/devkitpro/opt/devkitpro/portlibs/nds/include/**"
             ],
-            "defines": [
-                "_DEBUG",
-                "_UNICODE",
-                "ARM7",
-                "ARM9",
-                "__NDS__",
-                "_DEFAULT_SOURCE"
-            ],
-             "browse": {
+            "browse": {
                 "path": [
                     "${workspaceFolder}",
                     "~/devkitpro/opt/devkitpro/libnds/include/**",
@@ -96,6 +88,14 @@
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""
             },
+            "defines": [
+                "_DEBUG",
+                "_UNICODE",
+                "ARM7",
+                "ARM9",
+                "__NDS__",
+                "_DEFAULT_SOURCE"
+            ],
             "cStandard": "c11",
             "cppStandard": "c++11",
             "compilerPath": "~/devkitpro/opt/devkitpro/devkitARM/bin/arm-none-eabi-g++",
