@@ -38,52 +38,18 @@
             "includePath": [
                 "${workspaceFolder}",
                 "${workspaceFolder}/build",
-                "/opt/devkitpro/libnds/include/**",
-                "/opt/devkitpro/devkitARM/arm-none-eabi/include/**",
-                "/opt/devkitpro/calico/include/**",
-                "/opt/devkitpro/portlibs/nds/include/**"
+                "${config:terminal.integrated.env.linux.DEVKITPRO}/libnds/include/**",
+                "${config:terminal.integrated.env.linux.DEVKITPRO}/devkitARM/arm-none-eabi/include/**",
+                "${config:terminal.integrated.env.linux.DEVKITPRO}/calico/include/**",
+                "${config:terminal.integrated.env.linux.DEVKITPRO}/portlibs/nds/include/**"
             ],
             "browse": {
                 "path": [
                     "${workspaceFolder}",
-                    "/opt/devkitpro/libnds/include/**",
-                    "/opt/devkitpro/devkitARM/arm-none-eabi/include/**",
-                    "/opt/devkitpro/calico/include/**",
-                    "/opt/devkitpro/portlibs/nds/include/**"
-                ],
-                "limitSymbolsToIncludedHeaders": true,
-                "databaseFilename": ""
-            },
-            "defines": [
-                "_DEBUG",
-                "_UNICODE",
-                "ARM7",
-                "ARM9",
-                "__NDS__",
-                "_DEFAULT_SOURCE"
-            ],
-            "cStandard": "c11",
-            "cppStandard": "c++11",
-            "compilerPath": "/opt/devkitpro/devkitARM/bin/arm-none-eabi-g++",
-            "intelliSenseMode": "linux-gcc-arm"
-        },
-        {
-            "name": "SDD",
-            "includePath": [
-                "${workspaceFolder}",
-                "${workspaceFolder}/build",
-                "~/devkitpro/opt/devkitpro/libnds/include/**",
-                "~/devkitpro/opt/devkitpro/devkitARM/arm-none-eabi/include/**",
-                "~/devkitpro/opt/devkitpro/calico/include/**",
-                "~/devkitpro/opt/devkitpro/portlibs/nds/include/**"
-            ],
-            "browse": {
-                "path": [
-                    "${workspaceFolder}",
-                    "~/devkitpro/opt/devkitpro/libnds/include/**",
-                    "~/devkitpro/opt/devkitpro/devkitARM/arm-none-eabi/include/**",
-                    "~/devkitpro/opt/devkitpro/calico/include/**",
-                    "~/devkitpro/opt/devkitpro/portlibs/nds/include/**"
+                    "${config:terminal.integrated.env.linux.DEVKITPRO}/libnds/include/**",
+                    "${config:terminal.integrated.env.linux.DEVKITPRO}/devkitARM/arm-none-eabi/include/**",
+                    "${config:terminal.integrated.env.linux.DEVKITPRO}/calico/include/**",
+                    "${config:terminal.integrated.env.linux.DEVKITPRO}/portlibs/nds/include/**"
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""
