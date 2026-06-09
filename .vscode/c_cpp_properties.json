@@ -5,17 +5,18 @@
             "includePath": [
                 "${workspaceFolder}",
                 "${workspaceFolder}/build",
-                "C:/devkitPro/libnds/include/**",
-                "C:/devkitPro/devkitARM/arm-none-eabi/include/**",
-                "C:/devkitPro/calico/include/**",
-                "C:/devkitPro/portlibs/nds/include/**"
+                "${config:terminal.integrated.env.Windows.DEVKITPRO}/libnds/include/**",
+                "${config:terminal.integrated.env.Windows.DEVKITPRO}/devkitARM/arm-none-eabi/include/**",
+                "${config:terminal.integrated.env.Windows.DEVKITPRO}/calico/include/**",
+                "${config:terminal.integrated.env.Windows.DEVKITPRO}/portlibs/nds/include/**"
             ],
             "browse": {
                 "path": [
                     "${workspaceFolder}",
-                    "C:/devkitPro/libnds/include/**",
-                    "C:/devkitPro/devkitARM/arm-none-eabi/include/**",
-                    "C:/devkitPro/calico/include/**"
+                    "${config:terminal.integrated.env.Windows.DEVKITPRO}/libnds/include/**",
+                    "${config:terminal.integrated.env.Windows.DEVKITPRO}/devkitARM/arm-none-eabi/include/**",
+                    "${config:terminal.integrated.env.Windows.DEVKITPRO}/calico/include/**",
+                    "${config:terminal.integrated.env.Windows.DEVKITPRO}/portlibs/nds/include/**"
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""
@@ -31,25 +32,25 @@
             ],
             "cStandard": "c11",
             "cppStandard": "c++11",
-            "compilerPath": "C:/devkitPro/devkitARM/bin/arm-none-eabi-g++.exe"
+            "compilerPath": "${config:terminal.integrated.env.Windows.DEVKITPRO}/devkitARM/bin/arm-none-eabi-g++.exe"
         },
         {
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}",
                 "${workspaceFolder}/build",
-                "${config:terminal.integrated.env.linux.DEVKITPRO}/libnds/include/**",
-                "${config:terminal.integrated.env.linux.DEVKITPRO}/devkitARM/arm-none-eabi/include/**",
-                "${config:terminal.integrated.env.linux.DEVKITPRO}/calico/include/**",
-                "${config:terminal.integrated.env.linux.DEVKITPRO}/portlibs/nds/include/**"
+                "${config:terminal.integrated.env.Linux.DEVKITPRO}/libnds/include/**",
+                "${config:terminal.integrated.env.Linux.DEVKITPRO}/devkitARM/arm-none-eabi/include/**",
+                "${config:terminal.integrated.env.Linux.DEVKITPRO}/calico/include/**",
+                "${config:terminal.integrated.env.Linux.DEVKITPRO}/portlibs/nds/include/**"
             ],
             "browse": {
                 "path": [
                     "${workspaceFolder}",
-                    "${config:terminal.integrated.env.linux.DEVKITPRO}/libnds/include/**",
-                    "${config:terminal.integrated.env.linux.DEVKITPRO}/devkitARM/arm-none-eabi/include/**",
-                    "${config:terminal.integrated.env.linux.DEVKITPRO}/calico/include/**",
-                    "${config:terminal.integrated.env.linux.DEVKITPRO}/portlibs/nds/include/**"
+                    "${config:terminal.integrated.env.Linux.DEVKITPRO}/libnds/include/**",
+                    "${config:terminal.integrated.env.Linux.DEVKITPRO}/devkitARM/arm-none-eabi/include/**",
+                    "${config:terminal.integrated.env.Linux.DEVKITPRO}/calico/include/**",
+                    "${config:terminal.integrated.env.Linux.DEVKITPRO}/portlibs/nds/include/**"
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""
@@ -64,7 +65,7 @@
             ],
             "cStandard": "c11",
             "cppStandard": "c++11",
-            "compilerPath": "~/devkitpro/opt/devkitpro/devkitARM/bin/arm-none-eabi-g++",
+            "compilerPath": "${config:terminal.integrated.env.Linux.DEVKITPRO}/devkitARM/bin/arm-none-eabi-g++",
             "intelliSenseMode": "linux-gcc-arm"
         }
     ],
