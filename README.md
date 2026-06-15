@@ -1,5 +1,5 @@
 ```
-"terminal.integrated.env.Windows": {
+"terminal.integrated.env.windows": {
     "DEVKITPRO": "C:/devkitPro",
     "DEVKITARM": "C:/devkitPro/devkitARM",
     "DEVKITPPC": "C:/devkitPro/devkitPPC",
@@ -7,7 +7,7 @@
 }
 ```
 ```
-"terminal.integrated.env.Linux": {
+"terminal.integrated.env.linux": {
     "DEVKITPRO": "/opt/devkitpro",
     "DEVKITARM": "/opt/devkitpro/devkitARM",
     "DEVKITPPC": "/opt/devkitpro/devkitPPC",
