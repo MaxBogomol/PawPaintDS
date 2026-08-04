@@ -464,8 +464,15 @@ void Paint::drawChar(int x, int y, u32 c, u16* buffer, u16 color) {
     bool extended = false;
 
     if (c >= 0x00C0 && c <= 0x017F) {
-        int latinSize = sizeof(pawscriptLatinExtendedList) / sizeof(pawscriptLatinExtendedList[0]);
+        int latinSize = sizeof(pawscriptLatinList) / sizeof(pawscriptLatinList[0]);
         for (int i = 0; i < latinSize; i++) {
+            if (c == pawscriptLatinList[i]) {
+                index = i;
+                break;
+            }
+        }
+        int latinExtendedSize = sizeof(pawscriptLatinExtendedList) / sizeof(pawscriptLatinExtendedList[0]);
+        for (int i = 0; i < latinExtendedSize; i++) {
             if (c == pawscriptLatinExtendedList[i]) {
                 index = i;
                 extended = true;
@@ -476,7 +483,7 @@ void Paint::drawChar(int x, int y, u32 c, u16* buffer, u16 color) {
         if (extended) {
             pixels = (const u16*) pawscript_font_latin_extendedBitmap;
         } else {
-            //pixels = (const u16*) pawscript_font_latinBitmap;
+            pixels = (const u16*) pawscript_font_latinBitmap;
         }
     }
 
