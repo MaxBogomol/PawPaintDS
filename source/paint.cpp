@@ -535,6 +535,18 @@ void Paint::drawChar(int x, int y, u32 c, u16* buffer, u16 color) {
         }
     }
 
+    if (c >= 0x0590 && c <= 0x05FF) {
+        int hebrewSize = sizeof(pawscriptHebrewList) / sizeof(pawscriptHebrewList[0]);
+        for (int i = 0; i < hebrewSize; i++) {
+            if (c == pawscriptHebrewList[i]) {
+                index = i;
+                break;
+            }
+        }
+
+        pixels = (const u16*) pawscript_font_hebrewBitmap;
+    }
+
     int xSize = extended ? 9 : 8;
     int ySize = extended ? 12 : 8;
     int spriteWidth = extended ? 144 : 128;

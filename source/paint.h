@@ -28,6 +28,7 @@ using namespace std;
 #include "pawscript_font_greek_extended.h"
 #include "pawscript_font_cyrillic.h"
 #include "pawscript_font_cyrillic_extended.h"
+#include "pawscript_font_hebrew.h"
 #include "paint_icon.h"
 #include "paint_monochrome_icon.h"
 #include "buttons_icon.h"
