@@ -487,6 +487,30 @@ void Paint::drawChar(int x, int y, u32 c, u16* buffer, u16 color) {
         }
     }
 
+    if (c >= 0x0370 && c <= 0x03FF) {
+        int greekSize = sizeof(pawscriptGreekList) / sizeof(pawscriptGreekList[0]);
+        for (int i = 0; i < greekSize; i++) {
+            if (c == pawscriptGreekList[i]) {
+                index = i;
+                break;
+            }
+        }
+        int greekExtendedSize = sizeof(pawscriptGreekExtendedList) / sizeof(pawscriptGreekExtendedList[0]);
+        for (int i = 0; i < greekExtendedSize; i++) {
+            if (c == pawscriptGreekExtendedList[i]) {
+                index = i;
+                extended = true;
+                break;
+            }
+        }
+        
+        if (extended) {
+            pixels = (const u16*) pawscript_font_greek_extendedBitmap;
+        } else {
+            pixels = (const u16*) pawscript_font_greekBitmap;
+        }
+    }
+
     if (c >= 0x0400 && c <= 0x04FF) {
         int cyrillicSize = sizeof(pawscriptCyrillicList) / sizeof(pawscriptCyrillicList[0]);
         for (int i = 0; i < cyrillicSize; i++) {
