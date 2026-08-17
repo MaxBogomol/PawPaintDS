@@ -145,23 +145,23 @@ void Saving::drawTool(Paint& paint) {
     paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 
     string loadString = string((line == 1) ? ">" : "") + STR_SAVING_LOAD;
-    paint.drawText(3, yOffset += 10, loadString.c_str(), pixelBufferMain, blackColor);
+    paint.drawText(3, yOffset += 10, loadString.c_str(), pixelBufferMain, paint.fileSystemInit ? blackColor : grayColor);
     paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 
     string saveString = string((line == 2) ? ">" : "") + STR_SAVING_SAVE;
-    paint.drawText(3, yOffset += 10, saveString.c_str(), pixelBufferMain, blackColor);
+    paint.drawText(3, yOffset += 10, saveString.c_str(), pixelBufferMain, paint.fileSystemInit ? blackColor : grayColor);
     paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 
     string saveAsString = string((line == 3) ? ">" : "") + STR_SAVING_SAVE_AS;
-    paint.drawText(3, yOffset += 10, saveAsString.c_str(), pixelBufferMain, blackColor);
+    paint.drawText(3, yOffset += 10, saveAsString.c_str(), pixelBufferMain, paint.fileSystemInit ? blackColor : grayColor);
     paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 
     string exportString = string((line == 4) ? ">" : "") + STR_SAVING_EXPORT;
-    paint.drawText(3, yOffset += 10, exportString.c_str(), pixelBufferMain, blackColor);
+    paint.drawText(3, yOffset += 10, exportString.c_str(), pixelBufferMain, paint.fileSystemInit ? blackColor : grayColor);
     paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 
     string exportAsString = string((line == 5) ? ">" : "") + STR_SAVING_EXPORT_AS;
-    paint.drawText(3, yOffset += 10, exportAsString.c_str(), pixelBufferMain, blackColor);
+    paint.drawText(3, yOffset += 10, exportAsString.c_str(), pixelBufferMain, paint.fileSystemInit ? blackColor : grayColor);
     paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 }
 

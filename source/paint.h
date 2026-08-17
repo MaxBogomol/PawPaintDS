@@ -59,6 +59,7 @@ using namespace std;
 inline u16 alphaColor = ARGB16(0, 0, 0, 0);
 inline u16 whiteColor = ARGB16(1, 31, 31, 31);
 inline u16 blackColor = ARGB16(1, 0, 0, 0);
+inline u16 grayColor = ARGB16(1, 15, 15, 15);
 inline u16 redColor = ARGB16(1, 31, 0, 0);
 inline u16 greenColor = ARGB16(1, 0, 31, 0);
 inline u16 blueColor = ARGB16(1, 0, 0, 31);
