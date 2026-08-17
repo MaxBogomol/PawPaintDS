@@ -84,20 +84,26 @@ void Saving::update(Paint& paint) {
         }
         yOffset += 10;
         if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
-            loading = true;
-            paint.updateDrawTools = true;
+            if (paint.fileSystemInit) {
+                loading = true;
+                paint.updateDrawTools = true;
+            }
         }
         yOffset += 10;
         if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
-            saving = true;
-            paint.updateDrawTools = true;
+            if (paint.fileSystemInit) {
+                saving = true;
+                paint.updateDrawTools = true;
+            }
         }
         yOffset += 10;
         yOffset += 10;
         if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
-            pawName = paint.getPaintName();
-            savingExport = true;
-            paint.updateDrawTools = true;
+            if (paint.fileSystemInit) {
+                pawName = paint.getPaintName();
+                savingExport = true;
+                paint.updateDrawTools = true;
+            }
         }
     }
 
@@ -146,23 +152,23 @@ void Saving::drawTool(Paint& paint) {
 
     string loadString = string((line == 1) ? ">" : "") + STR_SAVING_LOAD;
     paint.drawText(3, yOffset += 10, loadString.c_str(), pixelBufferMain, paint.fileSystemInit ? blackColor : grayColor);
-    paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
+    if (paint.fileSystemInit) paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 
     string saveString = string((line == 2) ? ">" : "") + STR_SAVING_SAVE;
     paint.drawText(3, yOffset += 10, saveString.c_str(), pixelBufferMain, paint.fileSystemInit ? blackColor : grayColor);
-    paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
+    if (paint.fileSystemInit) paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 
     string saveAsString = string((line == 3) ? ">" : "") + STR_SAVING_SAVE_AS;
     paint.drawText(3, yOffset += 10, saveAsString.c_str(), pixelBufferMain, paint.fileSystemInit ? blackColor : grayColor);
-    paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
+    if (paint.fileSystemInit) paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 
     string exportString = string((line == 4) ? ">" : "") + STR_SAVING_EXPORT;
     paint.drawText(3, yOffset += 10, exportString.c_str(), pixelBufferMain, paint.fileSystemInit ? blackColor : grayColor);
-    paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
+    if (paint.fileSystemInit) paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 
     string exportAsString = string((line == 5) ? ">" : "") + STR_SAVING_EXPORT_AS;
     paint.drawText(3, yOffset += 10, exportAsString.c_str(), pixelBufferMain, paint.fileSystemInit ? blackColor : grayColor);
-    paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
+    if (paint.fileSystemInit) paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 }
 
 void Saving::createPaintDirectory(Paint& paint, const char* paintName) {
