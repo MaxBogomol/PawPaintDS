@@ -55,6 +55,9 @@ using namespace std;
 #include "saving_done_icon.h"
 #include "settings_icon.h"
 #include "info_icon.h"
+#include "qrcode_github.h"
+#include "qrcode_fluffyvillage.h"
+#include "qrcode_discord.h"
 
 inline u16 alphaColor = ARGB16(0, 0, 0, 0);
 inline u16 whiteColor = ARGB16(1, 31, 31, 31);

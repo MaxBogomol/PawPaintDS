@@ -4,6 +4,9 @@
 
 class Info : public Tool {
     public:
+        int line = 0;
+        int page = 0;
+        bool showPage = false;
         bool updateDrawTool = true;
 
         virtual ~Info() {} 
