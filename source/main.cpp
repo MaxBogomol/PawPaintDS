@@ -3,8 +3,7 @@
 Paint paint;
 
 int main(void) {
-	paint.setupNitroFS();
-
+	paint.nitroFSInit = nitroFSInit(NULL);
 	paint.fileSystemInit = fatInitDefault();
 
 	paint.setup();

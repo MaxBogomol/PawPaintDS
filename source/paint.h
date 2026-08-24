@@ -160,11 +160,11 @@ class Paint {
         bool updateDrawPaintName = true;
         bool updateDrawPaintIcon = true;
 
+        bool nitroFSInit = false;
         bool fileSystemInit = false;
 
         vector<Tool*> tools;
 
-        void setupNitroFS();
         void setup();
         void setupVideo();
         void setupLayers();

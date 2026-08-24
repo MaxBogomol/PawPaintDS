@@ -2,7 +2,9 @@
 
 #include <string>
 
-#define STRING(what, def) extern std::string STR_##what;
+using namespace std;
+
+#define STRING(what, def) extern string STR_##what;
 #include "language.inl"
 #undef STRING
 
