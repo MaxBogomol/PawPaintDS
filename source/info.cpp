@@ -40,7 +40,43 @@ void Info::update(Paint& paint) {
         if ((keysD & KEY_A) || (keysD & KEY_B)) {
             showPage = false;
             updateDrawTool = true;
-        }  
+        }
+    }
+
+    int yOffset = paint.getToolsYOffset();
+    int bOffset = paint.getToolsButtonsOffset();
+
+    if (keysD & KEY_TOUCH && paint.reverseScreens) {
+        if (!showPage) {
+            if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
+                page = 0;
+                showPage = true;
+                updateDrawTool = true;
+            }
+            yOffset += 10;
+            if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
+                page = 1;
+                showPage = true;
+                updateDrawTool = true;
+            }
+            yOffset += 10;
+            if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
+                page = 2;
+                showPage = true;
+                updateDrawTool = true;
+            }
+            yOffset += 10;
+            if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
+                page = 3;
+                showPage = true;
+                updateDrawTool = true;
+            }
+        } else {
+            if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
+                showPage = false;
+                updateDrawTool = true;
+            }
+        }
     }
 }
 
