@@ -1,6 +1,9 @@
 #include "eyedropper.h"
 
 #include "paint.h"
+#include "language.h"
+
+#include "eyedropper_icon.h"
 
 const char* Eyedropper::getName(Paint& paint) {
     return STR_EYEDROPPER.c_str();

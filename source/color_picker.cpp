@@ -1,6 +1,9 @@
 #include "color_picker.h"
 
 #include "paint.h"
+#include "language.h"
+
+#include "color_picker_icon.h"
 
 const char* ColorPicker::getName(Paint& paint) {
     return STR_COLOR_PICKER.c_str();

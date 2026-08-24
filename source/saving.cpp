@@ -1,6 +1,12 @@
 #include "saving.h"
 
 #include "paint.h"
+#include "language.h"
+
+#include "saving_icon.h"
+#include "saving_error_icon.h"
+#include "saving_loading_icon.h"
+#include "saving_done_icon.h"
 
 const char* Saving::getName(Paint& paint) {
     return STR_SAVING.c_str();

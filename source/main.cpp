@@ -1,5 +1,8 @@
 #include "paint.h"
 
+#include <filesystem.h>
+#include <fat.h>
+
 Paint paint;
 
 int main(void) {

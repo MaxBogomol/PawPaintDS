@@ -1,9 +1,6 @@
 #include "language.h"
 
 #include <nds.h>
-#include <filesystem.h>
-#include <fat.h>
-#include <string>
 
 #define STRING(what, def) string STR_##what;
 #include "language.inl"

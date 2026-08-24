@@ -1,5 +1,24 @@
 #include "paint.h"
 
+#include <fat.h>
+#include <png.h>
+#include <string>
+
+#include "language.h"
+#include "pawscript.h"
+
+#include "pawscript_font_ascii.h"
+#include "pawscript_font_latin.h"
+#include "pawscript_font_latin_extended.h"
+#include "pawscript_font_greek.h"
+#include "pawscript_font_greek_extended.h"
+#include "pawscript_font_cyrillic.h"
+#include "pawscript_font_cyrillic_extended.h"
+#include "pawscript_font_hebrew.h"
+#include "paint_icon.h"
+#include "paint_monochrome_icon.h"
+#include "buttons_icon.h"
+
 void Paint::setup() {
     firstFrameTool = true;
     updateSubLayers = false;

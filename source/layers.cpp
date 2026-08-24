@@ -1,6 +1,10 @@
 #include "layers.h"
 
 #include "paint.h"
+#include "language.h"
+
+#include "buttons_icon.h"
+#include "layers_icon.h"
 
 const char* Layers::getName(Paint& paint) {
     return STR_LAYERS.c_str();

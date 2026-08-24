@@ -1,6 +1,16 @@
 #include "brush.h"
 
 #include "paint.h"
+#include "language.h"
+
+#include "buttons_icon.h"
+#include "brush_icon.h"
+#include "brush_square_icon.h"
+#include "brush_circle_icon.h"
+#include "brush_dot_icon.h"
+#include "brush_square_noise_icon.h"
+#include "brush_circle_noise_icon.h"
+#include "brush_dot_noise_icon.h"
 
 const char* Brush::getName(Paint& paint) {
     return STR_BRUSH.c_str();

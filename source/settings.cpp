@@ -1,6 +1,10 @@
 #include "settings.h"
 
 #include "paint.h"
+#include "language.h"
+
+#include "buttons_icon.h"
+#include "settings_icon.h"
 
 const char* Settings::getName(Paint& paint) {
     return STR_SETTINGS.c_str();

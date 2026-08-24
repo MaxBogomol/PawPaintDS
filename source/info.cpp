@@ -1,6 +1,12 @@
 #include "info.h"
 
 #include "paint.h"
+#include "language.h"
+
+#include "info_icon.h"
+#include "qrcode_github.h"
+#include "qrcode_fluffyvillage.h"
+#include "qrcode_discord.h"
 
 const char* Info::getName(Paint& paint) {
     return STR_INFO.c_str();

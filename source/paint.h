@@ -1,10 +1,6 @@
 #pragma once
 
 #include <nds.h>
-#include <filesystem.h>
-#include <fat.h>
-#include <png.h>
-#include <string>
 #include <vector>
 
 using namespace std;
@@ -18,46 +14,6 @@ using namespace std;
 #include "saving.h"
 #include "settings.h"
 #include "info.h"
-#include "language.h"
-#include "pawscript.h"
-
-#include "pawscript_font_ascii.h"
-#include "pawscript_font_latin.h"
-#include "pawscript_font_latin_extended.h"
-#include "pawscript_font_greek.h"
-#include "pawscript_font_greek_extended.h"
-#include "pawscript_font_cyrillic.h"
-#include "pawscript_font_cyrillic_extended.h"
-#include "pawscript_font_hebrew.h"
-#include "paint_icon.h"
-#include "paint_monochrome_icon.h"
-#include "buttons_icon.h"
-#include "brush_icon.h"
-#include "brush_square_icon.h"
-#include "brush_circle_icon.h"
-#include "brush_dot_icon.h"
-#include "brush_square_noise_icon.h"
-#include "brush_circle_noise_icon.h"
-#include "brush_dot_noise_icon.h"
-#include "eraser_icon.h"
-#include "eraser_square_icon.h"
-#include "eraser_circle_icon.h"
-#include "eraser_dot_icon.h"
-#include "eraser_square_noise_icon.h"
-#include "eraser_circle_noise_icon.h"
-#include "eraser_dot_noise_icon.h"
-#include "eyedropper_icon.h"
-#include "color_picker_icon.h"
-#include "layers_icon.h"
-#include "saving_icon.h"
-#include "saving_error_icon.h"
-#include "saving_loading_icon.h"
-#include "saving_done_icon.h"
-#include "settings_icon.h"
-#include "info_icon.h"
-#include "qrcode_github.h"
-#include "qrcode_fluffyvillage.h"
-#include "qrcode_discord.h"
 
 inline u16 alphaColor = ARGB16(0, 0, 0, 0);
 inline u16 whiteColor = ARGB16(1, 31, 31, 31);
