@@ -155,10 +155,10 @@ class Paint {
         void drawCircleRadiusNoise(int xc, int yc, int r, u16* buffer, u16 color, int xSize, int ySize, int xShift, int yShift, int xOffset, int yOffset);
         void drawCircleDiameter(int xc, int yc, int d, u16* buffer, u16 color);
         void drawCircleDiameterNoise(int xc, int yc, int d, u16* buffer, u16 color, int xSize, int ySize, int xShift, int yShift, int xOffset, int yOffset);
+        void drawLine(int x0, int y0, int x1, int y1, u16* buffer, u16 color);
         u32 decodeChar(const char** s);
         int getCharLength(u32 c);
         int getTextLength(const char* text);
-        void drawLine(int x0, int y0, int x1, int y1, u16* buffer, u16 color);
         void drawChar(int x, int y, u32 c, u16* buffer, u16 color);
         void drawText(int x, int y, const char* text, u16* buffer, u16 color);
         void drawCharOutline(int x, int y, u32 c, u16* buffer, u16 color, u16 outlineColor);
