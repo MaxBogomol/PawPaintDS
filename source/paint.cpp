@@ -21,8 +21,8 @@
 
 void Paint::setup() {
     firstFrameTool = true;
-    updateSubLayers = false;
-    updateBlendSubLayers = false;
+    updateLayers = false;
+    updateBlendLayers = false;
 
     selectedTheme = 0;
     selectedIcon = 0;
@@ -61,7 +61,7 @@ void Paint::setupVideo() {
 
 void Paint::setupLayers() {
     clearBuffer(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, pixelBufferMain);
-    clearSubLayers();
+    clearLayers();
 }
 
 void Paint::setupTools() {
@@ -254,29 +254,29 @@ void Paint::drawPaintIcon() {
     drawSprite(SCREEN_WIDTH - 32 - 3, SCREEN_HEIGHT - 32 - 3, 32, 32, getSelectedIconSprite(), pixelBufferMain);
 }
 
-void Paint::blendSubLayers(int x, int y) {
+void Paint::blendLayers(int x, int y) {
     if (x >= 0 && x < SCREEN_WIDTH && y >= 0 && y < SCREEN_HEIGHT) {
-        updateBlendSubLayers = false;
-        if (activeSubLayer0) blendSubLayers(x, y, pixelBufferSubLayer0);
-        if (activeSubLayer1) blendSubLayers(x, y, pixelBufferSubLayer1);
-        if (activeSubLayer2) blendSubLayers(x, y, pixelBufferSubLayer2);
-        if (activeSubLayer3) blendSubLayers(x, y, pixelBufferSubLayer3);
-        if (!updateBlendSubLayers) pixelBufferSub[x + (y * SCREEN_WIDTH)] = blackColor;
+        updateBlendLayers = false;
+        if (activeLayer0) blendLayers(x, y, pixelBufferLayer0);
+        if (activeLayer1) blendLayers(x, y, pixelBufferLayer1);
+        if (activeLayer2) blendLayers(x, y, pixelBufferLayer2);
+        if (activeLayer3) blendLayers(x, y, pixelBufferLayer3);
+        if (!updateBlendLayers) pixelBufferSub[x + (y * SCREEN_WIDTH)] = blackColor;
     }
 }
 
-void Paint::blendSubLayers(int x, int y, u16* buffer) {
+void Paint::blendLayers(int x, int y, u16* buffer) {
     if (x >= 0 && x < SCREEN_WIDTH && y >= 0 && y < SCREEN_HEIGHT) {
-        if (updateBlendSubLayers) {
+        if (updateBlendLayers) {
             pixelBufferSub[x + (y * SCREEN_WIDTH)] = blendColors(pixelBufferSub[x + (y * SCREEN_WIDTH)], buffer[x + (y * SCREEN_WIDTH)]);
         } else {
             pixelBufferSub[x + (y * SCREEN_WIDTH)] = buffer[x + (y * SCREEN_WIDTH)];
-            updateBlendSubLayers = true;
+            updateBlendLayers = true;
         }
     }
 }
 
-void Paint::swapSubLayers(int l0, int l1) {
+void Paint::swapLayers(int l0, int l1) {
     for (int x = 0; x < SCREEN_WIDTH; x++) {
 		for (int y = 0; y < SCREEN_HEIGHT; y++) {
             u16 color = getLayer(l0)[x + (y * SCREEN_WIDTH)];
@@ -286,22 +286,22 @@ void Paint::swapSubLayers(int l0, int l1) {
     }
 }
 
-void Paint::updateSubLayersEnable() {
-    updateSubLayers = true;
+void Paint::updateLayersEnable() {
+    updateLayers = true;
 }
 
-void Paint::updateSubLayersDisable() {
-    updateSubLayers = false;
+void Paint::updateLayersDisable() {
+    updateLayers = false;
 }
 
 u16 *Paint::getLayer(int layer) {
 	switch (layer) {
-    	case 0: return pixelBufferSubLayer0;
-    	case 1: return pixelBufferSubLayer1;
-		case 2: return pixelBufferSubLayer2;
-		case 3: return pixelBufferSubLayer3;
+    	case 0: return pixelBufferLayer0;
+    	case 1: return pixelBufferLayer1;
+		case 2: return pixelBufferLayer2;
+		case 3: return pixelBufferLayer3;
     }
-	return pixelBufferSubLayer0;
+	return pixelBufferLayer0;
 }
 
 u16 *Paint::getSelectedLayer() {
@@ -323,7 +323,7 @@ void Paint::drawPixel(int x, int y, u16* buffer, u16 color) {
 	if (x >= 0 && x < SCREEN_WIDTH && y >= 0 && y < SCREEN_HEIGHT) {
 		if (getPixel(x, y, buffer) != color) {
             buffer[x + (y * SCREEN_WIDTH)] = color;
-		    if (updateSubLayers) blendSubLayers(x, y);
+		    if (updateLayers) blendLayers(x, y);
         }
 	}
 }
@@ -891,10 +891,10 @@ void Paint::clearBuffer(int x0, int y0, int x1, int y1, u16* buffer) {
     clearBuffer(x0, y0, x1, y1, buffer, getSelectedThemeColor());
 }
 
-void Paint::blendSubLayers(int x0, int y0, int x1, int y1) {
+void Paint::blendLayers(int x0, int y0, int x1, int y1) {
     for (int x = 0; x < x1; x++) {
         for (int y = 0; y < y1; y++) {
-            blendSubLayers(x0 + x, y0 + y);
+            blendLayers(x0 + x, y0 + y);
         }
     }
 }
@@ -936,14 +936,14 @@ const char* Paint::getSelectedLanguageCode() {
 	return getLanguageCode(selectedLanguage);
 }
 
-void Paint::clearSubLayers() {
+void Paint::clearLayers() {
     for (int x = 0; x < SCREEN_WIDTH; x++) {
 		for (int y = 0; y < SCREEN_HEIGHT; y++) {
-			pixelBufferSubLayer0[x + (y * SCREEN_WIDTH)] = selectedColorSub;
-			pixelBufferSubLayer1[x + (y * SCREEN_WIDTH)] = alphaColor;
-			pixelBufferSubLayer2[x + (y * SCREEN_WIDTH)] = alphaColor;
-			pixelBufferSubLayer3[x + (y * SCREEN_WIDTH)] = alphaColor;
-			blendSubLayers(x, y);
+			pixelBufferLayer0[x + (y * SCREEN_WIDTH)] = selectedColorSub;
+			pixelBufferLayer1[x + (y * SCREEN_WIDTH)] = alphaColor;
+			pixelBufferLayer2[x + (y * SCREEN_WIDTH)] = alphaColor;
+			pixelBufferLayer3[x + (y * SCREEN_WIDTH)] = alphaColor;
+			blendLayers(x, y);
 		}
 	}
 }

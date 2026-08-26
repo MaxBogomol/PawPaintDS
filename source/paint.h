@@ -5,7 +5,6 @@
 
 using namespace std;
 
-#include "tool.h"
 #include "brush.h"
 #include "eraser.h"
 #include "eyedropper.h"
@@ -29,12 +28,12 @@ inline u16 maidThemeColor = ARGB16(1, 6, 5, 7); //#2e2939
 inline u16 aceThemeColor = ARGB16(1, 20, 6, 20); //#a231a2
 
 inline u16 pixelBufferMain[SCREEN_WIDTH * SCREEN_HEIGHT];
-
 inline u16 pixelBufferSub[SCREEN_WIDTH * SCREEN_HEIGHT];
-inline u16 pixelBufferSubLayer0[SCREEN_WIDTH * SCREEN_HEIGHT];
-inline u16 pixelBufferSubLayer1[SCREEN_WIDTH * SCREEN_HEIGHT];
-inline u16 pixelBufferSubLayer2[SCREEN_WIDTH * SCREEN_HEIGHT];
-inline u16 pixelBufferSubLayer3[SCREEN_WIDTH * SCREEN_HEIGHT];
+
+inline u16 pixelBufferLayer0[SCREEN_WIDTH * SCREEN_HEIGHT];
+inline u16 pixelBufferLayer1[SCREEN_WIDTH * SCREEN_HEIGHT];
+inline u16 pixelBufferLayer2[SCREEN_WIDTH * SCREEN_HEIGHT];
+inline u16 pixelBufferLayer3[SCREEN_WIDTH * SCREEN_HEIGHT];
 
 inline u16* bgMainDest;
 inline u16* bgSubDest;
@@ -60,10 +59,10 @@ inline Saving saving;
 inline Settings settings;
 inline Info info;
 
-inline bool activeSubLayer0 = true;
-inline bool activeSubLayer1 = true;
-inline bool activeSubLayer2 = true;
-inline bool activeSubLayer3 = true;
+inline bool activeLayer0 = true;
+inline bool activeLayer1 = true;
+inline bool activeLayer2 = true;
+inline bool activeLayer3 = true;
 
 inline const char* pawPaintPath = "fat:/PawPaintDS";
 inline const char* paintsPath = "Paints";
@@ -94,8 +93,8 @@ struct HSV {
 class Paint {
     private:
         bool firstFrameTool = true;
-        bool updateSubLayers = false;
-        bool updateBlendSubLayers = false;
+        bool updateLayers = false;
+        bool updateBlendLayers = false;
 
         const char* paintName = "Unnamed";
 
@@ -135,11 +134,11 @@ class Paint {
         void drawPaintName();
         void drawPaintIcon();
 
-        void blendSubLayers(int x, int y);
-        void blendSubLayers(int x, int y, u16* buffer);
-        void swapSubLayers(int l0, int l1);
-        void updateSubLayersEnable();
-        void updateSubLayersDisable();
+        void blendLayers(int x, int y);
+        void blendLayers(int x, int y, u16* buffer);
+        void swapLayers(int l0, int l1);
+        void updateLayersEnable();
+        void updateLayersDisable();
         u16 *getLayer(int layer);
 
         u16 *getSelectedLayer();
@@ -191,7 +190,7 @@ class Paint {
         void drawScrollBox(int x, int y, int size, int scroll, u16* buffer);
         void clearBuffer(int x0, int y0, int x1, int y1, u16* buffer, u16 color);
         void clearBuffer(int x0, int y0, int x1, int y1, u16* buffer);
-        void blendSubLayers(int x0, int y0, int x1, int y1);
+        void blendLayers(int x0, int y0, int x1, int y1);
 
         u16 getThemeColor(int theme);
         u16 getSelectedThemeColor();
@@ -202,7 +201,7 @@ class Paint {
         const char* getLanguageCode(int language);
         const char* getSelectedLanguageCode();
 
-        void clearSubLayers();
+        void clearLayers();
 
         bool readSelectedLanguage();
 };

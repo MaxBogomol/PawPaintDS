@@ -43,9 +43,9 @@ void Brush::update(Paint& paint) {
         if (line == 0 && active) {
             updateDrawCursor = true;
         } else {
-            paint.updateSubLayersEnable();
+            paint.updateLayersEnable();
             drawLine(paint, touchXOld, touchYOld, touchX, touchY, getSelectedLayer(paint), getSelectedColor(paint));
-            paint.updateSubLayersDisable();
+            paint.updateLayersDisable();
         }
 
         cursorX = touchX;
@@ -100,9 +100,9 @@ void Brush::update(Paint& paint) {
                 updateDrawCursor = true;
             }
             if (keysH & KEY_B) {
-                paint.updateSubLayersEnable();
+                paint.updateLayersEnable();
                 drawLine(paint, cursorX, cursorY, cursorX, cursorY, getSelectedLayer(paint), getSelectedColor(paint));
-                paint.updateSubLayersDisable();
+                paint.updateLayersDisable();
             }
         }
     }
@@ -517,7 +517,7 @@ void Brush::drawCursor(Paint& paint, bool clear) {
     size = size + 2;
     for (int x = 0; x < size; x++) {
         for (int y = 0; y < size; y++) {
-            paint.blendSubLayers(cursorXOld + x - (size / 2), cursorYOld + y - (size / 2));
+            paint.blendLayers(cursorXOld + x - (size / 2), cursorYOld + y - (size / 2));
         }
     }
 

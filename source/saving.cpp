@@ -52,7 +52,7 @@ void Saving::update(Paint& paint) {
 
     if (keysD & KEY_A) {
         if (line == 0) {
-            paint.clearSubLayers();
+            paint.clearLayers();
             paint.setPaintName(STR_UNNAMED.c_str());
             paint.updateDrawPaintName = true;
         }
@@ -84,7 +84,7 @@ void Saving::update(Paint& paint) {
 
     if (keysD & KEY_TOUCH && paint.reverseScreens) {
         if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
-            paint.clearSubLayers();
+            paint.clearLayers();
             paint.setPaintName(STR_UNNAMED.c_str());
             paint.updateDrawPaintName = true;
         }
@@ -199,20 +199,20 @@ void Saving::createPawDirectory(Paint& paint) {
 void Saving::savePaint(Paint& paint) {
     createPaintDirectory(paint, paint.getPaintName());
     string pathString = string(pawPaintPath) + "/" + paintsPath + "/" + paint.getPaintName();
-    saveLayer(paint, pathString.c_str(), "layer0.png", pixelBufferSubLayer0);
-    saveLayer(paint, pathString.c_str(), "layer1.png", pixelBufferSubLayer1);
-    saveLayer(paint, pathString.c_str(), "layer2.png", pixelBufferSubLayer2);
-    saveLayer(paint, pathString.c_str(), "layer3.png", pixelBufferSubLayer3);
+    saveLayer(paint, pathString.c_str(), "layer0.png", pixelBufferLayer0);
+    saveLayer(paint, pathString.c_str(), "layer1.png", pixelBufferLayer1);
+    saveLayer(paint, pathString.c_str(), "layer2.png", pixelBufferLayer2);
+    saveLayer(paint, pathString.c_str(), "layer3.png", pixelBufferLayer3);
 }
 
 void Saving::loadPaint(Paint& paint) {
     createPawDirectory(paint);
     string pathString = string(pawPaintPath) + "/" + paintsPath + "/" + paint.getPaintName();
-    loadLayer(paint, pathString.c_str(), "layer0.png", pixelBufferSubLayer0);
-    loadLayer(paint, pathString.c_str(), "layer1.png", pixelBufferSubLayer1);
-    loadLayer(paint, pathString.c_str(), "layer2.png", pixelBufferSubLayer2);
-    loadLayer(paint, pathString.c_str(), "layer3.png", pixelBufferSubLayer3);
-    paint.blendSubLayers(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    loadLayer(paint, pathString.c_str(), "layer0.png", pixelBufferLayer0);
+    loadLayer(paint, pathString.c_str(), "layer1.png", pixelBufferLayer1);
+    loadLayer(paint, pathString.c_str(), "layer2.png", pixelBufferLayer2);
+    loadLayer(paint, pathString.c_str(), "layer3.png", pixelBufferLayer3);
+    paint.blendLayers(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 }
 
 void Saving::savePaw(Paint& paint) {

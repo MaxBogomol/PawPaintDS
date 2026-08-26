@@ -16,7 +16,7 @@ void Layers::setup(Paint& paint) {
 }
 
 void Layers::update(Paint& paint) {
-    bool updateSubLayers = false;
+    bool updateLayers = false;
     int maxLine = 2;
 
     if ((keysD & KEY_UP) && (line - 1 >= 0)) {
@@ -42,15 +42,15 @@ void Layers::update(Paint& paint) {
         }
         case 1: {
             if ((keysD & KEY_LEFT) && (paint.selectedLayer - 1 >= 0)) {
-                paint.swapSubLayers(paint.selectedLayer, paint.selectedLayer - 1);
+                paint.swapLayers(paint.selectedLayer, paint.selectedLayer - 1);
                 paint.selectedLayer--;
-                updateSubLayers = true;
+                updateLayers = true;
                 updateDrawTool = true;
             }
             if ((keysD & KEY_RIGHT) && (paint.selectedLayer + 1 <= 3)) {
-                paint.swapSubLayers(paint.selectedLayer, paint.selectedLayer + 1);
+                paint.swapLayers(paint.selectedLayer, paint.selectedLayer + 1);
                 paint.selectedLayer++;
-                updateSubLayers = true;
+                updateLayers = true;
                 updateDrawTool = true;
             }
             break;
@@ -76,24 +76,24 @@ void Layers::update(Paint& paint) {
         yOffset += 10;
         if (touchX >= SCREEN_WIDTH - bOffset - 16 - 5 && touchX < SCREEN_WIDTH - bOffset - 8 - 5 && touchY >= yOffset && touchY < yOffset + 8) {
             if (paint.selectedLayer - 1 >= 0) {
-                paint.swapSubLayers(paint.selectedLayer, paint.selectedLayer - 1);
+                paint.swapLayers(paint.selectedLayer, paint.selectedLayer - 1);
                 paint.selectedLayer--;
-                updateSubLayers = true;
+                updateLayers = true;
                 updateDrawTool = true;
             }
         }
         if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
             if (paint.selectedLayer + 1 <= 3) {
-                paint.swapSubLayers(paint.selectedLayer, paint.selectedLayer + 1);
+                paint.swapLayers(paint.selectedLayer, paint.selectedLayer + 1);
                 paint.selectedLayer++;
-                updateSubLayers = true;
+                updateLayers = true;
                 updateDrawTool = true;
             }
         }
     }
 
-    if (updateSubLayers) {
-        paint.blendSubLayers(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    if (updateLayers) {
+        paint.blendLayers(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
 }
 

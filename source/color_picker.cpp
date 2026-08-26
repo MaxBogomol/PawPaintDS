@@ -284,31 +284,31 @@ void ColorPicker::drawHuePointer(Paint& paint) {
 }
 
 void ColorPicker::clearPicker(Paint& paint) {
-    paint.blendSubLayers(207, 5, 34, 182);
+    paint.blendLayers(207, 5, 34, 182);
 }
 
 void ColorPicker::clearHue(Paint& paint) {
-    paint.blendSubLayers(63, 31, 130, 130);
+    paint.blendLayers(63, 31, 130, 130);
 }
 
 void ColorPicker::clearColors(Paint& paint) {
-    paint.blendSubLayers(23, 79, 34, 34);
+    paint.blendLayers(23, 79, 34, 34);
 }
 
 void ColorPicker::clearSelectedColor(Paint& paint) {
-    paint.blendSubLayers(23, 175, 73, 10);
+    paint.blendLayers(23, 175, 73, 10);
 }
 
 void ColorPicker::clearNewSelectedColor(Paint& paint) {
-    paint.blendSubLayers(23, 7, 73, 10);
+    paint.blendLayers(23, 7, 73, 10);
 }
 
 void ColorPicker::clearPickerPointers(Paint& paint) {
-    paint.blendSubLayers(colorXOld * 4 + 63, 23, 6, 6);
-    paint.blendSubLayers(colorXOld * 4 + 63, 162, 6, 6);
+    paint.blendLayers(colorXOld * 4 + 63, 23, 6, 6);
+    paint.blendLayers(colorXOld * 4 + 63, 162, 6, 6);
 
-    paint.blendSubLayers(55, colorYOld * 4 + 31, 6, 6);
-    paint.blendSubLayers(194, colorYOld * 4 + 31, 6, 6);
+    paint.blendLayers(55, colorYOld * 4 + 31, 6, 6);
+    paint.blendLayers(194, colorYOld * 4 + 31, 6, 6);
 }
 
 void ColorPicker::clearHuePointer(Paint& paint) {
@@ -318,5 +318,5 @@ void ColorPicker::clearHuePointer(Paint& paint) {
         y = y - 180;
         x = x + 40;
     }
-    paint.blendSubLayers(x + 202, y + 5, 4, 3);
+    paint.blendLayers(x + 202, y + 5, 4, 3);
 }
