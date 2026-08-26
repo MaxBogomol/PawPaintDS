@@ -200,7 +200,8 @@ void Paint::updateVideo() {
     tools[selectedTool]->updateTool(*this);
 
     swiWaitForVBlank();
-    DC_FlushAll();
+    DC_FlushRange(pixelBufferMain, sizeof(pixelBufferMain));
+    DC_FlushRange(pixelBufferSub, sizeof(pixelBufferSub));
     dmaCopy(pixelBufferMain, bgMainDest, sizeof(pixelBufferMain));
     dmaCopy(pixelBufferSub, bgSubDest, sizeof(pixelBufferSub));
 }
