@@ -718,7 +718,7 @@ const char* Paint::intToChars(int val) {
 }
 
 void Paint::setPaintName(const char* name) {
-    paintName = strdup(name);
+    paintName = name;
 }
 
 const char* Paint::getPaintName() {
