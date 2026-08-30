@@ -461,8 +461,8 @@ void Brush::drawTool(Paint& paint) {
 
     string typeString = string((line == 1) ? ">" : "") + STR_BRUSH_TYPE + ": " + getTypeName(paint, type); 
     paint.drawText(3, yOffset += 10, typeString.c_str(), pixelBufferMain, blackColor);
-    paint.drawSprite(SCREEN_WIDTH - bOffset - 16 - 5, yOffset, 32, 32, 24, 0, 8, 8, buttons_iconBitmap, pixelBufferMain);
-    paint.drawSprite(SCREEN_WIDTH - bOffset - 8, yOffset, 32, 32, 8, 0, 8, 8, buttons_iconBitmap, pixelBufferMain);
+    paint.drawLeftButton(SCREEN_WIDTH - bOffset - 16 - 5, yOffset, pixelBufferMain);
+    paint.drawRightButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 
     yOffset += 10;
 

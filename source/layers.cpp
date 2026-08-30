@@ -129,11 +129,11 @@ void Layers::drawTool(Paint& paint) {
 
     string moveString = string((line == 0) ? ">" : "") + STR_LAYERS_LAYER + ": " + paint.intToChars(paint.selectedLayer + 1);
     paint.drawText(3, yOffset, moveString.c_str(), pixelBufferMain, blackColor);
-    if (paint.selectedLayer - 1 >= 0) paint.drawSprite(SCREEN_WIDTH - bOffset - 16 - 5, yOffset, 32, 32, 24, 0, 8, 8, buttons_iconBitmap, pixelBufferMain);
-    if (paint.selectedLayer + 1 <= 3) paint.drawSprite(SCREEN_WIDTH - bOffset - 8, yOffset, 32, 32, 8, 0, 8, 8, buttons_iconBitmap, pixelBufferMain);
+    if (paint.selectedLayer - 1 >= 0) paint.drawLeftButton(SCREEN_WIDTH - bOffset - 16 - 5, yOffset, pixelBufferMain);
+    if (paint.selectedLayer + 1 <= 3) paint.drawRightButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 
     string typeString = string((line == 1) ? ">" : "") + STR_LAYERS_MOVE;
     paint.drawText(3, yOffset += 10, typeString.c_str(), pixelBufferMain, blackColor);
-    if (paint.selectedLayer - 1 >= 0) paint.drawSprite(SCREEN_WIDTH - bOffset - 16 - 5, yOffset, 32, 32, 24, 0, 8, 8, buttons_iconBitmap, pixelBufferMain);
-    if (paint.selectedLayer + 1 <= 3) paint.drawSprite(SCREEN_WIDTH - bOffset - 8, yOffset, 32, 32, 8, 0, 8, 8, buttons_iconBitmap, pixelBufferMain);
+    if (paint.selectedLayer - 1 >= 0) paint.drawLeftButton(SCREEN_WIDTH - bOffset - 16 - 5, yOffset, pixelBufferMain);
+    if (paint.selectedLayer + 1 <= 3) paint.drawRightButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 }

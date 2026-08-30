@@ -18,6 +18,7 @@
 #include "paint_icon.h"
 #include "paint_monochrome_icon.h"
 #include "buttons_icon.h"
+#include "touch_icon.h"
 
 void Paint::setup() {
     firstFrameTool = true;
@@ -244,6 +245,10 @@ void Paint::drawColors() {
     int bs = (selectedColorSub >> 10) & 31;
     string colorSubString = string("RGB: ") + intToChars(rs) + " " + intToChars(gs) + " " + intToChars(bs); 
     drawText(21, SCREEN_HEIGHT - 15, colorSubString.c_str(), pixelBufferMain, blackColor);
+
+    drawLButton(100, SCREEN_HEIGHT - 34, pixelBufferMain);
+    drawRButton(110, SCREEN_HEIGHT - 34, pixelBufferMain);
+    drawStartButton(120, SCREEN_HEIGHT - 34, pixelBufferMain);
 }
 
 void Paint::drawPaintName() {
@@ -860,6 +865,38 @@ int Paint::getToolsButtonsOffset() {
     return 8;
 }
 
+void Paint::drawUpButton(int x, int y, u16* buffer) {
+    drawSprite(x, y, 32, 32, 0, 0, 8, 8, buttons_iconBitmap, buffer);
+}
+
+void Paint::drawRightButton(int x, int y, u16* buffer) {
+    drawSprite(x, y, 32, 32, 8, 0, 8, 8, buttons_iconBitmap, buffer);
+}
+
+void Paint::drawDownButton(int x, int y, u16* buffer) {
+    drawSprite(x, y, 32, 32, 16, 0, 8, 8, buttons_iconBitmap, buffer);
+}
+
+void Paint::drawLeftButton(int x, int y, u16* buffer) {
+    drawSprite(x, y, 32, 32, 24, 0, 8, 8, buttons_iconBitmap, buffer);
+}
+
+void Paint::drawNoneButton(int x, int y, u16* buffer) {
+    drawSprite(x, y, 32, 32, 0, 8, 8, 8, buttons_iconBitmap, buffer);
+}
+
+void Paint::drawUpDownButton(int x, int y, u16* buffer) {
+    drawSprite(x, y, 32, 32, 8, 8, 8, 8, buttons_iconBitmap, buffer);
+}
+
+void Paint::drawLeftRightButton(int x, int y, u16* buffer) {
+    drawSprite(x, y, 32, 32, 16, 8, 8, 8, buttons_iconBitmap, buffer);
+}
+
+void Paint::drawAllButton(int x, int y, u16* buffer) {
+    drawSprite(x, y, 32, 32, 24, 8, 8, 8, buttons_iconBitmap, buffer);
+}
+
 void Paint::drawYButton(int x, int y, u16* buffer) {
     drawSprite(x, y, 32, 32, 0, 16, 8, 8, buttons_iconBitmap, buffer);
 }
@@ -874,6 +911,26 @@ void Paint::drawBButton(int x, int y, u16* buffer) {
 
 void Paint::drawAButton(int x, int y, u16* buffer) {
     drawSprite(x, y, 32, 32, 8, 24, 8, 8, buttons_iconBitmap, buffer);
+}
+
+void Paint::drawLButton(int x, int y, u16* buffer) {
+    drawSprite(x, y, 32, 32, 16, 16, 8, 8, buttons_iconBitmap, buffer);
+}
+
+void Paint::drawRButton(int x, int y, u16* buffer) {
+    drawSprite(x, y, 32, 32, 24, 16, 8, 8, buttons_iconBitmap, buffer);
+}
+
+void Paint::drawStartButton(int x, int y, u16* buffer) {
+    drawSprite(x, y, 32, 32, 16, 24, 8, 8, buttons_iconBitmap, buffer);
+}
+
+void Paint::drawSelectButton(int x, int y, u16* buffer) {
+    drawSprite(x, y, 32, 32, 24, 24, 8, 8, buttons_iconBitmap, buffer);
+}
+
+void Paint::drawTouchButton(int x, int y, u16* buffer) {
+    drawSprite(x, y, 8, 8, touch_iconBitmap, buffer);
 }
 
 void Paint::drawScrollBox(int x, int y, int size, int scroll, u16* buffer) {
