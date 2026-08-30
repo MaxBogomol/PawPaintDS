@@ -117,6 +117,7 @@ void Paint::updateTools() {
         updateDrawPaintName = true;
         updateDrawPaintIcon = true;
         updateDrawAll = false;
+        tools[selectedTool]->redraw(*this);
     }
 
     if (keysD & KEY_START) {

@@ -137,6 +137,10 @@ void Saving::close(Paint& paint) {
     doneTimer = 0;
 }
 
+void Saving::redraw(Paint& paint) {
+    updateDrawTool = true;
+}
+
 void Saving::drawIcon(Paint& paint, int x, int y, u16* buffer) {
     const unsigned int* iconSprite = paint.fileSystemInit ? saving_iconBitmap : saving_error_iconBitmap;
     if (loading || saving || savingExport) {

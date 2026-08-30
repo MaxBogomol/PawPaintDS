@@ -189,6 +189,13 @@ void ColorPicker::close(Paint& paint) {
     clearHuePointer(paint);
 }
 
+void ColorPicker::redraw(Paint& paint) {
+    updatePicker = true;
+    updateHue = true;
+    updateSelected = true;
+    updateNewSelected = true;
+}
+
 void ColorPicker::drawIcon(Paint& paint, int x, int y, u16* buffer) {
     paint.drawSprite(x, y, 16, 16, color_picker_iconBitmap, buffer);
 }

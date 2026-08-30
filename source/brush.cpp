@@ -384,6 +384,10 @@ void Brush::close(Paint& paint) {
     drawCursor(paint);
 }
 
+void Brush::redraw(Paint& paint) {
+    updateDrawTool = true;
+}
+
 void Brush::drawIcon(Paint& paint, int x, int y, u16* buffer) {
     const unsigned int* iconSprite = brush_square_iconBitmap;
     switch (type) {

@@ -96,6 +96,10 @@ void Info::close(Paint& paint) {
     paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 92, pixelBufferMain);
 }
 
+void Info::redraw(Paint& paint) {
+    updateDrawTool = true;
+}
+
 void Info::drawIcon(Paint& paint, int x, int y, u16* buffer) {
     paint.drawSprite(x, y, 16, 16, info_iconBitmap, pixelBufferMain);
 }

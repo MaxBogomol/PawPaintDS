@@ -114,6 +114,10 @@ void Layers::close(Paint& paint) {
     paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 22, pixelBufferMain);
 }
 
+void Layers::redraw(Paint& paint) {
+    updateDrawTool = true;
+}
+
 void Layers::drawIcon(Paint& paint, int x, int y, u16* buffer) {
     paint.drawSprite(x, y, 16, 16, layers_iconBitmap, buffer);
 }

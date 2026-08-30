@@ -147,6 +147,10 @@ void Settings::close(Paint& paint) {
     paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 32, pixelBufferMain);
 }
 
+void Settings::redraw(Paint& paint) {
+    updateDrawTool = true;
+}
+
 void Settings::drawIcon(Paint& paint, int x, int y, u16* buffer) {
     paint.drawSprite(x, y, 16, 16, settings_iconBitmap, pixelBufferMain);
 }
