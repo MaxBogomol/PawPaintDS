@@ -37,6 +37,7 @@ void Paint::setup() {
     updateDrawSelectedColor = false;
     updateDrawTools = true;
     updateDrawColors = true;
+    updateDrawHints = true;
     updateDrawPaintName = true;
     updateDrawPaintIcon = true;
 
@@ -115,6 +116,7 @@ void Paint::updateTools() {
         clearBuffer(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, pixelBufferMain);
         updateDrawTools = true;
         updateDrawColors = true;
+        updateDrawHints = true;
         updateDrawPaintName = true;
         updateDrawPaintIcon = true;
         updateDrawAll = false;
@@ -129,6 +131,7 @@ void Paint::updateTools() {
             lcdMainOnTop();
         }
         tools[selectedTool]->reverse(*this);
+        updateDrawHints = true;
     }
     if (keysD & KEY_L) {
         selectedTool--;
@@ -168,6 +171,7 @@ void Paint::updateTools() {
         tools[selectedToolOld]->close(*this);
         tools[selectedTool]->open(*this);
         updateDrawTools = true;
+        updateDrawHints = true;
     }
 
     if (firstFrameTool) {
@@ -187,6 +191,11 @@ void Paint::updateVideo() {
     if (updateDrawColors) {
         drawColors();
         updateDrawColors = false;
+    }
+
+    if (updateDrawHints) {
+        drawHints();
+        updateDrawHints = false;
     }
 
     if (updateDrawPaintName) {
@@ -245,10 +254,19 @@ void Paint::drawColors() {
     int bs = (selectedColorSub >> 10) & 31;
     string colorSubString = string("RGB: ") + intToChars(rs) + " " + intToChars(gs) + " " + intToChars(bs); 
     drawText(21, SCREEN_HEIGHT - 15, colorSubString.c_str(), pixelBufferMain, blackColor);
+}
 
-    drawLButton(100, SCREEN_HEIGHT - 34, pixelBufferMain);
-    drawRButton(110, SCREEN_HEIGHT - 34, pixelBufferMain);
-    drawStartButton(120, SCREEN_HEIGHT - 34, pixelBufferMain);
+void Paint::drawHints() {
+    int xOffset = 100;
+    int yOffset = SCREEN_HEIGHT - 34;
+    clearBuffer(xOffset, yOffset, 80, 30, pixelBufferMain);
+    drawLButton(xOffset, yOffset, pixelBufferMain);
+    drawRButton(xOffset += 10, yOffset, pixelBufferMain);
+    drawStartButton(xOffset += 10, yOffset, pixelBufferMain);
+    if (reverseScreens) drawTouchButton(xOffset += 10, yOffset, pixelBufferMain);
+    xOffset = 100;
+    yOffset += 10;
+    tools[selectedTool]->drawHints(*this, xOffset, yOffset, pixelBufferMain);
 }
 
 void Paint::drawPaintName() {

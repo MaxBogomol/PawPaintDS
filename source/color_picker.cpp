@@ -200,6 +200,18 @@ void ColorPicker::drawIcon(Paint& paint, int x, int y, u16* buffer) {
     paint.drawSprite(x, y, 16, 16, color_picker_iconBitmap, buffer);
 }
 
+void ColorPicker::drawHints(Paint& paint, int x, int y, u16* buffer) {
+    int xOffset = -10;
+    int yOffset = 0;
+    if (!paint.reverseScreens) paint.drawTouchButton(x + (xOffset += 10), y + yOffset, pixelBufferMain);
+    paint.drawAButton(x + (xOffset += 10), y + yOffset, pixelBufferMain);
+    paint.drawYButton(x + (xOffset += 10), y + yOffset, pixelBufferMain);
+    xOffset = 0;
+    yOffset += 10;
+    paint.drawAllButton(x + xOffset, y + yOffset, pixelBufferMain);
+    paint.drawBButton(x + (xOffset += 10), y + yOffset, pixelBufferMain);
+}
+
 u16 *ColorPicker::getDrawLayer(Paint& paint) {
     return pixelBufferSub;
 }

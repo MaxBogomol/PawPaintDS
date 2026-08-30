@@ -28,3 +28,9 @@ void Eyedropper::update(Paint& paint) {
 void Eyedropper::drawIcon(Paint& paint, int x, int y, u16* buffer) {
     paint.drawSprite(x, y, 16, 16, eyedropper_iconBitmap, pixelBufferMain);
 }
+
+void Eyedropper::drawHints(Paint& paint, int x, int y, u16* buffer) {
+    int xOffset = -10;
+    if (!paint.reverseScreens) paint.drawTouchButton(x + (xOffset += 10), y, pixelBufferMain);
+    paint.drawYButton(x + (xOffset += 10), y, pixelBufferMain);
+}

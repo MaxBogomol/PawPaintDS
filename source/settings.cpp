@@ -155,6 +155,12 @@ void Settings::drawIcon(Paint& paint, int x, int y, u16* buffer) {
     paint.drawSprite(x, y, 16, 16, settings_iconBitmap, pixelBufferMain);
 }
 
+void Settings::drawHints(Paint& paint, int x, int y, u16* buffer) {
+    int xOffset = 0;
+    paint.drawUpDownButton(x + xOffset, y, pixelBufferMain);
+    paint.drawLeftRightButton(x + (xOffset += 10), y, pixelBufferMain);
+}
+
 void Settings::drawTool(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
     int bOffset = paint.getToolsButtonsOffset();

@@ -35,11 +35,13 @@ void Info::update(Paint& paint) {
             page = line;
             showPage = true;
             updateDrawTool = true;
+            paint.updateDrawHints = true;
         }   
     } else {
-        if ((keysD & KEY_A) || (keysD & KEY_B)) {
+        if (keysD & KEY_A) {
             showPage = false;
             updateDrawTool = true;
+            paint.updateDrawHints = true;
         }
     }
 
@@ -102,6 +104,12 @@ void Info::redraw(Paint& paint) {
 
 void Info::drawIcon(Paint& paint, int x, int y, u16* buffer) {
     paint.drawSprite(x, y, 16, 16, info_iconBitmap, pixelBufferMain);
+}
+
+void Info::drawHints(Paint& paint, int x, int y, u16* buffer) {
+    int xOffset = -10;
+    if (!showPage) paint.drawUpDownButton(x + (xOffset += 10), y, pixelBufferMain);
+    paint.drawAButton(x + (xOffset += 10), y, pixelBufferMain);
 }
 
 void Info::drawTool(Paint& paint) {

@@ -33,10 +33,12 @@ void Layers::update(Paint& paint) {
             if ((keysD & KEY_LEFT) && (paint.selectedLayer - 1 >= 0)) {
                 paint.selectedLayer--;
                 updateDrawTool = true;
+                paint.updateDrawHints = true;
             }
             if ((keysD & KEY_RIGHT) && (paint.selectedLayer + 1 <= 3)) {
                 paint.selectedLayer++;
                 updateDrawTool = true;
+                paint.updateDrawHints = true;
             }
             break;
         }
@@ -46,12 +48,14 @@ void Layers::update(Paint& paint) {
                 paint.selectedLayer--;
                 updateLayers = true;
                 updateDrawTool = true;
+                paint.updateDrawHints = true;
             }
             if ((keysD & KEY_RIGHT) && (paint.selectedLayer + 1 <= 3)) {
                 paint.swapLayers(paint.selectedLayer, paint.selectedLayer + 1);
                 paint.selectedLayer++;
                 updateLayers = true;
                 updateDrawTool = true;
+                paint.updateDrawHints = true;
             }
             break;
         }
@@ -65,12 +69,14 @@ void Layers::update(Paint& paint) {
             if (paint.selectedLayer - 1 >= 0) {
                 paint.selectedLayer--;
                 updateDrawTool = true;
+                paint.updateDrawHints = true;
             }
         }
         if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
             if (paint.selectedLayer + 1 <= 3) {
                 paint.selectedLayer++;
                 updateDrawTool = true;
+                paint.updateDrawHints = true;
             }
         }
         yOffset += 10;
@@ -80,6 +86,7 @@ void Layers::update(Paint& paint) {
                 paint.selectedLayer--;
                 updateLayers = true;
                 updateDrawTool = true;
+                paint.updateDrawHints = true;
             }
         }
         if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
@@ -88,6 +95,7 @@ void Layers::update(Paint& paint) {
                 paint.selectedLayer++;
                 updateLayers = true;
                 updateDrawTool = true;
+                paint.updateDrawHints = true;
             }
         }
     }
@@ -120,6 +128,18 @@ void Layers::redraw(Paint& paint) {
 
 void Layers::drawIcon(Paint& paint, int x, int y, u16* buffer) {
     paint.drawSprite(x, y, 16, 16, layers_iconBitmap, buffer);
+}
+
+void Layers::drawHints(Paint& paint, int x, int y, u16* buffer) {
+    int xOffset = 0;
+    int yOffset = 0;
+    if (paint.selectedLayer == 0) {
+        paint.drawRightButton(x + xOffset, y + yOffset, pixelBufferMain);
+    } else if (paint.selectedLayer == 3) {
+        paint.drawLeftButton(x + xOffset, y + yOffset, pixelBufferMain);
+    } else {
+        paint.drawLeftRightButton(x + xOffset, y + yOffset, pixelBufferMain);
+    }
 }
 
 void Layers::drawTool(Paint& paint) {

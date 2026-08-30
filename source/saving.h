@@ -24,6 +24,7 @@ class Saving : public Tool {
         virtual void redraw(Paint& paint) override;
 
         virtual void drawIcon(Paint& paint, int x, int y, u16* buffer) override;
+        virtual void drawHints(Paint& paint, int x, int y, u16* buffer) override;
 
         virtual void drawTool(Paint& paint);
 

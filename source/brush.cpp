@@ -65,6 +65,7 @@ void Brush::update(Paint& paint) {
             active = !active;
             activeNoise = false;
             updateDrawTool = true;
+            paint.updateDrawHints = true;
         }
         if (line == 0) updateDrawCursor = true;
     }
@@ -76,10 +77,12 @@ void Brush::update(Paint& paint) {
         if ((keysD & KEY_UP) && (line - 1 >= 0)) {
             line--;
             updateDrawTool = true;
+            paint.updateDrawHints = true;
         }
         if ((keysD & KEY_DOWN) && (line + 1 < maxLine)) {
             line++;
             updateDrawTool = true;
+            paint.updateDrawHints = true;
         }
     } else {
         if (line == 0) {
@@ -175,6 +178,7 @@ void Brush::update(Paint& paint) {
             line = 0;
             updateDrawTool = true;
             updateDrawCursor = true;
+            paint.updateDrawHints = true;
         }
         yOffset += 10;
         if (touchX >= SCREEN_WIDTH - bOffset - 16 - 5 && touchX < SCREEN_WIDTH - bOffset - 8 - 5 && touchY >= yOffset && touchY < yOffset + 8) {
@@ -399,6 +403,34 @@ void Brush::drawIcon(Paint& paint, int x, int y, u16* buffer) {
 		case 5: iconSprite = brush_dot_noise_iconBitmap; break;
     }
     paint.drawSprite(x, y, 16, 16, iconSprite, buffer);
+}
+
+void Brush::drawHints(Paint& paint, int x, int y, u16* buffer) {
+    int xOffset = 0;
+    int yOffset = 0;
+    if (!active) {
+        paint.drawUpDownButton(x + xOffset, y + yOffset, pixelBufferMain);
+        xOffset += 10;
+    } else {
+        if (line > 0) {
+            paint.drawUpDownButton(x + xOffset, y + yOffset, pixelBufferMain);
+            paint.drawLeftRightButton(x + (xOffset += 10), y + yOffset, pixelBufferMain);
+            xOffset += 10;
+        }
+    }
+    if (line < 1 || line > 2) {
+        paint.drawAButton(x + xOffset, y + yOffset, pixelBufferMain);
+    } else {
+        paint.drawLeftRightButton(x + xOffset, y + yOffset, pixelBufferMain);
+    }
+    xOffset = -10;
+    yOffset += 10;
+    if (!paint.reverseScreens) paint.drawTouchButton(x + (xOffset += 10), y + yOffset, pixelBufferMain);
+    if (active && line == 0) {
+        paint.drawAllButton(x + (xOffset += 10), y + yOffset, pixelBufferMain);
+        paint.drawBButton(x + (xOffset += 10), y + yOffset, pixelBufferMain);
+    }
+    paint.drawYButton(x + (xOffset += 10), y + yOffset, pixelBufferMain);
 }
 
 void Brush::drawLine(Paint& paint, int x0, int y0, int x1, int y1, u16* buffer, u16 color) {

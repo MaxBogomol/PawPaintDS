@@ -44,10 +44,12 @@ void Saving::update(Paint& paint) {
     if ((keysD & KEY_UP) && (line - 1 >= 0)) {
         line--;
         updateDrawTool = true;
+        paint.updateDrawHints = true;
     }
     if ((keysD & KEY_DOWN) && (line + 1 < maxLine)) {
         line++;
         updateDrawTool = true;
+        paint.updateDrawHints = true;
     }
 
     if (keysD & KEY_A) {
@@ -149,6 +151,14 @@ void Saving::drawIcon(Paint& paint, int x, int y, u16* buffer) {
         iconSprite = saving_done_iconBitmap;
     }
     paint.drawSprite(x, y, 16, 16, iconSprite, buffer);
+}
+
+void Saving::drawHints(Paint& paint, int x, int y, u16* buffer) {
+    int xOffset = 0;
+    if (line == 0 || paint.fileSystemInit) {
+        paint.drawUpDownButton(x + xOffset, y, pixelBufferMain);
+        paint.drawAButton(x + (xOffset += 10), y, pixelBufferMain);
+    }
 }
 
 void Saving::drawTool(Paint& paint) {

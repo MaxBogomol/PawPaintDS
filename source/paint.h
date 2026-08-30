@@ -112,6 +112,7 @@ class Paint {
         bool updateDrawSelectedColor = false;
         bool updateDrawTools = true;
         bool updateDrawColors = true;
+        bool updateDrawHints = true;
         bool updateDrawPaintName = true;
         bool updateDrawPaintIcon = true;
 
@@ -131,6 +132,7 @@ class Paint {
 
         void drawTools();
         void drawColors();
+        void drawHints();
         void drawPaintName();
         void drawPaintIcon();
 
