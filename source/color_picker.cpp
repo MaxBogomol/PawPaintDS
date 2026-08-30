@@ -159,7 +159,6 @@ void ColorPicker::update(Paint& paint) {
         if (keysD & KEY_X) {
             active = false;
             updateDrawTool = true;
-            paint.updateDrawAll = true;
             clearPicker(paint);
             clearHue(paint);
             clearColors(paint);
@@ -189,7 +188,6 @@ void ColorPicker::update(Paint& paint) {
                 paint.updateDrawHints = true;
             } else {
                 updateDrawTool = true;
-                paint.updateDrawAll = true;
                 clearPicker(paint);
                 clearHue(paint);
                 clearColors(paint);
@@ -411,11 +409,11 @@ void ColorPicker::drawHuePointer(Paint& paint) {
 }
 
 void ColorPicker::clearPicker(Paint& paint) {
-    paint.blendLayers(207, 5, 34, 182);
+    paint.blendLayers(63, 31, 130, 130);
 }
 
 void ColorPicker::clearHue(Paint& paint) {
-    paint.blendLayers(63, 31, 130, 130);
+    paint.blendLayers(207, 5, 34, 182);
 }
 
 void ColorPicker::clearColors(Paint& paint) {

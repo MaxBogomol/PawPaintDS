@@ -112,16 +112,6 @@ void Paint::updateTools() {
     bool toolChanged = false;
 
     if (updateDrawSelectedColor) updateDrawSelectedColor = false;
-    if (updateDrawAll) {
-        clearBuffer(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, pixelBufferMain);
-        updateDrawTools = true;
-        updateDrawColors = true;
-        updateDrawHints = true;
-        updateDrawPaintName = true;
-        updateDrawPaintIcon = true;
-        updateDrawAll = false;
-        tools[selectedTool]->redraw(*this);
-    }
 
     if (keysD & KEY_START) {
         reverseScreens = !reverseScreens;
@@ -167,6 +157,7 @@ void Paint::updateTools() {
             updateDrawSelectedColor = true;
         }
     }
+    
     if (toolChanged) {
         tools[selectedToolOld]->close(*this);
         tools[selectedTool]->open(*this);
@@ -177,6 +168,17 @@ void Paint::updateTools() {
     if (firstFrameTool) {
         tools[selectedTool]->open(*this);
         firstFrameTool = false;
+    }
+
+    if (updateDrawAll) {
+        clearBuffer(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, pixelBufferMain);
+        updateDrawTools = true;
+        updateDrawColors = true;
+        updateDrawHints = true;
+        updateDrawPaintName = true;
+        updateDrawPaintIcon = true;
+        updateDrawAll = false;
+        tools[selectedTool]->redraw(*this);
     }
 
     tools[selectedTool]->update(*this);
