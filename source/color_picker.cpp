@@ -109,15 +109,17 @@ void ColorPicker::update(Paint& paint) {
         }
 
         if (keysH & KEY_B) {
-            if ((keysR & KEY_UP) && (hue - 1 >= 0)) {
+            if (keysR & KEY_UP) {
                 hue--;
+                if (hue < 0) hue = 359;
                 updatePicker = true;
                 updateHue = true;
                 updateNewSelected = true;
                 setNewColor = true;
             }
-            if ((keysR & KEY_DOWN) && (hue + 1 < 360)) {
+            if (keysR & KEY_DOWN) {
                 hue++;
+                if (hue >= 360) hue = 0;
                 updatePicker = true;
                 updateHue = true;
                 updateNewSelected = true;
