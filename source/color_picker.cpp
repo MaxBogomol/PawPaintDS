@@ -304,9 +304,9 @@ void ColorPicker::drawHints(Paint& paint, int x, int y, u16* buffer) {
         if (!paint.reverseScreens) paint.drawTouchButton(x + (xOffset += 10), y + yOffset, pixelBufferMain);
         paint.drawAButton(x + (xOffset += 10), y + yOffset, pixelBufferMain);
         paint.drawYButton(x + (xOffset += 10), y + yOffset, pixelBufferMain);
-        xOffset = 0;
+        xOffset = -10;
         yOffset += 10;
-        paint.drawAllButton(x + xOffset, y + yOffset, pixelBufferMain);
+        paint.drawAllButton(x + (xOffset += 10), y + yOffset, pixelBufferMain);
         paint.drawBButton(x + (xOffset += 10), y + yOffset, pixelBufferMain);
         paint.drawXButton(x + (xOffset += 10), y + yOffset, pixelBufferMain);
     }
