@@ -166,6 +166,7 @@ void ColorPicker::update(Paint& paint) {
             clearNewSelectedColor(paint);
             clearPickerPointers(paint);
             clearHuePointer(paint);
+            paint.updateDrawHints = true;
         }
     }
 
@@ -296,6 +297,9 @@ void ColorPicker::drawHints(Paint& paint, int x, int y, u16* buffer) {
     int yOffset = 0;
     if (!active) {
         paint.drawAButton(x + (xOffset += 10), y + yOffset, pixelBufferMain);
+        xOffset = -10;
+        yOffset += 10;
+        paint.drawYButton(x + (xOffset += 10), y + yOffset, pixelBufferMain);
     } else {
         if (!paint.reverseScreens) paint.drawTouchButton(x + (xOffset += 10), y + yOffset, pixelBufferMain);
         paint.drawAButton(x + (xOffset += 10), y + yOffset, pixelBufferMain);
