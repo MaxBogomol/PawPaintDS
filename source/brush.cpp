@@ -549,11 +549,7 @@ void Brush::drawCursor(Paint& paint, bool clear) {
     	case 5: size = dotRadius * 2; break;
     }
     size = size + 2;
-    for (int x = 0; x < size; x++) {
-        for (int y = 0; y < size; y++) {
-            paint.blendLayers(cursorXOld + x - (size / 2), cursorYOld + y - (size / 2));
-        }
-    }
+    paint.blendLayers(cursorXOld - (size / 2), cursorYOld - (size / 2), size, size);
 
     if (active && !clear) drawLine(paint, cursorX, cursorY, cursorX, cursorY, pixelBufferSub, getSelectedColor(paint));
 

@@ -1,7 +1,6 @@
 /.vscode/settings.json
 /build
+*.geany
 *.elf
 *.lst
 *.nds
-
-*.geany
