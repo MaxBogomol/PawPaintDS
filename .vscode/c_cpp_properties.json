@@ -23,12 +23,9 @@
             },
             "defines": [
                 "_DEBUG",
-                "_UNICODE",
-                "WIN32",
                 "ARM7",
                 "ARM9",
-                "__NDS__",
-                "_DEFAULT_SOURCE"
+                "__NDS__"
             ],
             "cStandard": "c11",
             "cppStandard": "c++11",
@@ -57,11 +54,9 @@
             },
             "defines": [
                 "_DEBUG",
-                "_UNICODE",
                 "ARM7",
                 "ARM9",
-                "__NDS__",
-                "_DEFAULT_SOURCE"
+                "__NDS__"
             ],
             "cStandard": "c11",
             "cppStandard": "c++11",
