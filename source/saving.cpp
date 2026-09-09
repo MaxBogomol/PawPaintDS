@@ -193,27 +193,27 @@ void Saving::drawTool(Paint& paint) {
 }
 
 void Saving::createPaintDirectory(Paint& paint, const char* paintName) {
-    string path = string(pawPaintPath);
+    string path = string(paint.getWorkingDirectory());
     if (!paint.directoryExist(path.c_str())) paint.makeDirectory(path.c_str());
 
-    path = string(pawPaintPath) + "/" + paintsPath;
+    path = string(paint.getWorkingDirectory()) + "/" + paintsPath;
     if (!paint.directoryExist(path.c_str())) paint.makeDirectory(path.c_str());
 
-    path = string(pawPaintPath) + "/" + paintsPath + "/" + paint.getPaintName();
+    path = string(paint.getWorkingDirectory()) + "/" + paintsPath + "/" + paint.getPaintName();
     if (!paint.directoryExist(path.c_str())) paint.makeDirectory(path.c_str());
 }
 
 void Saving::createPawDirectory(Paint& paint) {
-    string path = string(pawPaintPath);
+    string path = string(paint.getWorkingDirectory());
     if (!paint.directoryExist(path.c_str())) paint.makeDirectory(path.c_str());
 
-    path = string(pawPaintPath) + "/" + pawsPath;
+    path = string(paint.getWorkingDirectory()) + "/" + pawsPath;
     if (!paint.directoryExist(path.c_str())) paint.makeDirectory(path.c_str());
 }
 
 void Saving::savePaint(Paint& paint) {
     createPaintDirectory(paint, paint.getPaintName());
-    string pathString = string(pawPaintPath) + "/" + paintsPath + "/" + paint.getPaintName();
+    string pathString = string(paint.getWorkingDirectory()) + "/" + paintsPath + "/" + paint.getPaintName();
     saveLayer(paint, pathString.c_str(), "layer0.png", pixelBufferLayer0);
     saveLayer(paint, pathString.c_str(), "layer1.png", pixelBufferLayer1);
     saveLayer(paint, pathString.c_str(), "layer2.png", pixelBufferLayer2);
@@ -222,7 +222,7 @@ void Saving::savePaint(Paint& paint) {
 
 void Saving::loadPaint(Paint& paint) {
     createPawDirectory(paint);
-    string pathString = string(pawPaintPath) + "/" + paintsPath + "/" + paint.getPaintName();
+    string pathString = string(paint.getWorkingDirectory()) + "/" + paintsPath + "/" + paint.getPaintName();
     loadLayer(paint, pathString.c_str(), "layer0.png", pixelBufferLayer0);
     loadLayer(paint, pathString.c_str(), "layer1.png", pixelBufferLayer1);
     loadLayer(paint, pathString.c_str(), "layer2.png", pixelBufferLayer2);
@@ -232,7 +232,7 @@ void Saving::loadPaint(Paint& paint) {
 
 void Saving::savePaw(Paint& paint) {
     createPaintDirectory(paint, paint.getPaintName());
-    string pathString = string(pawPaintPath) + "/" + pawsPath;
+    string pathString = string(paint.getWorkingDirectory()) + "/" + pawsPath;
     string pawString = string(pawName) + ".png";
     saveLayer(paint, pathString.c_str(), pawString.c_str(), pixelBufferSub);
 }

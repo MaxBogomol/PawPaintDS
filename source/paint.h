@@ -64,7 +64,9 @@ inline bool activeLayer1 = true;
 inline bool activeLayer2 = true;
 inline bool activeLayer3 = true;
 
-inline const char* pawPaintPath = "fat:/PawPaintDS";
+inline const char* fatPath = "fat:";
+inline const char* sdPath = "sd:";
+inline const char* pawPaintPath = "PawPaintDS";
 inline const char* paintsPath = "Paints";
 inline const char* pawsPath = "Paws";
 inline const char* languagesPath = "nitro:/languages";
@@ -118,6 +120,7 @@ class Paint {
 
         bool nitroFSInit = false;
         bool fileSystemInit = false;
+        bool cartridgeInit = false;
 
         vector<Tool*> tools;
 
@@ -180,6 +183,7 @@ class Paint {
         bool loadFileBuffer(const char* path, u16* buffer);
         bool makeDirectory(const char* path);
         bool directoryExist(const char* path);
+        const char* getWorkingDirectory();
 
         int getToolYOffset();
         int getToolsYOffset();

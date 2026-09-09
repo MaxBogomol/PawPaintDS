@@ -873,6 +873,14 @@ bool Paint::directoryExist(const char* path) {
     return stat(path, &st) == 0;
 }
 
+const char* Paint::getWorkingDirectory() {
+    string path = string(fatPath) + "/" + pawPaintPath;
+    if (!cartridgeInit) {
+        path = string(sdPath) + "/" + pawPaintPath;
+    }
+    return path.c_str();
+}
+
 int Paint::getToolYOffset() {
     return 24;
 }

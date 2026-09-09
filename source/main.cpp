@@ -8,6 +8,7 @@ Paint paint;
 int main(void) {
 	paint.nitroFSInit = nitroFSInit(NULL);
 	paint.fileSystemInit = fatInitDefault();
+	paint.cartridgeInit = paint.directoryExist(fatPath);
 
 	paint.setup();
 	paint.setupVideo();
