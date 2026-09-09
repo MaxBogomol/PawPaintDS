@@ -121,6 +121,7 @@ class Paint {
         bool nitroFSInit = false;
         bool fileSystemInit = false;
         bool cartridgeInit = false;
+        bool sdCardInit = false;
 
         vector<Tool*> tools;
 
