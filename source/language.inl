@@ -55,3 +55,5 @@ STRING(SETTINGS_LANGUAGE, "Language");
 STRING(INFO, "Info");
 STRING(INFO_ABOUT, "About App");
 STRING(INFO_BY, "By");
+STRING(FILES, "Files");
+STRING(KEYBOARD, "Keyboard");
