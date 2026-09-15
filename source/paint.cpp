@@ -22,16 +22,18 @@
 
 void Paint::setup() {
     firstFrameTool = true;
-    updateLayers = false;
     updateBlendLayers = false;
+
+    updateLayers = false;
+
+    reverseScreens = false;
 
     selectedTheme = 0;
     selectedIcon = 0;
     selectedLayer = 0;
     selectedTool = 0;
     selectedColor = blackColor;
-    selectedColorSub = whiteColor;
-    reverseScreens = false;
+    secondColor = whiteColor;
 
     updateDrawAll = false;
     updateDrawSelectedColor = false;
@@ -150,8 +152,8 @@ void Paint::updateTools() {
         }
 
         if (touchX >= 3 && touchX < 19 && touchY >= 157 && touchY < 189) {
-            u16 color = selectedColorSub;
-            selectedColorSub = selectedColor;
+            u16 color = secondColor;
+            secondColor = selectedColor;
             selectedColor = color;
             updateDrawColors = true;
             updateDrawSelectedColor = true;
@@ -250,12 +252,12 @@ void Paint::drawColors() {
     string colorString = string("RGB: ") + intToChars(r) + " " + intToChars(g) + " " + intToChars(b); 
     drawText(21, SCREEN_HEIGHT - 31, colorString.c_str(), pixelBufferMain, blackColor);
 
-    drawSquare(3, SCREEN_HEIGHT - 19, 16, 16, pixelBufferMain, selectedColorSub);
-    int rs = (selectedColorSub) & 31;
-    int gs = (selectedColorSub >> 5) & 31;
-    int bs = (selectedColorSub >> 10) & 31;
-    string colorSubString = string("RGB: ") + intToChars(rs) + " " + intToChars(gs) + " " + intToChars(bs); 
-    drawText(21, SCREEN_HEIGHT - 15, colorSubString.c_str(), pixelBufferMain, blackColor);
+    drawSquare(3, SCREEN_HEIGHT - 19, 16, 16, pixelBufferMain, secondColor);
+    int rs = (secondColor) & 31;
+    int gs = (secondColor >> 5) & 31;
+    int bs = (secondColor >> 10) & 31;
+    string secondColorString = string("RGB: ") + intToChars(rs) + " " + intToChars(gs) + " " + intToChars(bs); 
+    drawText(21, SCREEN_HEIGHT - 15, secondColorString.c_str(), pixelBufferMain, blackColor);
 }
 
 void Paint::drawHints() {
@@ -281,6 +283,97 @@ void Paint::drawPaintIcon() {
     drawSprite(SCREEN_WIDTH - 32 - 3, SCREEN_HEIGHT - 32 - 3, 32, 32, getSelectedIconSprite(), pixelBufferMain);
 }
 
+const char* Paint::getPaintName() {
+    return paintName;
+}
+
+void Paint::setPaintName(const char* name) {
+    paintName = name;
+}
+
+u16 Paint::getThemeColor(int theme) {
+    switch (theme) {
+        case 0: return whiteColor; break;
+        case 1: return pinkFoxThemeColor; break;
+        case 2: return maidThemeColor; break;
+        case 3: return aceThemeColor; break;
+    }
+	return whiteColor;
+}
+
+u16 Paint::getSelectedThemeColor() {
+	return getThemeColor(selectedTheme);
+}
+
+const unsigned int* Paint::getIconSprite(int icon) {
+    switch (icon) {
+        case 0: return paint_iconBitmap; break;
+        case 1: return paint_monochrome_iconBitmap; break;
+    }
+	return paint_iconBitmap;
+}
+
+const unsigned int* Paint::getSelectedIconSprite() {
+	return getIconSprite(selectedIcon);
+}
+
+const char* Paint::getLanguageCode(int language) {
+    if (language >= 0 && language < (int) sizeof(languageCodes)) {
+        return languageCodes[language];
+    }
+	return "en_us";
+}
+
+const char* Paint::getSelectedLanguageCode() {
+	return getLanguageCode(selectedLanguage);
+}
+
+u16 *Paint::getLayer(int layer) {
+	switch (layer) {
+    	case 0: return pixelBufferLayer0;
+    	case 1: return pixelBufferLayer1;
+		case 2: return pixelBufferLayer2;
+		case 3: return pixelBufferLayer3;
+    }
+	return pixelBufferLayer0;
+}
+
+u16 *Paint::getSelectedLayer() {
+	return getLayer(selectedLayer);
+}
+
+u16 Paint::getSelectedColor() {
+	return selectedColor;
+}
+
+u16 Paint::getSecondColor() {
+	return secondColor;
+}
+
+int Paint::getToolYOffset() {
+    return 24;
+}
+
+int Paint::getToolsYOffset() {
+    return getToolYOffset() + 12;
+}
+
+int Paint::getToolsButtonsOffset() {
+    return 8;
+}
+
+void Paint::clearBuffer(int x0, int y0, int x1, int y1, u16* buffer, u16 color) {
+    for (int x = 0; x < x1; x++) {
+        for (int y = 0; y < y1; y++) {
+            drawPixel(x0 + x, y0 + y, buffer, color);
+        }
+    }
+}
+
+void Paint::clearBuffer(int x0, int y0, int x1, int y1, u16* buffer) {
+    clearBuffer(x0, y0, x1, y1, buffer, getSelectedThemeColor());
+}
+
 void Paint::blendLayers(int x, int y) {
     if (x >= 0 && x < SCREEN_WIDTH && y >= 0 && y < SCREEN_HEIGHT) {
         updateBlendLayers = false;
@@ -303,6 +396,14 @@ void Paint::blendLayers(int x, int y, u16* buffer) {
     }
 }
 
+void Paint::blendLayers(int x0, int y0, int x1, int y1) {
+    for (int x = 0; x < x1; x++) {
+        for (int y = 0; y < y1; y++) {
+            blendLayers(x0 + x, y0 + y);
+        }
+    }
+}
+
 void Paint::swapLayers(int l0, int l1) {
     for (int x = 0; x < SCREEN_WIDTH; x++) {
 		for (int y = 0; y < SCREEN_HEIGHT; y++) {
@@ -313,30 +414,24 @@ void Paint::swapLayers(int l0, int l1) {
     }
 }
 
+void Paint::clearLayers() {
+    for (int x = 0; x < SCREEN_WIDTH; x++) {
+		for (int y = 0; y < SCREEN_HEIGHT; y++) {
+			pixelBufferLayer0[x + (y * SCREEN_WIDTH)] = secondColor;
+			pixelBufferLayer1[x + (y * SCREEN_WIDTH)] = alphaColor;
+			pixelBufferLayer2[x + (y * SCREEN_WIDTH)] = alphaColor;
+			pixelBufferLayer3[x + (y * SCREEN_WIDTH)] = alphaColor;
+			blendLayers(x, y);
+		}
+	}
+}
+
 void Paint::updateLayersEnable() {
     updateLayers = true;
 }
 
 void Paint::updateLayersDisable() {
     updateLayers = false;
-}
-
-u16 *Paint::getLayer(int layer) {
-	switch (layer) {
-    	case 0: return pixelBufferLayer0;
-    	case 1: return pixelBufferLayer1;
-		case 2: return pixelBufferLayer2;
-		case 3: return pixelBufferLayer3;
-    }
-	return pixelBufferLayer0;
-}
-
-u16 *Paint::getSelectedLayer() {
-	return getLayer(selectedLayer);
-}
-
-u16 Paint::getSelectedColor() {
-	return selectedColor;
 }
 
 u16 Paint::getPixel(int x, int y, u16* buffer) {
@@ -453,42 +548,6 @@ void Paint::drawLine(int x0, int y0, int x1, int y1, u16* buffer, u16 color) {
             y0 += sy;
         }
     }
-}
-
-u32 Paint::decodeChar(const char** c) {
-    const unsigned char* p = (const unsigned char*)*c;
-    u32 code = 0;
-
-    if (p[0] < 0x80) {
-        code = p[0];
-        *c += 1;
-    } else if (p[0] < 0xE0) {
-        code = ((p[0] & 0x1F) << 6) | (p[1] & 0x3F);
-        *c += 2;
-    } else if (p[0] < 0xF0) {
-        code = ((p[0] & 0x0F) << 12) | ((p[1] & 0x3F) << 6) | (p[2] & 0x3F);
-        *c += 3;
-    }
-    return code;
-}
-
-int Paint::getCharLength(u32 c) {
-    int listSize = sizeof(pawscriptCharLengthList) / sizeof(pawscriptCharLengthList[0]);
-    for (int i = 0; i < listSize; i++) {
-        if (c == (u32) pawscriptCharLengthList[i][0]) return (int) pawscriptCharLengthList[i][1];
-    }
-    return 6;
-}
-
-int Paint::getTextLength(const char* text) {
-    const char* textPtr = text;
-    int l = 0;
-
-    while (*textPtr) {
-        u32 charCode = decodeChar(&textPtr);
-        l += getCharLength(charCode);
-    }
-    return l;
 }
 
 void Paint::drawChar(int x, int y, u32 c, u16* buffer, u16 color) {
@@ -653,6 +712,79 @@ void Paint::drawSprite(int x0, int y0, int x1, int y1, const unsigned int* sprit
     drawSprite(x0, y0, x1, y1, 0, 0, x1, y1, spriteBitmap, buffer);
 }
 
+void Paint::drawUpButton(int x, int y, u16* buffer) {
+    drawSprite(x, y, 32, 32, 0, 0, 8, 8, buttons_iconBitmap, buffer);
+}
+
+void Paint::drawRightButton(int x, int y, u16* buffer) {
+    drawSprite(x, y, 32, 32, 8, 0, 8, 8, buttons_iconBitmap, buffer);
+}
+
+void Paint::drawDownButton(int x, int y, u16* buffer) {
+    drawSprite(x, y, 32, 32, 16, 0, 8, 8, buttons_iconBitmap, buffer);
+}
+
+void Paint::drawLeftButton(int x, int y, u16* buffer) {
+    drawSprite(x, y, 32, 32, 24, 0, 8, 8, buttons_iconBitmap, buffer);
+}
+
+void Paint::drawNoneButton(int x, int y, u16* buffer) {
+    drawSprite(x, y, 32, 32, 0, 8, 8, 8, buttons_iconBitmap, buffer);
+}
+
+void Paint::drawUpDownButton(int x, int y, u16* buffer) {
+    drawSprite(x, y, 32, 32, 8, 8, 8, 8, buttons_iconBitmap, buffer);
+}
+
+void Paint::drawLeftRightButton(int x, int y, u16* buffer) {
+    drawSprite(x, y, 32, 32, 16, 8, 8, 8, buttons_iconBitmap, buffer);
+}
+
+void Paint::drawAllButton(int x, int y, u16* buffer) {
+    drawSprite(x, y, 32, 32, 24, 8, 8, 8, buttons_iconBitmap, buffer);
+}
+
+void Paint::drawYButton(int x, int y, u16* buffer) {
+    drawSprite(x, y, 32, 32, 0, 16, 8, 8, buttons_iconBitmap, buffer);
+}
+
+void Paint::drawXButton(int x, int y, u16* buffer) {
+    drawSprite(x, y, 32, 32, 8, 16, 8, 8, buttons_iconBitmap, buffer);
+}
+
+void Paint::drawBButton(int x, int y, u16* buffer) {
+    drawSprite(x, y, 32, 32, 0, 24, 8, 8, buttons_iconBitmap, buffer);
+}
+
+void Paint::drawAButton(int x, int y, u16* buffer) {
+    drawSprite(x, y, 32, 32, 8, 24, 8, 8, buttons_iconBitmap, buffer);
+}
+
+void Paint::drawLButton(int x, int y, u16* buffer) {
+    drawSprite(x, y, 32, 32, 16, 16, 8, 8, buttons_iconBitmap, buffer);
+}
+
+void Paint::drawRButton(int x, int y, u16* buffer) {
+    drawSprite(x, y, 32, 32, 24, 16, 8, 8, buttons_iconBitmap, buffer);
+}
+
+void Paint::drawStartButton(int x, int y, u16* buffer) {
+    drawSprite(x, y, 32, 32, 16, 24, 8, 8, buttons_iconBitmap, buffer);
+}
+
+void Paint::drawSelectButton(int x, int y, u16* buffer) {
+    drawSprite(x, y, 32, 32, 24, 24, 8, 8, buttons_iconBitmap, buffer);
+}
+
+void Paint::drawTouchButton(int x, int y, u16* buffer) {
+    drawSprite(x, y, 8, 8, touch_iconBitmap, buffer);
+}
+
+void Paint::drawScrollBox(int x, int y, int size, int scroll, u16* buffer) {
+    drawLine(x, y, x + size - 1, y, pixelBufferMain, blackColor);
+    drawSquareOutline(x + scroll - 1, y + 2, 3, 4, pixelBufferMain, blackColor);
+}
+
 u16 Paint::blendColors(u16 src, u16 dst) {
 	u8 alpha = (dst >> 15) & 1;
 	if (alpha == 1) {
@@ -731,24 +863,52 @@ HSV Paint::RGBtoHSV(u16 color) {
     return res;
 }
 
-int Paint::getDitherThreshold(int x, int y, int xSize, int ySize, int xShift, int yShift) {
-    int xOffset = ((y / ySize) % 2 == 1) ? xShift : 0;
-    int yOffset = ((x / xSize) % 2 == 1) ? yShift : 0;
-    return ((x + xOffset) % xSize) + ((y + yOffset) % ySize);
-}
-
 const char* Paint::intToChars(int val) {
     static char buf[12];
     sprintf(buf, "%d", val);
     return buf;
 }
 
-void Paint::setPaintName(const char* name) {
-    paintName = name;
+u32 Paint::decodeChar(const char** c) {
+    const unsigned char* p = (const unsigned char*)*c;
+    u32 code = 0;
+
+    if (p[0] < 0x80) {
+        code = p[0];
+        *c += 1;
+    } else if (p[0] < 0xE0) {
+        code = ((p[0] & 0x1F) << 6) | (p[1] & 0x3F);
+        *c += 2;
+    } else if (p[0] < 0xF0) {
+        code = ((p[0] & 0x0F) << 12) | ((p[1] & 0x3F) << 6) | (p[2] & 0x3F);
+        *c += 3;
+    }
+    return code;
 }
 
-const char* Paint::getPaintName() {
-    return paintName;
+int Paint::getCharLength(u32 c) {
+    int listSize = sizeof(pawscriptCharLengthList) / sizeof(pawscriptCharLengthList[0]);
+    for (int i = 0; i < listSize; i++) {
+        if (c == (u32) pawscriptCharLengthList[i][0]) return (int) pawscriptCharLengthList[i][1];
+    }
+    return 6;
+}
+
+int Paint::getTextLength(const char* text) {
+    const char* textPtr = text;
+    int l = 0;
+
+    while (*textPtr) {
+        u32 charCode = decodeChar(&textPtr);
+        l += getCharLength(charCode);
+    }
+    return l;
+}
+
+int Paint::getDitherThreshold(int x, int y, int xSize, int ySize, int xShift, int yShift) {
+    int xOffset = ((y / ySize) % 2 == 1) ? xShift : 0;
+    int yOffset = ((x / xSize) % 2 == 1) ? yShift : 0;
+    return ((x + xOffset) % xSize) + ((y + yOffset) % ySize);
 }
 
 bool Paint::saveFileBuffer(const char* path, u16* buffer) {
@@ -864,6 +1024,14 @@ bool Paint::loadFileBuffer(const char* path, u16* buffer) {
     return true;
 }
 
+const char* Paint::getWorkingDirectory() {
+    string path = string(fatPath) + "/" + pawPaintPath;
+    if (!cartridgeInit) {
+        path = string(sdPath) + "/" + pawPaintPath;
+    }
+    return path.c_str();
+}
+
 bool Paint::makeDirectory(const char* path) {
     return mkdir(path, 0777);
 }
@@ -871,160 +1039,6 @@ bool Paint::makeDirectory(const char* path) {
 bool Paint::directoryExist(const char* path) {
     struct stat st;
     return stat(path, &st) == 0;
-}
-
-int Paint::getToolYOffset() {
-    return 24;
-}
-
-int Paint::getToolsYOffset() {
-    return getToolYOffset() + 12;
-}
-
-int Paint::getToolsButtonsOffset() {
-    return 8;
-}
-
-void Paint::drawUpButton(int x, int y, u16* buffer) {
-    drawSprite(x, y, 32, 32, 0, 0, 8, 8, buttons_iconBitmap, buffer);
-}
-
-void Paint::drawRightButton(int x, int y, u16* buffer) {
-    drawSprite(x, y, 32, 32, 8, 0, 8, 8, buttons_iconBitmap, buffer);
-}
-
-void Paint::drawDownButton(int x, int y, u16* buffer) {
-    drawSprite(x, y, 32, 32, 16, 0, 8, 8, buttons_iconBitmap, buffer);
-}
-
-void Paint::drawLeftButton(int x, int y, u16* buffer) {
-    drawSprite(x, y, 32, 32, 24, 0, 8, 8, buttons_iconBitmap, buffer);
-}
-
-void Paint::drawNoneButton(int x, int y, u16* buffer) {
-    drawSprite(x, y, 32, 32, 0, 8, 8, 8, buttons_iconBitmap, buffer);
-}
-
-void Paint::drawUpDownButton(int x, int y, u16* buffer) {
-    drawSprite(x, y, 32, 32, 8, 8, 8, 8, buttons_iconBitmap, buffer);
-}
-
-void Paint::drawLeftRightButton(int x, int y, u16* buffer) {
-    drawSprite(x, y, 32, 32, 16, 8, 8, 8, buttons_iconBitmap, buffer);
-}
-
-void Paint::drawAllButton(int x, int y, u16* buffer) {
-    drawSprite(x, y, 32, 32, 24, 8, 8, 8, buttons_iconBitmap, buffer);
-}
-
-void Paint::drawYButton(int x, int y, u16* buffer) {
-    drawSprite(x, y, 32, 32, 0, 16, 8, 8, buttons_iconBitmap, buffer);
-}
-
-void Paint::drawXButton(int x, int y, u16* buffer) {
-    drawSprite(x, y, 32, 32, 8, 16, 8, 8, buttons_iconBitmap, buffer);
-}
-
-void Paint::drawBButton(int x, int y, u16* buffer) {
-    drawSprite(x, y, 32, 32, 0, 24, 8, 8, buttons_iconBitmap, buffer);
-}
-
-void Paint::drawAButton(int x, int y, u16* buffer) {
-    drawSprite(x, y, 32, 32, 8, 24, 8, 8, buttons_iconBitmap, buffer);
-}
-
-void Paint::drawLButton(int x, int y, u16* buffer) {
-    drawSprite(x, y, 32, 32, 16, 16, 8, 8, buttons_iconBitmap, buffer);
-}
-
-void Paint::drawRButton(int x, int y, u16* buffer) {
-    drawSprite(x, y, 32, 32, 24, 16, 8, 8, buttons_iconBitmap, buffer);
-}
-
-void Paint::drawStartButton(int x, int y, u16* buffer) {
-    drawSprite(x, y, 32, 32, 16, 24, 8, 8, buttons_iconBitmap, buffer);
-}
-
-void Paint::drawSelectButton(int x, int y, u16* buffer) {
-    drawSprite(x, y, 32, 32, 24, 24, 8, 8, buttons_iconBitmap, buffer);
-}
-
-void Paint::drawTouchButton(int x, int y, u16* buffer) {
-    drawSprite(x, y, 8, 8, touch_iconBitmap, buffer);
-}
-
-void Paint::drawScrollBox(int x, int y, int size, int scroll, u16* buffer) {
-    drawLine(x, y, x + size - 1, y, pixelBufferMain, blackColor);
-    drawSquareOutline(x + scroll - 1, y + 2, 3, 4, pixelBufferMain, blackColor);
-}
-
-void Paint::clearBuffer(int x0, int y0, int x1, int y1, u16* buffer, u16 color) {
-    for (int x = 0; x < x1; x++) {
-        for (int y = 0; y < y1; y++) {
-            drawPixel(x0 + x, y0 + y, buffer, color);
-        }
-    }
-}
-
-void Paint::clearBuffer(int x0, int y0, int x1, int y1, u16* buffer) {
-    clearBuffer(x0, y0, x1, y1, buffer, getSelectedThemeColor());
-}
-
-void Paint::blendLayers(int x0, int y0, int x1, int y1) {
-    for (int x = 0; x < x1; x++) {
-        for (int y = 0; y < y1; y++) {
-            blendLayers(x0 + x, y0 + y);
-        }
-    }
-}
-
-u16 Paint::getThemeColor(int theme) {
-    switch (theme) {
-        case 0: return whiteColor; break;
-        case 1: return pinkFoxThemeColor; break;
-        case 2: return maidThemeColor; break;
-        case 3: return aceThemeColor; break;
-    }
-	return whiteColor;
-}
-
-u16 Paint::getSelectedThemeColor() {
-	return getThemeColor(selectedTheme);
-}
-
-const unsigned int* Paint::getIconSprite(int icon) {
-    switch (icon) {
-        case 0: return paint_iconBitmap; break;
-        case 1: return paint_monochrome_iconBitmap; break;
-    }
-	return paint_iconBitmap;
-}
-
-const unsigned int* Paint::getSelectedIconSprite() {
-	return getIconSprite(selectedIcon);
-}
-
-const char* Paint::getLanguageCode(int language) {
-    if (language >= 0 && language < (int) sizeof(languageCodes)) {
-        return languageCodes[language];
-    }
-	return "en_us";
-}
-
-const char* Paint::getSelectedLanguageCode() {
-	return getLanguageCode(selectedLanguage);
-}
-
-void Paint::clearLayers() {
-    for (int x = 0; x < SCREEN_WIDTH; x++) {
-		for (int y = 0; y < SCREEN_HEIGHT; y++) {
-			pixelBufferLayer0[x + (y * SCREEN_WIDTH)] = selectedColorSub;
-			pixelBufferLayer1[x + (y * SCREEN_WIDTH)] = alphaColor;
-			pixelBufferLayer2[x + (y * SCREEN_WIDTH)] = alphaColor;
-			pixelBufferLayer3[x + (y * SCREEN_WIDTH)] = alphaColor;
-			blendLayers(x, y);
-		}
-	}
 }
 
 bool Paint::readSelectedLanguage() {

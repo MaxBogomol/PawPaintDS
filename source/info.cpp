@@ -90,6 +90,7 @@ void Info::updateTool(Paint& paint) {
 }
 
 void Info::open(Paint& paint) {
+    showPage = false;
     updateDrawTool = true;
 }
 
