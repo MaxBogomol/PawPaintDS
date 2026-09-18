@@ -113,7 +113,7 @@ void Eyedropper::open(Paint& paint) {
 
 void Eyedropper::close(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
-    paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 14, pixelBufferMain);
+    paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 13, pixelBufferMain);
 
     active = false;
     drawCursor(paint);
@@ -144,7 +144,7 @@ void Eyedropper::drawHints(Paint& paint, int x, int y, u16* buffer) {
 void Eyedropper::drawTool(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
     int bOffset = paint.getToolsButtonsOffset();
-    paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 14, pixelBufferMain);
+    paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 13, pixelBufferMain);
 
     string moveString = string((line == 0) ? ">" : "") + STR_EYEDROPPER_MOVE + ": " + ((line == 0 && active) ? "+" : "-"); 
     paint.drawText(3, yOffset, moveString.c_str(), pixelBufferMain, blackColor);

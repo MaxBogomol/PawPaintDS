@@ -180,7 +180,7 @@ void Brush::update(Paint& paint) {
             updateDrawCursor = true;
             paint.updateDrawHints = true;
         }
-        yOffset += 10;
+        yOffset += 13;
         if (touchX >= SCREEN_WIDTH - bOffset - 16 - 5 && touchX < SCREEN_WIDTH - bOffset - 8 - 5 && touchY >= yOffset && touchY < yOffset + 8) {
             drawCursor(paint, true);
             type--;
@@ -198,9 +198,9 @@ void Brush::update(Paint& paint) {
             paint.updateDrawTools = true;
         }
     } else {
-        yOffset += 10;
+        yOffset += 13;
     }
-    yOffset += 10;
+    yOffset += 13;
 
     if (touchCount >= 1 && paint.reverseScreens) {
         switch (type) {
@@ -315,7 +315,7 @@ void Brush::update(Paint& paint) {
         }
 
         if (touchCount >= 1 && paint.reverseScreens) {
-            yOffset += 10;
+            yOffset += 13;
             if (touchX >= SCREEN_WIDTH - bOffset - 16 - 24 && touchX < SCREEN_WIDTH - bOffset - 24 && touchY >= yOffset && touchY < yOffset + 8) {
                 drawCursor(paint, true);
                 noiseXSize = touchX - (SCREEN_WIDTH - bOffset - 16 - 24) + 1;
@@ -328,7 +328,7 @@ void Brush::update(Paint& paint) {
                 updateDrawTool = true;
                 updateDrawCursor = true;
             }
-            yOffset += 10;
+            yOffset += 13;
             if (touchX >= SCREEN_WIDTH - bOffset - 16 - 24 && touchX < SCREEN_WIDTH - bOffset - 24 && touchY >= yOffset && touchY < yOffset + 8) {
                 drawCursor(paint, true);
                 noiseXShift = touchX - (SCREEN_WIDTH - bOffset - 16 - 24);
@@ -341,7 +341,7 @@ void Brush::update(Paint& paint) {
                 updateDrawTool = true;
                 updateDrawCursor = true;
             }
-            yOffset += 10;
+            yOffset += 13;
             if (touchX >= SCREEN_WIDTH - bOffset - 16 - 24 && touchX < SCREEN_WIDTH - bOffset - 24 && touchY >= yOffset && touchY < yOffset + 8) {
                 drawCursor(paint, true);
                 noiseXOffset = touchX - (SCREEN_WIDTH - bOffset - 16 - 24);
@@ -382,7 +382,7 @@ void Brush::open(Paint& paint) {
 
 void Brush::close(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
-    paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 64, pixelBufferMain);
+    paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 6 * 13, pixelBufferMain);
 
     active = false;
     drawCursor(paint);
@@ -483,18 +483,18 @@ void Brush::drawLine(Paint& paint, int x0, int y0, int x1, int y1, u16* buffer, 
 void Brush::drawTool(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
     int bOffset = paint.getToolsButtonsOffset();
-    paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 64, pixelBufferMain);
+    paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 6 * 13, pixelBufferMain);
 
     string moveString = string((line == 0) ? ">" : "") + STR_BRUSH_MOVE + ": " + ((line == 0 && active) ? "+" : "-"); 
     paint.drawText(3, yOffset, moveString.c_str(), pixelBufferMain, blackColor);
     paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 
     string typeString = string((line == 1) ? ">" : "") + STR_BRUSH_TYPE + ": " + getTypeName(paint, type); 
-    paint.drawText(3, yOffset += 10, typeString.c_str(), pixelBufferMain, blackColor);
+    paint.drawText(3, yOffset += 13, typeString.c_str(), pixelBufferMain, blackColor);
     paint.drawLeftButton(SCREEN_WIDTH - bOffset - 16 - 5, yOffset, pixelBufferMain);
     paint.drawRightButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 
-    yOffset += 10;
+    yOffset += 13;
 
     switch (type) {
         case 0:
@@ -522,17 +522,17 @@ void Brush::drawTool(Paint& paint) {
 
     if (type >= 3) {
         string noiseSizeString = string((line == 3 && !active) ? ">" : "") + STR_BRUSH_NOISE_SIZE + ": " + ((line == 3 && active && !activeNoise) ? ">" : "") + paint.intToChars(noiseXSize) + " " + ((line == 3 && active && activeNoise) ? ">" : "") + paint.intToChars(noiseYSize);
-        paint.drawText(3, yOffset += 10, noiseSizeString.c_str(), pixelBufferMain, blackColor);
+        paint.drawText(3, yOffset += 13, noiseSizeString.c_str(), pixelBufferMain, blackColor);
         paint.drawScrollBox(SCREEN_WIDTH - bOffset - 40, yOffset + 1, 16, noiseXSize - 1, pixelBufferMain);
         paint.drawScrollBox(SCREEN_WIDTH - bOffset - 16, yOffset + 1, 16, noiseYSize - 1, pixelBufferMain);
 
         string noiseShiftString = string((line == 4 && !active) ? ">" : "") + STR_BRUSH_NOISE_SHIFT + ": " + ((line == 4 && active && !activeNoise) ? ">" : "") + paint.intToChars(noiseXShift) + " " + ((line == 4 && active && activeNoise) ? ">" : "") + paint.intToChars(noiseYShift);
-        paint.drawText(3, yOffset += 10, noiseShiftString.c_str(), pixelBufferMain, blackColor);
+        paint.drawText(3, yOffset += 13, noiseShiftString.c_str(), pixelBufferMain, blackColor);
         paint.drawScrollBox(SCREEN_WIDTH - bOffset - 40, yOffset + 1, 16, noiseXShift, pixelBufferMain);
         paint.drawScrollBox(SCREEN_WIDTH - bOffset - 16, yOffset + 1, 16, noiseYShift, pixelBufferMain);
 
         string noiseOffsetString = string((line == 5 && !active) ? ">" : "") + STR_BRUSH_NOISE_OFFSET + ": " + ((line == 5 && active && !activeNoise) ? ">" : "") + paint.intToChars(noiseXOffset) + " " + ((line == 5 && active && activeNoise) ? ">" : "") + paint.intToChars(noiseYOffset);
-        paint.drawText(3, yOffset += 10, noiseOffsetString.c_str(), pixelBufferMain, blackColor);
+        paint.drawText(3, yOffset += 13, noiseOffsetString.c_str(), pixelBufferMain, blackColor);
         paint.drawScrollBox(SCREEN_WIDTH - bOffset - 40, yOffset + 1, 16, noiseXOffset, pixelBufferMain);
         paint.drawScrollBox(SCREEN_WIDTH - bOffset - 16, yOffset + 1, 16, noiseYOffset, pixelBufferMain);
     }

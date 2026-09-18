@@ -222,7 +222,7 @@ void Paint::updateVideo() {
 }
 
 void Paint::drawTools() {
-    clearBuffer(0, 0, SCREEN_WIDTH, getToolsYOffset(), pixelBufferMain);
+    clearBuffer(0, 0, SCREEN_WIDTH, getToolsYOffset() - 3, pixelBufferMain);
 
     int i = 0;
     int j = 0;
@@ -355,7 +355,7 @@ int Paint::getToolYOffset() {
 }
 
 int Paint::getToolsYOffset() {
-    return getToolYOffset() + 12;
+    return getToolYOffset() + 13;
 }
 
 int Paint::getToolsButtonsOffset() {
