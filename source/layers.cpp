@@ -119,7 +119,7 @@ void Layers::open(Paint& paint) {
 
 void Layers::close(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
-    paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 2 * 13, pixelBufferMain);
+    paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 2 * 13 + 3, pixelBufferMain);
 }
 
 void Layers::redraw(Paint& paint) {
@@ -145,7 +145,7 @@ void Layers::drawHints(Paint& paint, int x, int y, u16* buffer) {
 void Layers::drawTool(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
     int bOffset = paint.getToolsButtonsOffset();
-    paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 2 * 13, pixelBufferMain);
+    paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 2 * 13 + 3, pixelBufferMain);
 
     string moveString = string((line == 0) ? ">" : "") + STR_LAYERS_LAYER + ": " + paint.intToChars(paint.selectedLayer + 1);
     paint.drawText(3, yOffset, moveString.c_str(), pixelBufferMain, blackColor);

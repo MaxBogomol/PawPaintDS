@@ -263,7 +263,7 @@ void ColorPicker::open(Paint& paint) {
 
 void ColorPicker::close(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
-    paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 13, pixelBufferMain);
+    paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 13 + 3, pixelBufferMain);
 
     if (active) {
         clearPicker(paint);
@@ -319,7 +319,7 @@ u16 *ColorPicker::getDrawLayer(Paint& paint) {
 void ColorPicker::drawTool(Paint& paint) {
     int yOffset = paint.getToolsYOffset();
     int bOffset = paint.getToolsButtonsOffset();
-    paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 13, pixelBufferMain);
+    paint.clearBuffer(0, yOffset - 3, SCREEN_WIDTH, 13 + 3, pixelBufferMain);
 
     string colorString = string((line == 0) ? ">" : "") + STR_COLOR_PICKER_COLOR + ": " + ((line == 0 && active) ? "+" : "-"); 
     paint.drawText(3, yOffset, colorString.c_str(), pixelBufferMain, blackColor);
