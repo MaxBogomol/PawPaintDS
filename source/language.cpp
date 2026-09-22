@@ -34,5 +34,7 @@ bool readLanguage(const char* path) {
     #include "language.inl"
     #undef STRING
 
+    fclose(fp);
+
     return true;
 }

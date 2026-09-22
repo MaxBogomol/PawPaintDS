@@ -955,7 +955,6 @@ bool Paint::saveFileBuffer(const char* path, u16* buffer) {
 
     png_write_end(png, NULL);
     png_destroy_write_struct(&png, &info);
-    fflush(fp);
     fclose(fp);
     return true;
 }
@@ -1019,7 +1018,6 @@ bool Paint::loadFileBuffer(const char* path, u16* buffer) {
     }
 
     png_destroy_read_struct(&png, &info, NULL);
-    fflush(fp);
     fclose(fp);
     return true;
 }
