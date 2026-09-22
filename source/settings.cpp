@@ -38,12 +38,14 @@ void Settings::update(Paint& paint) {
             if (keysD & KEY_LEFT) {
                 paint.selectedTheme--;
                 if (paint.selectedTheme < 0) paint.selectedTheme = maxPaintThemes - 1;
+                paint.saveSettings();
                 paint.updateDrawAll = true;
                 updateTheme = true;
             }
             if (keysD & KEY_RIGHT) {
                 paint.selectedTheme++;
                 if (paint.selectedTheme > maxPaintThemes - 1) paint.selectedTheme = 0;
+                paint.saveSettings();
                 paint.updateDrawAll = true;
                 updateTheme = true;
             }
@@ -53,12 +55,14 @@ void Settings::update(Paint& paint) {
             if (keysD & KEY_LEFT) {
                 paint.selectedIcon--;
                 if (paint.selectedIcon < 0) paint.selectedIcon = maxPaintIcons - 1;
+                paint.saveSettings();
                 paint.updateDrawPaintIcon = true;
                 updateDrawTool = true;
             }
             if (keysD & KEY_RIGHT) {
                 paint.selectedIcon++;
                 if (paint.selectedIcon > maxPaintIcons - 1) paint.selectedIcon = 0;
+                paint.saveSettings();
                 paint.updateDrawPaintIcon = true;
                 updateDrawTool = true;
             }
@@ -68,6 +72,7 @@ void Settings::update(Paint& paint) {
             if (keysD & KEY_LEFT) {
                 paint.selectedLanguage--;
                 if (paint.selectedLanguage < 0) paint.selectedLanguage = maxLanguages - 1;
+                paint.saveSettings();
                 paint.updateDrawTools = true;
                 updateTheme = true;
                 paint.readSelectedLanguage();
@@ -75,6 +80,7 @@ void Settings::update(Paint& paint) {
             if (keysD & KEY_RIGHT) {
                 paint.selectedLanguage++;
                 if (paint.selectedLanguage > maxLanguages - 1) paint.selectedLanguage = 0;
+                paint.saveSettings();
                 paint.updateDrawTools = true;
                 updateTheme = true;
                 paint.readSelectedLanguage();
@@ -90,12 +96,14 @@ void Settings::update(Paint& paint) {
         if (touchX >= SCREEN_WIDTH - bOffset - 16 - 5 && touchX < SCREEN_WIDTH - bOffset - 8 - 5 && touchY >= yOffset && touchY < yOffset + 8) {
             paint.selectedTheme--;
             if (paint.selectedTheme < 0) paint.selectedTheme = maxPaintThemes - 1;
+            paint.saveSettings();
             paint.updateDrawAll = true;
             updateTheme = true;
         }
         if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
             paint.selectedTheme++;
             if (paint.selectedTheme > maxPaintThemes - 1) paint.selectedTheme = 0;
+            paint.saveSettings();
             paint.updateDrawAll = true;
             updateTheme = true;
         }
@@ -103,12 +111,14 @@ void Settings::update(Paint& paint) {
         if (touchX >= SCREEN_WIDTH - bOffset - 16 - 5 && touchX < SCREEN_WIDTH - bOffset - 8 - 5 && touchY >= yOffset && touchY < yOffset + 8) {
             paint.selectedIcon--;
             if (paint.selectedIcon < 0) paint.selectedIcon = maxPaintIcons - 1;
+            paint.saveSettings();
             paint.updateDrawPaintIcon = true;
             updateDrawTool = true;
         }
         if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
             paint.selectedIcon++;
             if (paint.selectedIcon > maxPaintIcons - 1) paint.selectedIcon = 0;
+            paint.saveSettings();
             paint.updateDrawPaintIcon = true;
             updateDrawTool = true;
         }
@@ -116,6 +126,7 @@ void Settings::update(Paint& paint) {
         if (touchX >= SCREEN_WIDTH - bOffset - 16 - 5 && touchX < SCREEN_WIDTH - bOffset - 8 - 5 && touchY >= yOffset && touchY < yOffset + 8) {
             paint.selectedLanguage--;
             if (paint.selectedLanguage < 0) paint.selectedLanguage = maxLanguages - 1;
+            paint.saveSettings();
             paint.updateDrawTools = true;
             updateDrawTool = true;
             paint.readSelectedLanguage();
@@ -123,6 +134,7 @@ void Settings::update(Paint& paint) {
         if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
             paint.selectedLanguage++;
             if (paint.selectedLanguage > maxLanguages - 1) paint.selectedLanguage = 0;
+            paint.saveSettings();
             paint.updateDrawTools = true;
             updateDrawTool = true;
             paint.readSelectedLanguage();

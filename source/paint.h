@@ -43,9 +43,9 @@ class Paint {
         
         bool reverseScreens = false;
 
-        int selectedLanguage = 0;
         int selectedTheme = 0;
         int selectedIcon = 0;
+        int selectedLanguage = 0;
         int selectedLayer = 0;
         int selectedTool = 0;
         u16 selectedColor = blackColor;
@@ -150,6 +150,7 @@ class Paint {
         HSV RGBtoHSV(u16 color);
 
         const char* intToChars(int val);
+        int charsToInt(const char* buf);
         u32 decodeChar(const char** s);
         int getCharLength(u32 c);
         int getTextLength(const char* text);
@@ -164,4 +165,7 @@ class Paint {
         bool directoryExist(const char* path);
 
         bool readSelectedLanguage();
+
+        bool saveSettings();
+        bool loadSettings();
 };

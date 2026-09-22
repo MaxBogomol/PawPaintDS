@@ -45,6 +45,8 @@ void Paint::setup() {
 
     keysSetRepeat(10, 2);
 
+    loadSettings();
+
     readSelectedLanguage();
     setPaintName(STR_UNNAMED.c_str());
 }
@@ -869,6 +871,13 @@ const char* Paint::intToChars(int val) {
     return buf;
 }
 
+
+int Paint::charsToInt(const char* buf) {
+    int val = 0;
+    sscanf(buf, "%d", &val);
+    return val;
+}
+
 u32 Paint::decodeChar(const char** c) {
     const unsigned char* p = (const unsigned char*)*c;
     u32 code = 0;
@@ -1042,4 +1051,46 @@ bool Paint::directoryExist(const char* path) {
 bool Paint::readSelectedLanguage() {
     string path = string(languagesPath) + "/" + getSelectedLanguageCode() + ".ini";
     return readLanguage(path.c_str());
+}
+
+bool Paint::saveSettings() {
+    string path = string(getWorkingDirectory());
+    if (!directoryExist(path.c_str())) makeDirectory(path.c_str());
+
+    path = string(getWorkingDirectory()) + "/" + settingsFile;
+
+    FILE* fp = fopen(path.c_str(), "wb");
+    if (!fp) return false;
+
+    fprintf(fp, "[GENERAL]\n");
+    fprintf(fp, "THEME=%d\n", selectedTheme);
+    fprintf(fp, "ICON=%d\n", selectedIcon);
+    fprintf(fp, "LANGUAGE=%d\n", selectedLanguage);
+
+    fclose(fp);
+    return true;
+}
+
+bool Paint::loadSettings() {
+    string path = string(getWorkingDirectory());
+    if (!directoryExist(path.c_str())) makeDirectory(path.c_str());
+    
+    path = string(getWorkingDirectory()) + "/" + settingsFile;
+
+    FILE* fp = fopen(path.c_str(), "rb");
+    if (!fp) return false;
+
+    char line[256];
+    while (fgets(line, sizeof(line), fp)) {
+        char key[100], value[100];
+        if (sscanf(line, "%99[^=]=%99[^\n]", key, value) == 2) {
+            string k = key;
+            string v = value;
+            if (k == "THEME") selectedTheme = charsToInt(v.c_str());
+            if (k == "ICON") selectedIcon = charsToInt(v.c_str());
+            if (k == "LANGUAGE") selectedLanguage = charsToInt(v.c_str());
+        }
+    }
+    
+    return true;
 }

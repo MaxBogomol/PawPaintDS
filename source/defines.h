@@ -46,6 +46,7 @@ inline const char* pawPaintPath = "PawPaintDS";
 inline const char* paintsPath = "Paints";
 inline const char* pawsPath = "Paws";
 inline const char* languagesPath = "nitro:/languages";
+inline const char* settingsFile = "settings.ini";
 
 inline const char* paintVerstion = "v0.1";
 

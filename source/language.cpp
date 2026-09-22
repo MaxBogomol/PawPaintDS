@@ -35,6 +35,5 @@ bool readLanguage(const char* path) {
     #undef STRING
 
     fclose(fp);
-
     return true;
 }
