@@ -14,6 +14,7 @@ const char* Saving::getName(Paint& paint) {
 
 void Saving::setup(Paint& paint) {
     line = 0;
+    active = false;
     loading = false;
     saving = false;
     savingExport = false;
@@ -39,22 +40,64 @@ void Saving::update(Paint& paint) {
         }
     }
 
-    int maxLine = 7;
+    if (!active) {
+        int maxLine = 7;
 
-    if ((keysD & KEY_UP) && (line - 1 >= 0)) {
-        line--;
-        updateDrawTool = true;
-        paint.updateDrawHints = true;
-    }
-    if ((keysD & KEY_DOWN) && (line + 1 < maxLine)) {
-        line++;
-        updateDrawTool = true;
-        paint.updateDrawHints = true;
-    }
+        if ((keysD & KEY_UP) && (line - 1 >= 0)) {
+            line--;
+            updateDrawTool = true;
+            paint.updateDrawHints = true;
+        }
+        if ((keysD & KEY_DOWN) && (line + 1 < maxLine)) {
+            line++;
+            updateDrawTool = true;
+            paint.updateDrawHints = true;
+        }
 
-    if (keysD & KEY_A) {
-        switch (line) {
-            case 1: {
+        if (keysD & KEY_A) {
+            switch (line) {
+                case 1: {
+                    paint.selectedLayer = 0;
+                    paint.screenLayers.clear();
+                    Layer* newLayer = new Layer();
+                    paint.screenLayers.push_back(newLayer);
+                    paint.clearLayers();
+                    paint.setPaintName(STR_UNNAMED.c_str());
+                    paint.updateDrawPaintName = true;
+                }
+            }
+
+            if (paint.fileSystemInit) {
+                switch (line) {
+                    case 2: {
+                        //loading = true;
+                        active = true;
+                        fileManager.update(paint);
+                        updateDrawTool = true;
+                        paint.updateDrawTools = true;
+                        paint.updateDrawHints = true;
+                        break;
+                    }
+                    case 3: {
+                        saving = true;
+                        paint.updateDrawTools = true;
+                        break;
+                    }
+                    case 5: {
+                        pawName = paint.getPaintName();
+                        savingExport = true;
+                        paint.updateDrawTools = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        int yOffset = paint.getToolsYOffset();
+        int bOffset = paint.getToolsButtonsOffset();
+
+        if (keysD & KEY_TOUCH && paint.reverseScreens) {
+            if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
                 paint.selectedLayer = 0;
                 paint.screenLayers.clear();
                 Layer* newLayer = new Layer();
@@ -63,64 +106,28 @@ void Saving::update(Paint& paint) {
                 paint.setPaintName(STR_UNNAMED.c_str());
                 paint.updateDrawPaintName = true;
             }
-        }
-
-        if (paint.fileSystemInit) {
-            switch (line) {
-                case 2: {
+            yOffset += 13;
+            if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
+                if (paint.fileSystemInit) {
                     loading = true;
                     paint.updateDrawTools = true;
-                    break;
                 }
-                case 3: {
+            }
+            yOffset += 13;
+            if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
+                if (paint.fileSystemInit) {
                     saving = true;
                     paint.updateDrawTools = true;
-                    break;
                 }
-                case 5: {
+            }
+            yOffset += 13;
+            yOffset += 13;
+            if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
+                if (paint.fileSystemInit) {
                     pawName = paint.getPaintName();
                     savingExport = true;
                     paint.updateDrawTools = true;
-                    break;
                 }
-            }
-        }
-    }
-
-    int yOffset = paint.getToolsYOffset();
-    int bOffset = paint.getToolsButtonsOffset();
-
-    if (keysD & KEY_TOUCH && paint.reverseScreens) {
-        if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
-            paint.selectedLayer = 0;
-            paint.screenLayers.clear();
-            Layer* newLayer = new Layer();
-            paint.screenLayers.push_back(newLayer);
-            paint.clearLayers();
-            paint.setPaintName(STR_UNNAMED.c_str());
-            paint.updateDrawPaintName = true;
-        }
-        yOffset += 13;
-        if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
-            if (paint.fileSystemInit) {
-                loading = true;
-                paint.updateDrawTools = true;
-            }
-        }
-        yOffset += 13;
-        if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
-            if (paint.fileSystemInit) {
-                saving = true;
-                paint.updateDrawTools = true;
-            }
-        }
-        yOffset += 13;
-        yOffset += 13;
-        if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
-            if (paint.fileSystemInit) {
-                pawName = paint.getPaintName();
-                savingExport = true;
-                paint.updateDrawTools = true;
             }
         }
     }
@@ -140,6 +147,7 @@ void Saving::updateTool(Paint& paint) {
 
 void Saving::open(Paint& paint) {
     line = 0;
+    active = false;
     updateDrawTool = true;
 }
 
@@ -166,9 +174,11 @@ void Saving::drawIcon(Paint& paint, int x, int y, u16* buffer) {
 void Saving::drawHints(Paint& paint, int x, int y, u16* buffer) {
     int xOffset = -10;
     int yOffset = 0;
-    paint.drawUpDownButton(x + (xOffset += 10), y + yOffset, pixelBufferMain);
-    if (line < 2 || paint.fileSystemInit) {
-        paint.drawAButton(x + (xOffset += 10), y + yOffset, pixelBufferMain);
+    if (!active) {
+        paint.drawUpDownButton(x + (xOffset += 10), y + yOffset, pixelBufferMain);
+        if (line < 2 || paint.fileSystemInit) {
+            paint.drawAButton(x + (xOffset += 10), y + yOffset, pixelBufferMain);
+        }
     }
 }
 
@@ -179,31 +189,31 @@ void Saving::drawTool(Paint& paint) {
 
     string renameString = string((line == 0) ? ">" : "") + STR_SAVING_RENAME;
     paint.drawText(3, yOffset, renameString.c_str(), pixelBufferMain, blackColor);
-    paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
+    if (!active) paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 
     string newString = string((line == 1) ? ">" : "") + STR_SAVING_NEW;
     paint.drawText(3, yOffset += 13, newString.c_str(), pixelBufferMain, blackColor);
-    paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
+    if (!active) paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 
     string loadString = string((line == 2) ? ">" : "") + STR_SAVING_LOAD;
     paint.drawText(3, yOffset += 13, loadString.c_str(), pixelBufferMain, paint.fileSystemInit ? blackColor : grayColor);
-    if (paint.fileSystemInit) paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
+    if (!active && paint.fileSystemInit) paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 
     string saveString = string((line == 3) ? ">" : "") + STR_SAVING_SAVE;
     paint.drawText(3, yOffset += 13, saveString.c_str(), pixelBufferMain, paint.fileSystemInit ? blackColor : grayColor);
-    if (paint.fileSystemInit) paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
+    if (!active && paint.fileSystemInit) paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 
     string saveAsString = string((line == 4) ? ">" : "") + STR_SAVING_SAVE_AS;
     paint.drawText(3, yOffset += 13, saveAsString.c_str(), pixelBufferMain, paint.fileSystemInit ? blackColor : grayColor);
-    if (paint.fileSystemInit) paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
+    if (!active && paint.fileSystemInit) paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 
     string exportString = string((line == 5) ? ">" : "") + STR_SAVING_EXPORT;
     paint.drawText(3, yOffset += 13, exportString.c_str(), pixelBufferMain, paint.fileSystemInit ? blackColor : grayColor);
-    if (paint.fileSystemInit) paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
+    if (!active && paint.fileSystemInit) paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 
     string exportAsString = string((line == 6) ? ">" : "") + STR_SAVING_EXPORT_AS;
     paint.drawText(3, yOffset += 13, exportAsString.c_str(), pixelBufferMain, paint.fileSystemInit ? blackColor : grayColor);
-    if (paint.fileSystemInit) paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
+    if (!active && paint.fileSystemInit) paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 }
 
 void Saving::createPawDirectory(Paint& paint, const char* paintName) {
@@ -226,7 +236,7 @@ void Saving::createPaintDirectory(Paint& paint) {
 }
 
 void Saving::savePaw(Paint& paint) {
-    createPawDirectory(paint, paint.getPaintName());
+    createPawDirectory(paint, paint.getPaintName().c_str());
     string directoryPath = string(paint.getWorkingDirectory()) + "/" + pawsPath + "/" + paint.getPaintName();
     string pawPath = string(directoryPath) + "/" + pawFile;
 
@@ -251,7 +261,7 @@ void Saving::savePaw(Paint& paint) {
 }
 
 void Saving::loadPaw(Paint& paint) {
-    createPawDirectory(paint, paint.getPaintName());
+    createPawDirectory(paint, paint.getPaintName().c_str());
     string directoryPath = string(paint.getWorkingDirectory()) + "/" + pawsPath + "/" + paint.getPaintName();
     string pawPath = string(directoryPath) + "/" + pawFile;
 

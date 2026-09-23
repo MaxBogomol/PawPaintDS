@@ -2,6 +2,7 @@
 
 #include <nds.h>
 #include <vector>
+#include <string>
 
 using namespace std;
 
@@ -15,6 +16,8 @@ using namespace std;
 #include "saving.h"
 #include "settings.h"
 #include "info.h"
+#include "file_manager.h"
+#include "screen_keyboard.h"
 
 inline Brush brush;
 inline Eraser eraser;
@@ -24,6 +27,8 @@ inline Layers layers;
 inline Saving saving;
 inline Settings settings;
 inline Info info;
+inline FileManager fileManager;
+inline ScreenKeyboard screenKeyboard;
 
 class Paint {
     private:
@@ -34,7 +39,8 @@ class Paint {
 
         vector<Tool*> tools;
 
-        const char* paintName = "Unnamed";
+        string paintDirectory = "";
+        string paintName = "Unnamed";
 
     public:
         bool nitroFSInit = false;
@@ -76,8 +82,11 @@ class Paint {
         void drawPaintName();
         void drawPaintIcon();
 
-        const char* getPaintName();
-        void setPaintName(const char* name);
+        string getPaintDirectory();
+        void setPaintDirectory(string directory);
+
+        string getPaintName();
+        void setPaintName(string name);
 
         u16 getThemeColor(int theme);
         u16 getSelectedThemeColor();
@@ -161,9 +170,10 @@ class Paint {
         bool saveFileBuffer(const char* path, u16* buffer);
         bool loadFileBuffer(const char* path, u16* buffer);
 
-        const char* getWorkingDirectory();
+        string getWorkingDirectory();
         bool makeDirectory(const char* path);
         bool directoryExist(const char* path);
+        vector<string> getDirectoryFiles(const char* path);
 
         bool readSelectedLanguage();
 

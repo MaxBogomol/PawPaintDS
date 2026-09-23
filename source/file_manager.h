@@ -9,4 +9,6 @@ class FileManager : public Tool {
         virtual const char* getName(Paint& paint) override;
 
         virtual void update(Paint& paint) override;
+
+        virtual u16 *getDrawLayer(Paint& paint);
 };

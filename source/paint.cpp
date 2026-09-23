@@ -1,8 +1,8 @@
 #include "paint.h"
 
 #include <fat.h>
+#include <dirent.h> 
 #include <png.h>
-#include <string>
 
 #include "language.h"
 #include "pawscript.h"
@@ -46,6 +46,10 @@ void Paint::setup() {
     keysSetRepeat(10, 2);
 
     loadSettings();
+
+    string path = string(getWorkingDirectory()) + "/" + pawsPath;
+    if (!directoryExist(path.c_str())) makeDirectory(path.c_str());
+    setPaintDirectory(path.c_str());
 
     readSelectedLanguage();
     setPaintName(STR_UNNAMED.c_str());
@@ -280,7 +284,7 @@ void Paint::drawHints() {
 
 void Paint::drawPaintName() {
     clearBuffer(0, SCREEN_HEIGHT - 49, SCREEN_WIDTH, 12, pixelBufferMain);
-    drawText(3, SCREEN_HEIGHT - 46, getPaintName(), pixelBufferMain, blackColor);
+    drawText(3, SCREEN_HEIGHT - 46, getPaintName().c_str(), pixelBufferMain, blackColor);
 }
 
 void Paint::drawPaintIcon() {
@@ -288,11 +292,19 @@ void Paint::drawPaintIcon() {
     drawSprite(SCREEN_WIDTH - 32 - 3, SCREEN_HEIGHT - 32 - 3, 32, 32, getSelectedIconSprite(), pixelBufferMain);
 }
 
-const char* Paint::getPaintName() {
+string Paint::getPaintDirectory() {
+    return paintDirectory;
+}
+
+void Paint::setPaintDirectory(string directory) {
+    paintDirectory = directory;
+}
+
+string Paint::getPaintName() {
     return paintName;
 }
 
-void Paint::setPaintName(const char* name) {
+void Paint::setPaintName(string name) {
     paintName = name;
 }
 
@@ -1012,7 +1024,7 @@ bool Paint::loadFileBuffer(const char* path, u16* buffer) {
     return true;
 }
 
-const char* Paint::getWorkingDirectory() {
+string Paint::getWorkingDirectory() {
     string path = string(fatPath) + "/" + pawPaintPath;
     if (!cartridgeInit) {
         path = string(sdPath) + "/" + pawPaintPath;
@@ -1027,6 +1039,23 @@ bool Paint::makeDirectory(const char* path) {
 bool Paint::directoryExist(const char* path) {
     struct stat st;
     return stat(path, &st) == 0;
+}
+
+vector<string> Paint::getDirectoryFiles(const char* path) {
+    vector<string> files;
+
+    DIR* dir = opendir(path);
+    if (!dir) return files;
+
+    struct dirent *entry;
+
+    while ((entry = readdir(dir))) {
+        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) continue;
+        files.push_back(entry->d_name);
+    }
+
+    closedir(dir);
+    return files;
 }
 
 bool Paint::readSelectedLanguage() {
