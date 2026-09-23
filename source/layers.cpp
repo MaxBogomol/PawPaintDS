@@ -106,7 +106,7 @@ void Layers::update(Paint& paint) {
             }
         }
         if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
-            if (paint.selectedLayer + 1 <= maxLayers) {
+            if (paint.selectedLayer + 1 < maxLayers) {
                 paint.selectedLayer++;
                 updateDrawTool = true;
                 paint.updateDrawHints = true;
@@ -130,6 +130,12 @@ void Layers::update(Paint& paint) {
                 updateDrawTool = true;
                 paint.updateDrawHints = true;
             }
+        }
+        yOffset += 13;
+        if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
+            paint.screenLayers[paint.selectedLayer]->active = !paint.screenLayers[paint.selectedLayer]->active;
+            updateLayers = true;
+            updateDrawTool = true;
         }
         yOffset += 13;
         if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
