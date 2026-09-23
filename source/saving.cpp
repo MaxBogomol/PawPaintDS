@@ -235,7 +235,7 @@ void Saving::savePaw(Paint& paint) {
     for (int i = 0; i < (int) paint.screenLayers.size(); i++) {
         fprintf(fp, "\n");
         fprintf(fp, "[LAYER_%d]\n", i);
-        fprintf(fp, "ACTIVE_%d=%d\n", i, paint.screenLayers[i]->active);
+        fprintf(fp, "LAYER_%d_ACTIVE=%d\n", i, paint.screenLayers[i]->active);
 
         string fileName = string("layer") + paint.intToChars(i) + ".png";
         saveLayer(paint, directoryPath.c_str(), fileName.c_str(), paint.screenLayers[i]->pixelBufferLayer);
