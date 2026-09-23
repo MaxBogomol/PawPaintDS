@@ -218,7 +218,7 @@ void Layers::drawTool(Paint& paint) {
 
     int maxLayers = (int) paint.screenLayers.size();
 
-    string layerString = string((line == 0) ? ">" : "") + STR_LAYERS_LAYER + ": " + paint.intToChars(paint.selectedLayer + 1);
+    string layerString = string((line == 0) ? ">" : "") + STR_LAYERS_LAYER + ": " + paint.intToChars(paint.selectedLayer + 1) + "/" + paint.intToChars(maxLayers);
     paint.drawText(3, yOffset, layerString.c_str(), pixelBufferMain, maxLayers > 1 ? blackColor : grayColor);
     if (paint.selectedLayer - 1 >= 0) paint.drawLeftButton(SCREEN_WIDTH - bOffset - 16 - 5, yOffset, pixelBufferMain);
     if (paint.selectedLayer + 1 < maxLayers) paint.drawRightButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);

@@ -54,6 +54,10 @@ void Saving::update(Paint& paint) {
 
     if (keysD & KEY_A) {
         if (line == 0) {
+            paint.selectedLayer = 0;
+            paint.screenLayers.clear();
+            Layer* newLayer = new Layer();
+            paint.screenLayers.push_back(newLayer);
             paint.clearLayers();
             paint.setPaintName(STR_UNNAMED.c_str());
             paint.updateDrawPaintName = true;
@@ -86,6 +90,10 @@ void Saving::update(Paint& paint) {
 
     if (keysD & KEY_TOUCH && paint.reverseScreens) {
         if (touchX >= SCREEN_WIDTH - bOffset - 8 && touchX < SCREEN_WIDTH - bOffset && touchY >= yOffset && touchY < yOffset + 8) {
+            paint.selectedLayer = 0;
+            paint.screenLayers.clear();
+            Layer* newLayer = new Layer();
+            paint.screenLayers.push_back(newLayer);
             paint.clearLayers();
             paint.setPaintName(STR_UNNAMED.c_str());
             paint.updateDrawPaintName = true;
