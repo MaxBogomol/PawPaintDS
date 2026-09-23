@@ -66,6 +66,9 @@ void Paint::setupVideo() {
 }
 
 void Paint::setupLayers() {
+    Layer* firstLayer = new Layer();
+    screenLayers.push_back(firstLayer);
+
     clearBuffer(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, pixelBufferMain);
     clearLayers();
 }
@@ -331,13 +334,7 @@ const char* Paint::getSelectedLanguageCode() {
 }
 
 u16 *Paint::getLayer(int layer) {
-	switch (layer) {
-    	case 0: return pixelBufferLayer0;
-    	case 1: return pixelBufferLayer1;
-		case 2: return pixelBufferLayer2;
-		case 3: return pixelBufferLayer3;
-    }
-	return pixelBufferLayer0;
+	return screenLayers[layer]->pixelBufferLayer;
 }
 
 u16 *Paint::getSelectedLayer() {
@@ -379,10 +376,9 @@ void Paint::clearBuffer(int x0, int y0, int x1, int y1, u16* buffer) {
 void Paint::blendLayers(int x, int y) {
     if (x >= 0 && x < SCREEN_WIDTH && y >= 0 && y < SCREEN_HEIGHT) {
         updateBlendLayers = false;
-        if (activeLayer0) blendLayers(x, y, pixelBufferLayer0);
-        if (activeLayer1) blendLayers(x, y, pixelBufferLayer1);
-        if (activeLayer2) blendLayers(x, y, pixelBufferLayer2);
-        if (activeLayer3) blendLayers(x, y, pixelBufferLayer3);
+        for (int i = 0; i < (int) screenLayers.size(); i++) {
+            if (screenLayers[i]->active) blendLayers(x, y, screenLayers[i]->pixelBufferLayer);
+        }
         if (!updateBlendLayers) pixelBufferSub[x + (y * SCREEN_WIDTH)] = blackColor;
     }
 }
@@ -406,26 +402,11 @@ void Paint::blendLayers(int x0, int y0, int x1, int y1) {
     }
 }
 
-void Paint::swapLayers(int l0, int l1) {
-    for (int x = 0; x < SCREEN_WIDTH; x++) {
-		for (int y = 0; y < SCREEN_HEIGHT; y++) {
-            u16 color = getLayer(l0)[x + (y * SCREEN_WIDTH)];
-            getLayer(l0)[x + (y * SCREEN_WIDTH)] = getLayer(l1)[x + (y * SCREEN_WIDTH)];
-            getLayer(l1)[x + (y * SCREEN_WIDTH)] = color;
-        }
-    }
-}
-
 void Paint::clearLayers() {
-    for (int x = 0; x < SCREEN_WIDTH; x++) {
-		for (int y = 0; y < SCREEN_HEIGHT; y++) {
-			pixelBufferLayer0[x + (y * SCREEN_WIDTH)] = secondColor;
-			pixelBufferLayer1[x + (y * SCREEN_WIDTH)] = alphaColor;
-			pixelBufferLayer2[x + (y * SCREEN_WIDTH)] = alphaColor;
-			pixelBufferLayer3[x + (y * SCREEN_WIDTH)] = alphaColor;
-			blendLayers(x, y);
-		}
-	}
+    for (int i = 0; i < (int) screenLayers.size(); i++) {
+        screenLayers[i]->fillLayer(i == 0 ? secondColor : alphaColor);
+    }
+    blendLayers(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 }
 
 void Paint::updateLayersEnable() {

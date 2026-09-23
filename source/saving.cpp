@@ -214,19 +214,19 @@ void Saving::createPawDirectory(Paint& paint) {
 void Saving::savePaint(Paint& paint) {
     createPaintDirectory(paint, paint.getPaintName());
     string pathString = string(paint.getWorkingDirectory()) + "/" + paintsPath + "/" + paint.getPaintName();
-    saveLayer(paint, pathString.c_str(), "layer0.png", pixelBufferLayer0);
-    saveLayer(paint, pathString.c_str(), "layer1.png", pixelBufferLayer1);
-    saveLayer(paint, pathString.c_str(), "layer2.png", pixelBufferLayer2);
-    saveLayer(paint, pathString.c_str(), "layer3.png", pixelBufferLayer3);
+    //saveLayer(paint, pathString.c_str(), "layer0.png", pixelBufferLayer0);
+    //saveLayer(paint, pathString.c_str(), "layer1.png", pixelBufferLayer1);
+    //saveLayer(paint, pathString.c_str(), "layer2.png", pixelBufferLayer2);
+    //saveLayer(paint, pathString.c_str(), "layer3.png", pixelBufferLayer3);
 }
 
 void Saving::loadPaint(Paint& paint) {
     createPawDirectory(paint);
     string pathString = string(paint.getWorkingDirectory()) + "/" + paintsPath + "/" + paint.getPaintName();
-    loadLayer(paint, pathString.c_str(), "layer0.png", pixelBufferLayer0);
-    loadLayer(paint, pathString.c_str(), "layer1.png", pixelBufferLayer1);
-    loadLayer(paint, pathString.c_str(), "layer2.png", pixelBufferLayer2);
-    loadLayer(paint, pathString.c_str(), "layer3.png", pixelBufferLayer3);
+    //loadLayer(paint, pathString.c_str(), "layer0.png", pixelBufferLayer0);
+    //loadLayer(paint, pathString.c_str(), "layer1.png", pixelBufferLayer1);
+    //loadLayer(paint, pathString.c_str(), "layer2.png", pixelBufferLayer2);
+    //loadLayer(paint, pathString.c_str(), "layer3.png", pixelBufferLayer3);
     paint.blendLayers(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 }
 

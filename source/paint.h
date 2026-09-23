@@ -6,6 +6,7 @@
 using namespace std;
 
 #include "defines.h"
+#include "layer.h"
 #include "brush.h"
 #include "eraser.h"
 #include "eyedropper.h"
@@ -48,6 +49,7 @@ class Paint {
         int selectedLanguage = 0;
         int selectedLayer = 0;
         int selectedTool = 0;
+        vector<Layer*> screenLayers;
         u16 selectedColor = blackColor;
         u16 secondColor = whiteColor;
 
@@ -101,7 +103,6 @@ class Paint {
         void blendLayers(int x, int y);
         void blendLayers(int x, int y, u16* buffer);
         void blendLayers(int x0, int y0, int x1, int y1);
-        void swapLayers(int l0, int l1);
         void clearLayers();
         
         void updateLayersEnable();

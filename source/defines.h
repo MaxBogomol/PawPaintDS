@@ -15,16 +15,6 @@ inline u16 aceThemeColor = ARGB16(1, 20, 6, 20); //#a231a2
 inline u16 pixelBufferMain[SCREEN_WIDTH * SCREEN_HEIGHT];
 inline u16 pixelBufferSub[SCREEN_WIDTH * SCREEN_HEIGHT];
 
-inline u16 pixelBufferLayer0[SCREEN_WIDTH * SCREEN_HEIGHT];
-inline u16 pixelBufferLayer1[SCREEN_WIDTH * SCREEN_HEIGHT];
-inline u16 pixelBufferLayer2[SCREEN_WIDTH * SCREEN_HEIGHT];
-inline u16 pixelBufferLayer3[SCREEN_WIDTH * SCREEN_HEIGHT];
-
-inline bool activeLayer0 = true;
-inline bool activeLayer1 = true;
-inline bool activeLayer2 = true;
-inline bool activeLayer3 = true;
-
 inline u16* bgMainDest;
 inline u16* bgSubDest;
 
