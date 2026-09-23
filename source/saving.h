@@ -28,11 +28,11 @@ class Saving : public Tool {
 
         virtual void drawTool(Paint& paint);
 
-        virtual void createPaintDirectory(Paint& paint, const char* paintName);
-        virtual void createPawDirectory(Paint& paint);
-        virtual void savePaint(Paint& paint);
-        virtual void loadPaint(Paint& paint);
+        virtual void createPawDirectory(Paint& paint, const char* paintName);
+        virtual void createPaintDirectory(Paint& paint);
         virtual void savePaw(Paint& paint);
+        virtual void loadPaw(Paint& paint);
+        virtual void savePaint(Paint& paint);
         virtual bool saveLayer(Paint& paint, const char* path, const char* layerName, u16* buffer);
         virtual bool loadLayer(Paint& paint, const char* path, const char* layerName, u16* buffer);
 };

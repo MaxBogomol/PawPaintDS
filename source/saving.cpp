@@ -23,17 +23,17 @@ void Saving::setup(Paint& paint) {
 void Saving::update(Paint& paint) {
     if (paint.fileSystemInit) {
         if (loading) {
-            loadPaint(paint);
+            loadPaw(paint);
             loading = false;
             doneTimer = 60;
         }
         if (saving) {
-            savePaint(paint);
+            savePaw(paint);
             saving = false;
             doneTimer = 60;
         }
         if (savingExport) {
-            savePaw(paint);
+            savePaint(paint);
             savingExport = false;
             doneTimer = 60;
         }
@@ -200,49 +200,109 @@ void Saving::drawTool(Paint& paint) {
     if (paint.fileSystemInit) paint.drawAButton(SCREEN_WIDTH - bOffset - 8, yOffset, pixelBufferMain);
 }
 
-void Saving::createPaintDirectory(Paint& paint, const char* paintName) {
-    string path = string(paint.getWorkingDirectory());
-    if (!paint.directoryExist(path.c_str())) paint.makeDirectory(path.c_str());
-
-    path = string(paint.getWorkingDirectory()) + "/" + paintsPath;
-    if (!paint.directoryExist(path.c_str())) paint.makeDirectory(path.c_str());
-
-    path = string(paint.getWorkingDirectory()) + "/" + paintsPath + "/" + paint.getPaintName();
-    if (!paint.directoryExist(path.c_str())) paint.makeDirectory(path.c_str());
-}
-
-void Saving::createPawDirectory(Paint& paint) {
+void Saving::createPawDirectory(Paint& paint, const char* paintName) {
     string path = string(paint.getWorkingDirectory());
     if (!paint.directoryExist(path.c_str())) paint.makeDirectory(path.c_str());
 
     path = string(paint.getWorkingDirectory()) + "/" + pawsPath;
     if (!paint.directoryExist(path.c_str())) paint.makeDirectory(path.c_str());
+
+    path = string(paint.getWorkingDirectory()) + "/" + pawsPath + "/" + paint.getPaintName();
+    if (!paint.directoryExist(path.c_str())) paint.makeDirectory(path.c_str());
 }
 
-void Saving::savePaint(Paint& paint) {
-    createPaintDirectory(paint, paint.getPaintName());
-    string pathString = string(paint.getWorkingDirectory()) + "/" + paintsPath + "/" + paint.getPaintName();
-    //saveLayer(paint, pathString.c_str(), "layer0.png", pixelBufferLayer0);
-    //saveLayer(paint, pathString.c_str(), "layer1.png", pixelBufferLayer1);
-    //saveLayer(paint, pathString.c_str(), "layer2.png", pixelBufferLayer2);
-    //saveLayer(paint, pathString.c_str(), "layer3.png", pixelBufferLayer3);
-}
+void Saving::createPaintDirectory(Paint& paint) {
+    string path = string(paint.getWorkingDirectory());
+    if (!paint.directoryExist(path.c_str())) paint.makeDirectory(path.c_str());
 
-void Saving::loadPaint(Paint& paint) {
-    createPawDirectory(paint);
-    string pathString = string(paint.getWorkingDirectory()) + "/" + paintsPath + "/" + paint.getPaintName();
-    //loadLayer(paint, pathString.c_str(), "layer0.png", pixelBufferLayer0);
-    //loadLayer(paint, pathString.c_str(), "layer1.png", pixelBufferLayer1);
-    //loadLayer(paint, pathString.c_str(), "layer2.png", pixelBufferLayer2);
-    //loadLayer(paint, pathString.c_str(), "layer3.png", pixelBufferLayer3);
-    paint.blendLayers(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    path = string(paint.getWorkingDirectory()) + "/" + paintsPath;
+    if (!paint.directoryExist(path.c_str())) paint.makeDirectory(path.c_str());
 }
 
 void Saving::savePaw(Paint& paint) {
-    createPaintDirectory(paint, paint.getPaintName());
-    string pathString = string(paint.getWorkingDirectory()) + "/" + pawsPath;
-    string pawString = string(pawName) + ".png";
-    saveLayer(paint, pathString.c_str(), pawString.c_str(), pixelBufferSub);
+    createPawDirectory(paint, paint.getPaintName());
+    string directoryPath = string(paint.getWorkingDirectory()) + "/" + pawsPath + "/" + paint.getPaintName();
+    string pawPath = string(directoryPath) + "/" + pawFile;
+
+    FILE* fp = fopen(pawPath.c_str(), "wb");
+    if (!fp) return;
+
+    int maxLayers = (int) paint.screenLayers.size();
+
+    fprintf(fp, "[GENERAL]\n");
+    fprintf(fp, "LAYERS=%d\n", maxLayers);
+
+    for (int i = 0; i < (int) paint.screenLayers.size(); i++) {
+        fprintf(fp, "\n");
+        fprintf(fp, "[LAYER_%d]\n", i);
+        fprintf(fp, "ACTIVE_%d=%d\n", i, paint.screenLayers[i]->active);
+
+        string fileName = string("layer") + paint.intToChars(i) + ".png";
+        saveLayer(paint, directoryPath.c_str(), fileName.c_str(), paint.screenLayers[i]->pixelBufferLayer);
+    }
+
+    fclose(fp);
+}
+
+void Saving::loadPaw(Paint& paint) {
+    createPawDirectory(paint, paint.getPaintName());
+    string directoryPath = string(paint.getWorkingDirectory()) + "/" + pawsPath + "/" + paint.getPaintName();
+    string pawPath = string(directoryPath) + "/" + pawFile;
+
+    FILE* fp = fopen(pawPath.c_str(), "rb");
+    if (!fp) return;
+
+    int maxLayers = 1;
+
+    char line[256];
+    while (fgets(line, sizeof(line), fp)) {
+        char key[100], value[100];
+        if (sscanf(line, "%99[^=]=%99[^\n]", key, value) == 2) {
+            string k = key;
+            string v = value;
+            if (k == "LAYERS") maxLayers = paint.charsToInt(v.c_str());
+        }
+    }
+
+    paint.screenLayers.clear();
+    paint.selectedLayer = 0;
+
+    if (maxLayers <=0 ) maxLayers = 1;
+    for (int i = 0; i < maxLayers; i++) {
+        Layer* newLayer = new Layer();
+        paint.screenLayers.push_back(newLayer);
+
+        string fileName = string("layer") + paint.intToChars(i) + ".png";
+        loadLayer(paint, directoryPath.c_str(), fileName.c_str(), paint.screenLayers[i]->pixelBufferLayer);
+    }
+
+    fseek(fp, 0, SEEK_SET);
+    while (fgets(line, sizeof(line), fp)) {
+        char key[100], value[100];
+        if (sscanf(line, "%99[^=]=%99[^\n]", key, value) == 2) {
+            string k = key;
+            string v = value;
+
+            if (k.find("LAYER_") != string::npos) {
+                size_t pos = k.find('_');
+                string layerString = k.substr(pos + 1);
+                int layer = paint.charsToInt(layerString.c_str());
+
+                if (k.find("_ACTIVE") != string::npos) {
+                    paint.screenLayers[layer]->active = paint.charsToInt(v.c_str());
+                }
+            }
+        }
+    }
+
+    paint.blendLayers(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+}
+
+void Saving::savePaint(Paint& paint) {
+    createPaintDirectory(paint);
+    string directoryPath = string(paint.getWorkingDirectory()) + "/" + paintsPath;
+    string paintString = string(pawName) + ".png";
+    saveLayer(paint, directoryPath.c_str(), paintString.c_str(), pixelBufferSub);
 }
 
 bool Saving::saveLayer(Paint& paint, const char* path, const char* layerName, u16* buffer) {

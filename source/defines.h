@@ -33,10 +33,11 @@ inline int touchCount = 0;
 inline const char* fatPath = "fat:";
 inline const char* sdPath = "sd:";
 inline const char* pawPaintPath = "PawPaintDS";
-inline const char* paintsPath = "Paints";
 inline const char* pawsPath = "Paws";
+inline const char* paintsPath = "Paints";
 inline const char* languagesPath = "nitro:/languages";
 inline const char* settingsFile = "settings.ini";
+inline const char* pawFile = "paw.ini";
 
 inline const char* paintVerstion = "v0.1";
 
