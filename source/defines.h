@@ -1,4 +1,7 @@
 #include <nds.h>
+#include <string>
+
+using namespace std;
 
 inline u16 alphaColor = ARGB16(0, 0, 0, 0);
 inline u16 whiteColor = ARGB16(1, 31, 31, 31);
@@ -58,4 +61,16 @@ struct HSV {
     int h;
     int s;
     int v;
+};
+
+enum class FILE_TYPE {
+    FILE,
+    DIRECTORY,
+    PAW,
+    IMAGE
+};
+
+struct FILE_ENTRY {
+    FILE_TYPE type;
+    string path;
 };

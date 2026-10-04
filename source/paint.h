@@ -2,9 +2,6 @@
 
 #include <nds.h>
 #include <vector>
-#include <string>
-
-using namespace std;
 
 #include "defines.h"
 #include "layer.h"
